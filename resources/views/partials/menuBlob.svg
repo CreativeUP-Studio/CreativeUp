@@ -1,0 +1,11 @@
+<svg width="340" height="220" viewBox="0 0 340 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="blobClip">
+      <path d="M60,40 Q120,10 180,40 Q240,70 300,40 Q320,100 280,160 Q220,210 140,200 Q60,190 40,120 Q20,70 60,40 Z" />
+    </clipPath>
+  </defs>
+  <rect width="340" height="220" fill="white" />
+  <g clip-path="url(#blobClip)">
+    <image href="/images/menu/inicio.jpg" width="340" height="220" preserveAspectRatio="xMidYMid slice" />
+  </g>
+</svg>
