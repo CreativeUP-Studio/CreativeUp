@@ -7,14 +7,26 @@
 <div class="admin-detail-grid">
     {{-- Columna principal --}}
     <div>
-        {{-- Info del lead --}}
+        {{-- Header del lead --}}
         <div class="admin-form-card admin-mb-md">
-            <h2 class="admin-section-title">
-                <span class="admin-form-section-icon">👤</span>
-                {{ $lead->name }}
-            </h2>
+            <div class="admin-lead-header">
+                <h2 class="admin-section-title admin-mb-0">
+                    <i class="fa-solid fa-user" style="color:var(--admin-purple);font-size:0.95rem"></i>
+                    {{ $lead->name }}
+                </h2>
+                <div class="admin-lead-header-badges">
+                    @if($lead->source === 'chat')
+                        <span class="admin-badge admin-badge-purple"><i class="fa-solid fa-comment-dots"></i> Chat</span>
+                    @else
+                        <span class="admin-badge admin-badge-blue"><i class="fa-solid fa-envelope"></i> Contacto</span>
+                    @endif
+                    @if($lead->read_at)
+                        <span class="admin-badge admin-badge-gray"><i class="fa-solid fa-eye"></i> Leído {{ $lead->read_at->diffForHumans() }}</span>
+                    @endif
+                </div>
+            </div>
 
-            <div class="admin-form-grid admin-mb-lg">
+            <div class="admin-form-grid admin-mb-lg" style="margin-top:1rem">
                 <div>
                     <p class="admin-detail-label">Email</p>
                     <p class="admin-detail-value"><a href="mailto:{{ $lead->email }}">{{ $lead->email }}</a></p>
@@ -31,6 +43,16 @@
                     <p class="admin-detail-label">Fecha de contacto</p>
                     <p class="admin-detail-value">{{ $lead->created_at->format('d/m/Y \a \l\a\s H:i') }}</p>
                 </div>
+                <div>
+                    <p class="admin-detail-label">Presupuesto estimado</p>
+                    <p class="admin-detail-value">
+                        @if($lead->budget)
+                            <span class="admin-badge admin-badge-purple"><i class="fa-solid fa-dollar-sign"></i> {{ $lead->budget }}</span>
+                        @else
+                            No especificado
+                        @endif
+                    </p>
+                </div>
             </div>
 
             <div>
@@ -44,7 +66,7 @@
         {{-- Conversación / Historial de respuestas --}}
         <div class="admin-form-card admin-mb-md">
             <h3 class="admin-section-title">
-                <span class="admin-form-section-icon">💬</span>
+                <i class="fa-solid fa-comments" style="color:var(--admin-purple);font-size:0.95rem"></i>
                 Conversación
             </h3>
 
@@ -73,7 +95,7 @@
                                 <strong>{{ $reply->user->name ?? 'Admin' }}</strong>
                                 <span>{{ $reply->created_at->format('d/m/Y H:i') }}</span>
                                 @if($reply->sent_to_email)
-                                    <span class="admin-badge admin-badge-green" style="font-size:10px; padding:2px 6px;">📧 Enviado por email</span>
+                                    <span class="admin-badge admin-badge-green" style="font-size:10px; padding:2px 6px;"><i class="fa-solid fa-envelope"></i> Enviado por email</span>
                                 @endif
                             </div>
                             <div class="admin-conv-bubble admin-conv-bubble--admin">
@@ -95,7 +117,7 @@
         {{-- Formulario de respuesta --}}
         <div class="admin-form-card">
             <h3 class="admin-section-title">
-                <span class="admin-form-section-icon">✉️</span>
+                <i class="fa-solid fa-paper-plane" style="color:var(--admin-purple);font-size:0.95rem"></i>
                 Responder a {{ $lead->name }}
             </h3>
 
@@ -113,17 +135,17 @@
                 <div class="admin-reply-options">
                     <label class="admin-checkbox-label">
                         <input type="checkbox" name="send_to_email" value="1" checked class="admin-checkbox">
-                        <span>📧 Enviar respuesta al email del cliente ({{ $lead->email }})</span>
+                        <span><i class="fa-solid fa-envelope"></i> Enviar respuesta al email del cliente ({{ $lead->email }})</span>
                     </label>
                     <label class="admin-checkbox-label">
                         <input type="checkbox" name="send_copy" value="1" class="admin-checkbox">
-                        <span>📋 Enviar copia a mi correo</span>
+                        <span><i class="fa-regular fa-copy"></i> Enviar copia a mi correo</span>
                     </label>
                 </div>
 
                 <div class="admin-form-actions">
                     <button type="submit" class="admin-btn admin-btn-primary">
-                        Enviar respuesta
+                        <i class="fa-solid fa-paper-plane"></i> Enviar respuesta
                     </button>
                 </div>
             </form>
@@ -132,19 +154,48 @@
 
     {{-- Panel lateral --}}
     <div>
-        {{-- Cambiar estado --}}
+        {{-- Estado y Prioridad --}}
         <div class="admin-form-card admin-mb-md">
-            <h3 class="admin-section-title admin-section-title--sm">Estado</h3>
+            <h3 class="admin-section-title admin-section-title--sm">Estado y Prioridad</h3>
             <form method="POST" action="{{ route('admin.leads.update', $lead) }}">
                 @csrf @method('PUT')
                 <div class="admin-form-group">
+                    <label class="admin-form-label" style="font-size:0.75rem;color:var(--admin-text-muted)">Estado</label>
                     <select name="status" class="admin-form-control">
-                        <option value="new" {{ $lead->status === 'new' ? 'selected' : '' }}>🟢 Nuevo</option>
-                        <option value="contacted" {{ $lead->status === 'contacted' ? 'selected' : '' }}>🟡 Contactado</option>
-                        <option value="closed" {{ $lead->status === 'closed' ? 'selected' : '' }}>⚫ Cerrado</option>
+                        <option value="new" {{ $lead->status === 'new' ? 'selected' : '' }}>● Nuevo</option>
+                        <option value="contacted" {{ $lead->status === 'contacted' ? 'selected' : '' }}>● Contactado</option>
+                        <option value="closed" {{ $lead->status === 'closed' ? 'selected' : '' }}>● Cerrado</option>
                     </select>
                 </div>
-                <button type="submit" class="admin-btn admin-btn-primary admin-btn-block">Actualizar estado</button>
+                <div class="admin-form-group">
+                    <label class="admin-form-label" style="font-size:0.75rem;color:var(--admin-text-muted)">Prioridad</label>
+                    <select name="priority" class="admin-form-control">
+                        <option value="high" {{ $lead->priority === 'high' ? 'selected' : '' }}>🔴 Alta</option>
+                        <option value="medium" {{ $lead->priority === 'medium' ? 'selected' : '' }}>🟡 Media</option>
+                        <option value="low" {{ $lead->priority === 'low' ? 'selected' : '' }}>⚪ Baja</option>
+                    </select>
+                </div>
+                <button type="submit" class="admin-btn admin-btn-primary admin-btn-block">
+                    <i class="fa-solid fa-save"></i> Guardar cambios
+                </button>
+            </form>
+        </div>
+
+        {{-- Notas internas --}}
+        <div class="admin-form-card admin-mb-md">
+            <h3 class="admin-section-title admin-section-title--sm">
+                <i class="fa-solid fa-sticky-note" style="color:var(--admin-purple);font-size:0.85rem"></i>
+                Notas internas
+            </h3>
+            <form method="POST" action="{{ route('admin.leads.update', $lead) }}">
+                @csrf @method('PUT')
+                <div class="admin-form-group">
+                    <textarea name="notes" class="admin-form-control" rows="4"
+                              placeholder="Notas privadas sobre este lead...">{{ old('notes', $lead->notes) }}</textarea>
+                </div>
+                <button type="submit" class="admin-btn admin-btn-secondary admin-btn-block admin-btn-sm">
+                    <i class="fa-solid fa-save"></i> Guardar notas
+                </button>
             </form>
         </div>
 
@@ -168,17 +219,19 @@
             <h3 class="admin-section-title admin-section-title--sm">Acciones</h3>
             <div class="admin-actions-stack">
                 <a href="mailto:{{ $lead->email }}" class="admin-btn admin-btn-success admin-btn-block">
-                    Abrir email directo
+                    <i class="fa-solid fa-envelope"></i> Abrir email directo
                 </a>
                 @if($lead->phone)
                     <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $lead->phone) }}" target="_blank"
                        class="admin-btn admin-btn-secondary admin-btn-block">
-                        WhatsApp
+                        <i class="fa-brands fa-whatsapp"></i> WhatsApp
                     </a>
                 @endif
                 <form method="POST" action="{{ route('admin.leads.destroy', $lead) }}" onsubmit="return confirm('¿Eliminar este lead y todas sus respuestas?')">
                     @csrf @method('DELETE')
-                    <button type="submit" class="admin-btn admin-btn-danger admin-btn-block">Eliminar</button>
+                    <button type="submit" class="admin-btn admin-btn-danger admin-btn-block">
+                        <i class="fa-solid fa-trash"></i> Eliminar lead
+                    </button>
                 </form>
             </div>
         </div>
@@ -186,6 +239,8 @@
 </div>
 
 <div class="admin-mt-lg">
-    <a href="{{ route('admin.leads.index') }}" class="admin-btn admin-btn-secondary">← Volver a leads</a>
+    <a href="{{ route('admin.leads.index') }}" class="admin-btn admin-btn-secondary">
+        <i class="fa-solid fa-arrow-left"></i> Volver a leads
+    </a>
 </div>
 @endsection

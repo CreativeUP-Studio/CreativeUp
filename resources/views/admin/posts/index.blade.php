@@ -12,6 +12,7 @@
             Nuevo post
         </a>
     </div>
+    <div class="admin-table-scroll">
     <table class="admin-table">
         <thead>
             <tr>
@@ -63,6 +64,7 @@
             @endforelse
         </tbody>
     </table>
+    </div>
     @if($posts->hasPages())
         <div class="admin-pagination">{{ $posts->links() }}</div>
     @endif

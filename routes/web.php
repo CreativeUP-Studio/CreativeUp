@@ -45,6 +45,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('posts', AdminPostController::class);
 
     Route::get('leads', [LeadController::class, 'index'])->name('leads.index');
+    Route::get('leads/export', [LeadController::class, 'export'])->name('leads.export');
+    Route::post('leads/bulk', [LeadController::class, 'bulkAction'])->name('leads.bulk');
     Route::get('leads/{lead}', [LeadController::class, 'show'])->name('leads.show');
     Route::put('leads/{lead}', [LeadController::class, 'update'])->name('leads.update');
     Route::post('leads/{lead}/reply', [LeadController::class, 'reply'])->name('leads.reply');

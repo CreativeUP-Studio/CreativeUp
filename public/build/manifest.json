@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-BmRLZO0g.css",
+    "file": "assets/app-DFMPBsVw.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -8,16 +8,8 @@
       "app.css"
     ]
   },
-  "resources/fonts/Mont/Mont-ExtraLightDEMO.otf": {
-    "file": "assets/Mont-ExtraLightDEMO-Dlz6JtMC.otf",
-    "src": "resources/fonts/Mont/Mont-ExtraLightDEMO.otf"
-  },
-  "resources/fonts/Mont/Mont-HeavyDEMO.otf": {
-    "file": "assets/Mont-HeavyDEMO-CRqU7cNb.otf",
-    "src": "resources/fonts/Mont/Mont-HeavyDEMO.otf"
-  },
   "resources/js/app.js": {
-    "file": "assets/app-DpX9gXdW.js",
+    "file": "assets/app-CKXG4cOa.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true

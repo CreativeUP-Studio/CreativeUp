@@ -195,7 +195,7 @@
                 {{-- Card izquierda: imagen arriba, texto abajo --}}
                 <div class="service-card card-left">
                     <div class="service-blob anim-scroll" data-anim="blob-reveal" style="clip-path: url(#blob-{{ $index }})">
-                        <img src="{{ asset('images/hero-1.jpg') }}"
+                        <img src="{{ $service->image ? Storage::url($service->image) : asset('images/hero-1.jpg') }}"
                              alt="{{ $service->title }}"
                              loading="lazy"
                              decoding="async">
@@ -207,7 +207,7 @@
                         </a>
                         <div class="service-desc-wrapper desc-wrapper-left">
                             <span class="service-desc-line"></span>
-                            <p class="service-desc">{{ $service->description }}</p>
+                            <p class="service-desc">{{ $service->short_description ?? $service->description }}</p>
                         </div>
                     </div>
                 </div>
@@ -226,7 +226,7 @@
                 <div class="service-card card-right">
                     <div class="service-info anim-scroll" data-anim="slide-down-bounce" style="animation-delay: 0.2s">
                         <div class="service-desc-wrapper">
-                            <p class="service-desc">{{ $nextService->description }}</p>
+                            <p class="service-desc">{{ $nextService->short_description ?? $nextService->description }}</p>
                             <span class="service-desc-line"></span>
                         </div>
                         <a href="{{ route('services.show', $nextService->slug) }}" class="service-name-link">
@@ -235,7 +235,7 @@
                         </a>
                     </div>
                     <div class="service-blob anim-scroll" data-anim="blob-reveal" style="clip-path: url(#blob-{{ $index + 1 }}); animation-delay: 0.15s">
-                        <img src="{{ asset('images/hero-2.jpg') }}"
+                        <img src="{{ $nextService->image ? Storage::url($nextService->image) : asset('images/hero-2.jpg') }}"
                              alt="{{ $nextService->title }}"
                              loading="lazy"
                              decoding="async">
