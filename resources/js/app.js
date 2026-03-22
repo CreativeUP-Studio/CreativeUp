@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fullscreen Menu toggle
     const dotsBtn = document.querySelector(".topbar-dots");
     const fullMenu = document.getElementById("fullscreenMenu");
+    const menuCloseBtn = document.getElementById("menuCloseBtn");
 
     function closeMenu() {
         fullMenu.classList.remove("active");
@@ -86,6 +87,21 @@ document.addEventListener("DOMContentLoaded", () => {
         dotsBtn.classList.add("menu-open");
         topbar.classList.add("menu-open");
         document.body.style.overflow = "hidden";
+
+        // Marcar página activa
+        const currentPath = window.location.pathname;
+        const menuItems = document.querySelectorAll(".menu-link-item");
+        menuItems.forEach((item) => {
+            const link = item.querySelector(".menu-link");
+            const href = link.getAttribute("href");
+            item.classList.remove("active");
+
+            if (currentPath === href ||
+                (currentPath === "/" && href === "/") ||
+                (currentPath.startsWith(href) && href !== "/")) {
+                item.classList.add("active");
+            }
+        });
     }
 
     if (dotsBtn && fullMenu) {
@@ -96,6 +112,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 openMenu();
             }
         });
+
+        // Botón de cerrar del menú
+        if (menuCloseBtn) {
+            menuCloseBtn.addEventListener("click", closeMenu);
+        }
 
         // Cerrar con Escape
         document.addEventListener("keydown", (e) => {
@@ -109,32 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (overlay) {
             overlay.addEventListener("click", closeMenu);
         }
-    }
-
-    // Imagen dinámica al hacer hover en links del menú
-    const menuLinks = document.querySelectorAll(".menu-link-item");
-    const menuImg = document.getElementById("menuBlobImage");
-    const menuImgs = [
-        "/images/menu/inicio.jpg",
-        "/images/menu/servicios.jpg",
-        "/images/menu/proyectos.jpg",
-        "/images/menu/blog.jpg",
-        "/images/menu/contacto.jpg",
-    ];
-    if (menuImg && menuLinks.length) {
-        menuLinks.forEach((link, idx) => {
-            link.addEventListener("mouseenter", () => {
-                menuImg.style.opacity = "0";
-                setTimeout(() => {
-                    menuImg.src = menuImgs[idx] || menuImgs[0];
-                    menuImg.style.opacity = "1";
-                }, 180);
-            });
-            link.addEventListener("mouseleave", () => {
-                menuImg.style.opacity = "1";
-                menuImg.src = menuImgs[idx] || menuImgs[0];
-            });
-        });
     }
 
     // ═══ SERVICES PAGE — Counter Animation & Process Timeline ═══

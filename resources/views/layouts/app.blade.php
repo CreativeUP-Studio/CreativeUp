@@ -29,102 +29,208 @@
         </button>
     </header>
 
-    {{-- Menú Fullscreen --}}
+    {{-- Menú Fullscreen Premium --}}
     <div class="fullscreen-menu" id="fullscreenMenu">
         <div class="menu-overlay"></div>
         <div class="menu-content">
-            {{-- Columna izquierda: Navegación principal --}}
-            <div class="menu-left">
-                <nav class="menu-nav">
-                    <ul class="menu-links">
-                        <li class="menu-link-item" style="--i: 0">
-                            <a href="{{ route('home') }}" class="menu-link">
-                                <span class="menu-link-number">01</span>
-                                <span class="menu-link-text">Inicio</span>
-                                <span class="menu-link-arrow"><i class="fa-solid fa-arrow-right"></i></span>
-                            </a>
-                        </li>
-                        <li class="menu-link-item" style="--i: 1">
-                            <a href="{{ route('services.index') }}" class="menu-link">
-                                <span class="menu-link-number">02</span>
-                                <span class="menu-link-text">Servicios</span>
-                                <span class="menu-link-arrow"><i class="fa-solid fa-arrow-right"></i></span>
-                            </a>
-                        </li>
-                        <li class="menu-link-item" style="--i: 2">
-                            <a href="{{ route('projects.index') }}" class="menu-link">
-                                <span class="menu-link-number">03</span>
-                                <span class="menu-link-text">Proyectos</span>
-                                <span class="menu-link-arrow"><i class="fa-solid fa-arrow-right"></i></span>
-                            </a>
-                        </li>
-                        <li class="menu-link-item" style="--i: 3">
-                            <a href="{{ route('blog.index') }}" class="menu-link">
-                                <span class="menu-link-number">04</span>
-                                <span class="menu-link-text">Blog</span>
-                                <span class="menu-link-arrow"><i class="fa-solid fa-arrow-right"></i></span>
-                            </a>
-                        </li>
-                        <li class="menu-link-item" style="--i: 4">
-                            <a href="{{ route('contact.index') }}" class="menu-link">
-                                <span class="menu-link-number">05</span>
-                                <span class="menu-link-text">Contacto</span>
-                                <span class="menu-link-arrow"><i class="fa-solid fa-arrow-right"></i></span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <div class="menu-bottom-tagline">
-                    <span class="menu-tagline-text">Potenciamos tu presencia digital</span>
+            {{-- Header del menú --}}
+            <div class="menu-header">
+                <div class="menu-logo">
+                    <span class="menu-logo-creative">creative</span><span class="menu-logo-up">up</span>
                 </div>
             </div>
 
-            {{-- Separador gradiente vertical --}}
-            <div class="menu-divider"></div>
+            {{-- Grid de 2 columnas --}}
+            <div class="menu-grid">
+                {{-- Columna izquierda: Navegación --}}
+                <div class="menu-left-col">
+                    <nav class="menu-nav">
+                        <ul class="menu-links">
+                            <li class="menu-link-item" style="--i: 0" data-page="home">
+                                <a href="{{ route('home') }}" class="menu-link">
+                                    <div class="menu-link-icon">
+                                        <i class="fa-solid fa-house"></i>
+                                    </div>
+                                    <div class="menu-link-content">
+                                        <span class="menu-link-number">01</span>
+                                        <span class="menu-link-text">Inicio</span>
+                                    </div>
+                                    <div class="menu-link-arrow">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="menu-link-item" style="--i: 1" data-page="services">
+                                <a href="{{ route('services.index') }}" class="menu-link">
+                                    <div class="menu-link-icon">
+                                        <i class="fa-solid fa-briefcase"></i>
+                                    </div>
+                                    <div class="menu-link-content">
+                                        <span class="menu-link-number">02</span>
+                                        <span class="menu-link-text">Servicios</span>
+                                    </div>
+                                    <div class="menu-link-arrow">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="menu-link-item" style="--i: 2" data-page="projects">
+                                <a href="{{ route('projects.index') }}" class="menu-link">
+                                    <div class="menu-link-icon">
+                                        <i class="fa-solid fa-folder-open"></i>
+                                    </div>
+                                    <div class="menu-link-content">
+                                        <span class="menu-link-number">03</span>
+                                        <span class="menu-link-text">Proyectos</span>
+                                    </div>
+                                    <div class="menu-link-arrow">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="menu-link-item" style="--i: 3" data-page="blog">
+                                <a href="{{ route('blog.index') }}" class="menu-link">
+                                    <div class="menu-link-icon">
+                                        <i class="fa-solid fa-newspaper"></i>
+                                    </div>
+                                    <div class="menu-link-content">
+                                        <span class="menu-link-number">04</span>
+                                        <span class="menu-link-text">Blog</span>
+                                    </div>
+                                    <div class="menu-link-arrow">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="menu-link-item" style="--i: 4" data-page="contact">
+                                <a href="{{ route('contact.index') }}" class="menu-link">
+                                    <div class="menu-link-icon">
+                                        <i class="fa-solid fa-paper-plane"></i>
+                                    </div>
+                                    <div class="menu-link-content">
+                                        <span class="menu-link-number">05</span>
+                                        <span class="menu-link-text">Contacto</span>
+                                    </div>
+                                    <div class="menu-link-arrow">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
 
-            {{-- Columna derecha: Imagen + Info --}}
-            <div class="menu-right">
-                <div class="menu-image-preview">
-                    <img id="menuBlobImage" src="/images/menu/inicio.jpg" alt="Imagen menú" />
-                </div>
-                <div class="menu-info-grid">
-                    <div class="menu-info-block">
-                        <h4 class="menu-info-title">Servicios</h4>
-                        <ul class="menu-info-list">
-                            <li><a href="{{ route('services.index') }}">Social Media</a></li>
-                            <li><a href="{{ route('services.index') }}">Branding</a></li>
-                            <li><a href="{{ route('services.index') }}">Desarrollo Web</a></li>
-                            <li><a href="{{ route('services.index') }}">SEO Profesional</a></li>
-                        </ul>
+                    {{-- Stats --}}
+                    <div class="menu-stats">
+                        <div class="menu-stat-item">
+                            <span class="menu-stat-number">150+</span>
+                            <span class="menu-stat-label">Proyectos</span>
+                        </div>
+                        <div class="menu-stat-item">
+                            <span class="menu-stat-number">95%</span>
+                            <span class="menu-stat-label">Satisfacción</span>
+                        </div>
+                        <div class="menu-stat-item">
+                            <span class="menu-stat-number">5+</span>
+                            <span class="menu-stat-label">Años</span>
+                        </div>
                     </div>
-                    <div class="menu-info-block">
-                        <h4 class="menu-info-title">Contacto</h4>
-                        <ul class="menu-info-list">
-                            <li>
-                                <a href="mailto:hola@creativeup.com">
-                                    <i class="fa-regular fa-envelope"></i> hola@creativeup.com
-                                </a>
-                            </li>
-                            <li>
-                                <a href="tel:+1234567890">
-                                    <i class="fa-solid fa-phone"></i> +1 (234) 567-890
-                                </a>
-                            </li>
-                        </ul>
+
+                    {{-- Redes sociales --}}
+                    <div class="menu-social">
+                        <span class="menu-social-label">Síguenos</span>
+                        <div class="menu-social-links">
+                            <a href="#" class="menu-social-link" aria-label="Facebook">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="menu-social-link" aria-label="Instagram">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                            <a href="#" class="menu-social-link" aria-label="TikTok">
+                                <i class="fa-brands fa-tiktok"></i>
+                            </a>
+                            <a href="#" class="menu-social-link" aria-label="LinkedIn">
+                                <i class="fa-brands fa-linkedin-in"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-                <div class="menu-info-block">
-                    <h4 class="menu-info-title">Síguenos</h4>
-                    <div class="menu-social-links">
-                        <a href="#" class="menu-social-link" aria-label="Facebook">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="menu-social-link" aria-label="Instagram">
-                            <i class="fa-brands fa-instagram"></i>
-                        </a>
-                        <a href="#" class="menu-social-link" aria-label="TikTok">
-                            <i class="fa-brands fa-tiktok"></i>
-                        </a>
+
+                {{-- Columna derecha: Info y CTAs --}}
+                <div class="menu-right-col">
+                    {{-- Servicios destacados --}}
+                    <div class="menu-section">
+                        <h3 class="menu-section-title">Servicios Destacados</h3>
+                        <div class="menu-services-grid">
+                            <a href="{{ route('services.index') }}" class="menu-service-card">
+                                <div class="menu-service-icon">
+                                    <i class="fa-solid fa-code"></i>
+                                </div>
+                                <span class="menu-service-name">Desarrollo Web</span>
+                            </a>
+                            <a href="{{ route('services.index') }}" class="menu-service-card">
+                                <div class="menu-service-icon">
+                                    <i class="fa-solid fa-palette"></i>
+                                </div>
+                                <span class="menu-service-name">Branding</span>
+                            </a>
+                            <a href="{{ route('services.index') }}" class="menu-service-card">
+                                <div class="menu-service-icon">
+                                    <i class="fa-solid fa-bullhorn"></i>
+                                </div>
+                                <span class="menu-service-name">Social Media</span>
+                            </a>
+                            <a href="{{ route('services.index') }}" class="menu-service-card">
+                                <div class="menu-service-icon">
+                                    <i class="fa-solid fa-chart-line"></i>
+                                </div>
+                                <span class="menu-service-name">SEO</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    {{-- CTA Principal --}}
+                    <div class="menu-section">
+                        <div class="menu-cta-card">
+                            <div class="menu-cta-badge">
+                                <i class="fa-solid fa-sparkles"></i>
+                                <span>Consultoría Gratuita</span>
+                            </div>
+                            <h3 class="menu-cta-title">¿Tienes un proyecto en mente?</h3>
+                            <p class="menu-cta-desc">Conversemos sobre cómo podemos ayudarte a alcanzar tus objetivos digitales.</p>
+                            <a href="{{ route('contact.index') }}" class="menu-cta-btn">
+                                <span>Iniciar Proyecto</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    {{-- Info de contacto --}}
+                    <div class="menu-section">
+                        <h3 class="menu-section-title">Contacto</h3>
+                        <div class="menu-contact-grid">
+                            <a href="mailto:hola@creativeup.com" class="menu-contact-item">
+                                <div class="menu-contact-icon">
+                                    <i class="fa-regular fa-envelope"></i>
+                                </div>
+                                <div class="menu-contact-info">
+                                    <span class="menu-contact-label">Email</span>
+                                    <span class="menu-contact-value">hola@creativeup.com</span>
+                                </div>
+                            </a>
+                            <a href="tel:+1234567890" class="menu-contact-item">
+                                <div class="menu-contact-icon">
+                                    <i class="fa-solid fa-phone"></i>
+                                </div>
+                                <div class="menu-contact-info">
+                                    <span class="menu-contact-label">Teléfono</span>
+                                    <span class="menu-contact-value">+1 (234) 567-890</span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="menu-schedule">
+                            <i class="fa-regular fa-clock"></i>
+                            <span>Lunes a Viernes, 9:00 AM - 6:00 PM</span>
+                        </div>
                     </div>
                 </div>
             </div>
