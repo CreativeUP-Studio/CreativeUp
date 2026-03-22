@@ -4,69 +4,238 @@
 @section('page-title', 'Blog / Posts')
 
 @section('content')
-<div class="admin-table-wrapper">
-    <div class="admin-table-header">
-        <h2>Todos los posts ({{ $posts->total() }})</h2>
+
+{{-- ═══════════════════════════════════════════════════
+     HEADER & STATS
+     ═══════════════════════════════════════════════════ --}}
+<div class="admin-page-header">
+    <div>
+        <h1 class="admin-page-title">Gestión de Posts</h1>
+        <p class="admin-page-subtitle">Administra todos los artículos del blog</p>
+    </div>
+    <div class="admin-page-actions">
         <a href="{{ route('admin.posts.create') }}" class="admin-btn admin-btn-primary">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            Nuevo post
+            <i class="fa-solid fa-plus"></i>
+            <span>Nuevo Post</span>
         </a>
     </div>
-    <div class="admin-table-scroll">
-    <table class="admin-table">
-        <thead>
-            <tr>
-                <th>Imagen</th>
-                <th>Título</th>
-                <th>Autor</th>
-                <th>Estado</th>
-                <th>Publicado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($posts as $post)
-            <tr>
-                <td>
-                    @if($post->featured_image)
-                        <img src="{{ Storage::url($post->featured_image) }}" alt="{{ $post->title }}" class="admin-thumb">
-                    @else
-                        <div class="admin-thumb-placeholder">
-                            <svg fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
-                        </div>
-                    @endif
-                </td>
-                <td>
-                    <strong>{{ Str::limit($post->title, 50) }}</strong><br>
-                    <span class="text-muted">{{ $post->slug }}</span>
-                </td>
-                <td>{{ $post->user->name ?? '—' }}</td>
-                <td>
-                    @if($post->status === 'published')
-                        <span class="admin-badge admin-badge-green">Publicado</span>
-                    @else
-                        <span class="admin-badge admin-badge-yellow">Borrador</span>
-                    @endif
-                </td>
-                <td>{{ $post->published_at?->format('d/m/Y') ?? '—' }}</td>
-                <td>
-                    <div class="admin-actions-group">
-                        <a href="{{ route('admin.posts.edit', $post) }}" class="admin-btn admin-btn-secondary admin-btn-sm">Editar</a>
-                        <form method="POST" action="{{ route('admin.posts.destroy', $post) }}" onsubmit="return confirm('¿Eliminar este post?')">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm">Eliminar</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-            @empty
-            <tr><td colspan="6" class="empty-message">No hay posts registrados.</td></tr>
-            @endforelse
-        </tbody>
-    </table>
+</div>
+
+{{-- Stats rápidas --}}
+<div class="admin-posts-stats">
+    <div class="admin-posts-stat">
+        <div class="admin-posts-stat-icon" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05)); color: var(--admin-success);">
+            <i class="fa-solid fa-check-circle"></i>
+        </div>
+        <div class="admin-posts-stat-info">
+            <span class="admin-posts-stat-label">Publicados</span>
+            <span class="admin-posts-stat-value">{{ $posts->where('status', 'published')->count() }}</span>
+        </div>
     </div>
-    @if($posts->hasPages())
-        <div class="admin-pagination">{{ $posts->links() }}</div>
+    <div class="admin-posts-stat">
+        <div class="admin-posts-stat-icon" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05)); color: var(--admin-warning);">
+            <i class="fa-solid fa-file-pen"></i>
+        </div>
+        <div class="admin-posts-stat-info">
+            <span class="admin-posts-stat-label">Borradores</span>
+            <span class="admin-posts-stat-value">{{ $posts->where('status', 'draft')->count() }}</span>
+        </div>
+    </div>
+    <div class="admin-posts-stat">
+        <div class="admin-posts-stat-icon" style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(124, 58, 237, 0.05)); color: var(--admin-primary);">
+            <i class="fa-solid fa-newspaper"></i>
+        </div>
+        <div class="admin-posts-stat-info">
+            <span class="admin-posts-stat-label">Total Posts</span>
+            <span class="admin-posts-stat-value">{{ $posts->total() }}</span>
+        </div>
+    </div>
+</div>
+
+{{-- ═══════════════════════════════════════════════════
+     FILTERS & SEARCH
+     ═══════════════════════════════════════════════════ --}}
+<form method="GET" action="{{ route('admin.posts.index') }}" class="admin-posts-filters">
+    <div class="admin-filter-group">
+        <label class="admin-filter-label">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Buscar
+        </label>
+        <input type="text"
+               name="search"
+               value="{{ request('search') }}"
+               placeholder="Buscar por título o contenido..."
+               class="admin-form-input">
+    </div>
+
+    <div class="admin-filter-group">
+        <label class="admin-filter-label">
+            <i class="fa-solid fa-filter"></i>
+            Estado
+        </label>
+        <select name="status" class="admin-form-select">
+            <option value="">Todos los estados</option>
+            <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Publicados</option>
+            <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Borradores</option>
+        </select>
+    </div>
+
+    <div class="admin-filter-group">
+        <label class="admin-filter-label">
+            <i class="fa-solid fa-calendar"></i>
+            Ordenar por
+        </label>
+        <select name="sort" class="admin-form-select">
+            <option value="newest" {{ request('sort') === 'newest' || !request('sort') ? 'selected' : '' }}>Más recientes</option>
+            <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Más antiguos</option>
+            <option value="title" {{ request('sort') === 'title' ? 'selected' : '' }}>Título A-Z</option>
+        </select>
+    </div>
+
+    <div class="admin-filter-actions">
+        <button type="submit" class="admin-btn admin-btn-primary admin-btn-sm">
+            <i class="fa-solid fa-search"></i>
+            Filtrar
+        </button>
+        @if(request()->hasAny(['search', 'status', 'sort']))
+        <a href="{{ route('admin.posts.index') }}" class="admin-btn admin-btn-secondary admin-btn-sm">
+            <i class="fa-solid fa-xmark"></i>
+            Limpiar
+        </a>
+        @endif
+    </div>
+</form>
+
+{{-- ═══════════════════════════════════════════════════
+     POSTS GRID/LIST
+     ═══════════════════════════════════════════════════ --}}
+@if($posts->count() > 0)
+<div class="admin-posts-grid">
+    @foreach($posts as $post)
+    <article class="admin-post-card">
+        {{-- Image --}}
+        <div class="admin-post-card-image">
+            @if($post->featured_image)
+                <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}">
+            @else
+                <div class="admin-post-card-placeholder">
+                    <i class="fa-solid fa-image"></i>
+                </div>
+            @endif
+
+            {{-- Status badge --}}
+            <div class="admin-post-card-badges">
+                @if($post->status === 'published')
+                    <span class="admin-badge admin-badge-green">
+                        <i class="fa-solid fa-check"></i>
+                        Publicado
+                    </span>
+                @else
+                    <span class="admin-badge admin-badge-yellow">
+                        <i class="fa-solid fa-pen"></i>
+                        Borrador
+                    </span>
+                @endif
+            </div>
+        </div>
+
+        {{-- Content --}}
+        <div class="admin-post-card-content">
+            {{-- Meta info --}}
+            <div class="admin-post-card-meta">
+                <span class="admin-post-card-meta-item">
+                    <i class="fa-regular fa-calendar"></i>
+                    {{ $post->published_at?->format('d M Y') ?? $post->created_at->format('d M Y') }}
+                </span>
+                <span class="admin-post-card-meta-item">
+                    <i class="fa-regular fa-user"></i>
+                    {{ $post->user->name ?? 'Admin' }}
+                </span>
+                <span class="admin-post-card-meta-item">
+                    <i class="fa-regular fa-clock"></i>
+                    {{ $post->read_time }} min
+                </span>
+            </div>
+
+            {{-- Title --}}
+            <h3 class="admin-post-card-title">{{ $post->title }}</h3>
+
+            {{-- Excerpt --}}
+            <p class="admin-post-card-excerpt">{{ Str::limit($post->excerpt, 100) }}</p>
+
+            {{-- Stats --}}
+            <div class="admin-post-card-stats">
+                <span class="admin-post-card-stat">
+                    <i class="fa-solid fa-text-width"></i>
+                    {{ str_word_count(strip_tags($post->content)) }} palabras
+                </span>
+            </div>
+
+            {{-- Actions --}}
+            <div class="admin-post-card-actions">
+                <a href="{{ route('blog.show', $post->slug) }}"
+                   target="_blank"
+                   class="admin-btn admin-btn-secondary admin-btn-sm"
+                   title="Ver en el sitio">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
+                <a href="{{ route('admin.posts.edit', $post) }}"
+                   class="admin-btn admin-btn-secondary admin-btn-sm"
+                   title="Editar">
+                    <i class="fa-solid fa-pen"></i>
+                </a>
+                <form method="POST"
+                      action="{{ route('admin.posts.destroy', $post) }}"
+                      onsubmit="return confirm('¿Estás seguro de eliminar este post?')"
+                      style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit"
+                            class="admin-btn admin-btn-danger admin-btn-sm"
+                            title="Eliminar">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </article>
+    @endforeach
+</div>
+
+{{-- Pagination --}}
+@if($posts->hasPages())
+<div class="admin-pagination">
+    {{ $posts->appends(request()->query())->links() }}
+</div>
+@endif
+
+@else
+{{-- Empty state --}}
+<div class="admin-empty-state">
+    <div class="admin-empty-icon">
+        <i class="fa-solid fa-newspaper"></i>
+    </div>
+    <h3 class="admin-empty-title">
+        @if(request()->hasAny(['search', 'status']))
+            No se encontraron posts
+        @else
+            No hay posts aún
+        @endif
+    </h3>
+    <p class="admin-empty-text">
+        @if(request()->hasAny(['search', 'status']))
+            Intenta ajustar tus filtros de búsqueda
+        @else
+            Comienza creando tu primer artículo para el blog
+        @endif
+    </p>
+    @if(!request()->hasAny(['search', 'status']))
+    <a href="{{ route('admin.posts.create') }}" class="admin-btn admin-btn-primary">
+        <i class="fa-solid fa-plus"></i>
+        Crear primer post
+    </a>
     @endif
 </div>
+@endif
+
 @endsection

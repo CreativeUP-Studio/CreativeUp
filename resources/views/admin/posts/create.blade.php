@@ -1,51 +1,393 @@
 @extends('admin.layouts.app')
 
 @section('title', 'Nuevo Post')
-@section('page-title', 'Crear Post')
+@section('page-title', 'Crear Nuevo Post')
 
 @section('content')
-<div class="admin-form-card">
-    <form method="POST" action="{{ route('admin.posts.store') }}" enctype="multipart/form-data">
-        @csrf
-        <div class="admin-form-grid">
-            <div class="admin-form-group">
-                <label for="title">Título *</label>
-                <input type="text" id="title" name="title" class="admin-form-control"
-                       value="{{ old('title') }}" required placeholder="Título del post">
-            </div>
-            <div class="admin-form-group">
-                <label for="slug">Slug</label>
-                <input type="text" id="slug" name="slug" class="admin-form-control"
-                       value="{{ old('slug') }}" placeholder="Se genera automáticamente">
-            </div>
-        </div>
-        <div class="admin-form-group">
-            <label for="content">Contenido *</label>
-            <textarea id="content" name="content" class="admin-form-control"
-                      required placeholder="Escribe el contenido del post...">{{ old('content') }}</textarea>
-        </div>
-        <div class="admin-form-grid">
-            <div class="admin-form-group">
-                <label for="featured_image">Imagen destacada</label>
-                <input type="file" id="featured_image" name="featured_image" class="admin-form-control" accept="image/*">
-            </div>
-            <div class="admin-form-group">
-                <label for="status">Estado *</label>
-                <select id="status" name="status" class="admin-form-control">
-                    <option value="draft" {{ old('status') === 'draft' ? 'selected' : '' }}>Borrador</option>
-                    <option value="published" {{ old('status') === 'published' ? 'selected' : '' }}>Publicado</option>
-                </select>
+
+<form method="POST" action="{{ route('admin.posts.store') }}" enctype="multipart/form-data" id="postForm">
+    @csrf
+
+    {{-- ═══════════════════════════════════════════════════
+         HEADER WITH ACTIONS
+         ═══════════════════════════════════════════════════ --}}
+    <div class="admin-post-header">
+        <div class="admin-post-header-left">
+            <a href="{{ route('admin.posts.index') }}" class="admin-btn admin-btn-secondary admin-btn-sm">
+                <i class="fa-solid fa-arrow-left"></i>
+                Volver
+            </a>
+            <div class="admin-post-header-info">
+                <h1 class="admin-post-header-title">Nuevo Post</h1>
+                <p class="admin-post-header-subtitle">Crea un nuevo artículo para tu blog</p>
             </div>
         </div>
-        <div class="admin-form-group">
-            <label for="published_at">Fecha de publicación</label>
-            <input type="date" id="published_at" name="published_at" class="admin-form-control"
-                   value="{{ old('published_at') }}">
+        <div class="admin-post-header-actions">
+            <button type="submit" name="status" value="draft" class="admin-btn admin-btn-secondary">
+                <i class="fa-solid fa-floppy-disk"></i>
+                Guardar borrador
+            </button>
+            <button type="submit" name="status" value="published" class="admin-btn admin-btn-primary">
+                <i class="fa-solid fa-paper-plane"></i>
+                Publicar
+            </button>
         </div>
-        <div class="admin-form-actions">
-            <button type="submit" class="admin-btn admin-btn-primary">Guardar post</button>
-            <a href="{{ route('admin.posts.index') }}" class="admin-btn admin-btn-secondary">Cancelar</a>
+    </div>
+
+    {{-- ═══════════════════════════════════════════════════
+         MAIN EDITOR LAYOUT (2 COLUMNS)
+         ═══════════════════════════════════════════════════ --}}
+    <div class="admin-post-editor">
+        {{-- Left Column: Main Content --}}
+        <div class="admin-post-main">
+            {{-- Title --}}
+            <div class="admin-form-group">
+                <input type="text"
+                       id="title"
+                       name="title"
+                       class="admin-post-title-input"
+                       value="{{ old('title') }}"
+                       placeholder="Escribe el título del post..."
+                       required
+                       maxlength="200">
+                <div class="admin-post-title-counter">
+                    <span id="titleCount">0</span> / 200 caracteres
+                </div>
+                @error('title')
+                    <span class="admin-form-error">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- Slug --}}
+            <div class="admin-form-group">
+                <label class="admin-form-label">
+                    <i class="fa-solid fa-link"></i>
+                    URL amigable (slug)
+                </label>
+                <div class="admin-input-group">
+                    <span class="admin-input-prefix">/blog/</span>
+                    <input type="text"
+                           id="slug"
+                           name="slug"
+                           class="admin-form-input"
+                           value="{{ old('slug') }}"
+                           placeholder="se-genera-automaticamente">
+                </div>
+                <p class="admin-form-help">Se genera automáticamente del título si lo dejas vacío</p>
+                @error('slug')
+                    <span class="admin-form-error">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- Content Editor --}}
+            <div class="admin-form-group">
+                <label class="admin-form-label">
+                    <i class="fa-solid fa-file-lines"></i>
+                    Contenido del post
+                    <span class="required">*</span>
+                </label>
+                <div class="admin-editor-toolbar">
+                    <button type="button" class="admin-editor-btn" data-action="bold" title="Negrita">
+                        <i class="fa-solid fa-bold"></i>
+                    </button>
+                    <button type="button" class="admin-editor-btn" data-action="italic" title="Cursiva">
+                        <i class="fa-solid fa-italic"></i>
+                    </button>
+                    <button type="button" class="admin-editor-btn" data-action="heading" title="Título">
+                        <i class="fa-solid fa-heading"></i>
+                    </button>
+                    <span class="admin-editor-divider"></span>
+                    <button type="button" class="admin-editor-btn" data-action="list" title="Lista">
+                        <i class="fa-solid fa-list-ul"></i>
+                    </button>
+                    <button type="button" class="admin-editor-btn" data-action="link" title="Enlace">
+                        <i class="fa-solid fa-link"></i>
+                    </button>
+                    <button type="button" class="admin-editor-btn" data-action="quote" title="Cita">
+                        <i class="fa-solid fa-quote-right"></i>
+                    </button>
+                </div>
+                <textarea id="content"
+                          name="content"
+                          class="admin-post-content-editor"
+                          placeholder="Escribe el contenido de tu post aquí..."
+                          required
+                          rows="20">{{ old('content') }}</textarea>
+                <div class="admin-editor-stats">
+                    <span class="admin-editor-stat">
+                        <i class="fa-solid fa-text-width"></i>
+                        <span id="wordCount">0</span> palabras
+                    </span>
+                    <span class="admin-editor-stat">
+                        <i class="fa-solid fa-align-left"></i>
+                        <span id="charCount">0</span> caracteres
+                    </span>
+                    <span class="admin-editor-stat">
+                        <i class="fa-regular fa-clock"></i>
+                        <span id="readTime">0</span> min de lectura
+                    </span>
+                </div>
+                @error('content')
+                    <span class="admin-form-error">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- SEO Section --}}
+            <div class="admin-post-section">
+                <div class="admin-post-section-header">
+                    <h3 class="admin-post-section-title">
+                        <i class="fa-solid fa-search"></i>
+                        SEO & Meta información
+                    </h3>
+                </div>
+                <div class="admin-post-section-content">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Meta descripción</label>
+                        <textarea name="meta_description"
+                                  id="metaDescription"
+                                  class="admin-form-textarea"
+                                  placeholder="Breve descripción para motores de búsqueda..."
+                                  maxlength="160"
+                                  rows="3">{{ old('meta_description') }}</textarea>
+                        <div class="admin-form-help">
+                            <span id="metaCount">0</span> / 160 caracteres
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </form>
-</div>
+
+        {{-- Right Column: Sidebar --}}
+        <div class="admin-post-sidebar">
+            {{-- Featured Image --}}
+            <div class="admin-post-sidebar-card">
+                <h3 class="admin-post-sidebar-title">
+                    <i class="fa-solid fa-image"></i>
+                    Imagen destacada
+                </h3>
+                <div class="admin-post-image-upload">
+                    <input type="file"
+                           id="featured_image"
+                           name="featured_image"
+                           accept="image/*"
+                           class="admin-file-input"
+                           onchange="previewImage(event)">
+                    <div id="imagePreview" class="admin-image-preview">
+                        <div class="admin-image-preview-placeholder">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <p>Click para subir imagen</p>
+                            <span>JPG, PNG, GIF (Max 2MB)</span>
+                        </div>
+                    </div>
+                    <label for="featured_image" class="admin-btn admin-btn-secondary admin-btn-sm" style="width: 100%; margin-top: 12px;">
+                        <i class="fa-solid fa-upload"></i>
+                        Seleccionar imagen
+                    </label>
+                </div>
+                @error('featured_image')
+                    <span class="admin-form-error">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- Publish Settings --}}
+            <div class="admin-post-sidebar-card">
+                <h3 class="admin-post-sidebar-title">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    Configuración de publicación
+                </h3>
+
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Estado</label>
+                    <select name="status_select" id="status" class="admin-form-select">
+                        <option value="draft" {{ old('status') === 'draft' ? 'selected' : '' }}>
+                            Borrador
+                        </option>
+                        <option value="published" {{ old('status') === 'published' ? 'selected' : '' }}>
+                            Publicado
+                        </option>
+                    </select>
+                </div>
+
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Fecha de publicación</label>
+                    <input type="datetime-local"
+                           name="published_at"
+                           class="admin-form-input"
+                           value="{{ old('published_at') }}">
+                    <p class="admin-form-help">Déjalo vacío para publicar ahora</p>
+                </div>
+            </div>
+
+            {{-- Category/Tags (Future) --}}
+            <div class="admin-post-sidebar-card">
+                <h3 class="admin-post-sidebar-title">
+                    <i class="fa-solid fa-tag"></i>
+                    Categoría
+                </h3>
+                <div class="admin-post-categories">
+                    <label class="admin-category-item">
+                        <input type="radio" name="category" value="branding">
+                        <span class="admin-category-label">
+                            <i class="fa-solid fa-palette"></i>
+                            Branding
+                        </span>
+                    </label>
+                    <label class="admin-category-item">
+                        <input type="radio" name="category" value="diseno">
+                        <span class="admin-category-label">
+                            <i class="fa-solid fa-pen-nib"></i>
+                            Diseño Web
+                        </span>
+                    </label>
+                    <label class="admin-category-item">
+                        <input type="radio" name="category" value="seo">
+                        <span class="admin-category-label">
+                            <i class="fa-solid fa-chart-line"></i>
+                            SEO
+                        </span>
+                    </label>
+                    <label class="admin-category-item">
+                        <input type="radio" name="category" value="redes">
+                        <span class="admin-category-label">
+                            <i class="fa-solid fa-share-nodes"></i>
+                            Social Media
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            {{-- Quick Tips --}}
+            <div class="admin-post-sidebar-card admin-post-tips">
+                <h3 class="admin-post-sidebar-title">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    Consejos
+                </h3>
+                <ul class="admin-tips-list">
+                    <li><i class="fa-solid fa-check"></i> Usa un título llamativo y descriptivo</li>
+                    <li><i class="fa-solid fa-check"></i> Agrega una imagen destacada atractiva</li>
+                    <li><i class="fa-solid fa-check"></i> Escribe contenido de valor y bien estructurado</li>
+                    <li><i class="fa-solid fa-check"></i> Optimiza la meta descripción para SEO</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</form>
+
 @endsection
+
+@push('scripts')
+<script>
+// Title character counter
+const titleInput = document.getElementById('title');
+const titleCount = document.getElementById('titleCount');
+const slugInput = document.getElementById('slug');
+
+titleInput.addEventListener('input', function() {
+    titleCount.textContent = this.value.length;
+
+    // Auto-generate slug if empty
+    if (!slugInput.value || slugInput.dataset.auto !== 'false') {
+        slugInput.value = this.value
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .trim();
+        slugInput.dataset.auto = 'true';
+    }
+});
+
+slugInput.addEventListener('input', function() {
+    slugInput.dataset.auto = 'false';
+});
+
+// Content stats counter
+const contentEditor = document.getElementById('content');
+const wordCount = document.getElementById('wordCount');
+const charCount = document.getElementById('charCount');
+const readTime = document.getElementById('readTime');
+
+contentEditor.addEventListener('input', function() {
+    const text = this.value.trim();
+    const words = text ? text.split(/\s+/).length : 0;
+    const chars = text.length;
+    const minutes = Math.max(1, Math.ceil(words / 200));
+
+    wordCount.textContent = words;
+    charCount.textContent = chars;
+    readTime.textContent = minutes;
+});
+
+// Meta description counter
+const metaDescription = document.getElementById('metaDescription');
+const metaCount = document.getElementById('metaCount');
+
+if (metaDescription) {
+    metaDescription.addEventListener('input', function() {
+        metaCount.textContent = this.value.length;
+    });
+}
+
+// Image preview
+function previewImage(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('imagePreview');
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            preview.innerHTML = `<img src="${e.target.result}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--admin-radius);">`;
+        };
+
+        reader.readAsDataURL(file);
+    }
+}
+
+// Editor toolbar actions
+document.querySelectorAll('.admin-editor-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const action = this.dataset.action;
+        const textarea = document.getElementById('content');
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const selectedText = textarea.value.substring(start, end);
+        let replacement = selectedText;
+
+        switch(action) {
+            case 'bold':
+                replacement = `**${selectedText}**`;
+                break;
+            case 'italic':
+                replacement = `*${selectedText}*`;
+                break;
+            case 'heading':
+                replacement = `## ${selectedText}`;
+                break;
+            case 'list':
+                replacement = `- ${selectedText}`;
+                break;
+            case 'link':
+                replacement = `[${selectedText}](url)`;
+                break;
+            case 'quote':
+                replacement = `> ${selectedText}`;
+                break;
+        }
+
+        textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+        textarea.focus();
+        textarea.setSelectionRange(start, start + replacement.length);
+
+        // Trigger content update
+        contentEditor.dispatchEvent(new Event('input'));
+    });
+});
+
+// Initialize counters
+titleInput.dispatchEvent(new Event('input'));
+contentEditor.dispatchEvent(new Event('input'));
+if (metaDescription) metaDescription.dispatchEvent(new Event('input'));
+</script>
+@endpush
