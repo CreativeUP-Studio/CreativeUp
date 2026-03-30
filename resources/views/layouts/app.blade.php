@@ -237,7 +237,7 @@
         </div>
     </div>
 
-    <main class="min-h-screen">
+    <main class="main-content min-h-screen">
         @yield('content')
     </main>
 

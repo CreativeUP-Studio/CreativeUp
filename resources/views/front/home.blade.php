@@ -28,7 +28,7 @@
             <div class="hero-img-wrapper anim-hidden" data-anim="fade-up">
                 <img src="{{ asset('images/hero-1.jpg') }}"
                      alt="CreativeUP Desarrollo"
-                     width="260" height="320"
+                     width="320" height="400"
                      decoding="async"
                      fetchpriority="high">
             </div>
@@ -36,7 +36,7 @@
             <div class="hero-img-wrapper anim-hidden" data-anim="fade-up">
                 <img src="{{ asset('images/hero-2.jpg') }}"
                      alt="CreativeUP Marketing"
-                     width="260" height="320"
+                     width="320" height="400"
                      decoding="async"
                      fetchpriority="high">
             </div>
