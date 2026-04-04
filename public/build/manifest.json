@@ -1,20 +1,12 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-mPNgQBeu.css",
+    "file": "assets/app-BoS43MrV.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
     "names": [
       "app.css"
     ]
-  },
-  "resources/fonts/Mont/Mont-ExtraLightDEMO.otf": {
-    "file": "assets/Mont-ExtraLightDEMO-Dlz6JtMC.otf",
-    "src": "resources/fonts/Mont/Mont-ExtraLightDEMO.otf"
-  },
-  "resources/fonts/Mont/Mont-HeavyDEMO.otf": {
-    "file": "assets/Mont-HeavyDEMO-CRqU7cNb.otf",
-    "src": "resources/fonts/Mont/Mont-HeavyDEMO.otf"
   },
   "resources/js/app.js": {
     "file": "assets/app-n1ks0eGB.js",
