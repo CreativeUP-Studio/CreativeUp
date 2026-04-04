@@ -3,465 +3,458 @@
 @section('title', 'Nuevo Proyecto')
 @section('page-title', 'Crear Proyecto')
 
+@push('styles')
+<style>
+/* ═══ Enhanced Form Styles (Overrides) ═══ */
+
+/* Header glow effect */
+.pf-header {
+    box-shadow: 0 15px 40px rgba(94, 23, 235, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+.pf-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* Card hover effect */
+.pf-card:hover {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+/* Tech tag enhanced */
+.pf-tech-tag {
+    background: rgba(124, 58, 237, 0.1);
+    color: #7c3aed;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+/* Drag over state */
+.pf-upload-zone.is-dragover {
+    border-color: #7c3aed;
+    background: rgba(124, 58, 237, 0.05);
+    transform: scale(1.01);
+}
+</style>
+@endpush
+
 @section('content')
 
 <form method="POST" action="{{ route('admin.projects.store') }}" enctype="multipart/form-data" id="projectForm">
     @csrf
 
     {{-- ═══════════════════════════════════════════════════
-         HEADER WITH ACTIONS
+         HEADER
          ═══════════════════════════════════════════════════ --}}
-    <div class="admin-post-header" style="background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%); color: white; padding: 2rem; border-radius: 16px; margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(124, 58, 237, 0.25);">
-        <div class="admin-post-header-left">
-            <a href="{{ route('admin.projects.index') }}" class="admin-btn admin-btn-secondary admin-btn-sm" style="background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px);">
-                <i class="fa-solid fa-arrow-left"></i>
-                Volver
+    <header class="pf-header">
+        <div class="pf-header-left">
+            <a href="{{ route('admin.projects.index') }}" class="pf-back" aria-label="Volver a proyectos">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
             </a>
-            <div class="admin-post-header-info">
-                <h1 class="admin-post-header-title" style="color: white; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">
-                    <i class="fa-solid fa-sparkles" style="color: #fbbf24; margin-right: 0.5rem;"></i>
+            <div class="pf-header-info">
+                <h1>
+                    <i class="fa-solid fa-sparkles" style="color: #fbbf24;" aria-hidden="true"></i>
                     Nuevo Proyecto
                 </h1>
-                <p class="admin-post-header-subtitle" style="color: rgba(255, 255, 255, 0.9); font-size: 1rem;">Crea un proyecto increíble para tu portafolio</p>
+                <p>Crea un proyecto increíble para tu portafolio</p>
             </div>
         </div>
-        <div class="admin-post-header-actions">
-            <button type="submit" name="status" value="draft" class="admin-btn admin-btn-secondary" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px);">
-                <i class="fa-solid fa-floppy-disk"></i>
+        <div class="pf-header-actions">
+            <button type="submit" name="status" value="draft" class="pf-btn-draft">
+                <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
                 Guardar borrador
             </button>
-            <button type="submit" name="status" value="published" class="admin-btn admin-btn-primary" style="background: white; color: #7c3aed; font-weight: 600; box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);">
-                <i class="fa-solid fa-rocket"></i>
+            <button type="submit" name="status" value="published" class="pf-btn-publish">
+                <i class="fa-solid fa-rocket" aria-hidden="true"></i>
                 Publicar Proyecto
             </button>
         </div>
-    </div>
+    </header>
 
     {{-- ═══════════════════════════════════════════════════
-         MAIN EDITOR LAYOUT (2 COLUMNS)
+         MAIN LAYOUT
          ═══════════════════════════════════════════════════ --}}
-    <div class="admin-post-editor">
-        {{-- Left Column: Main Content --}}
-        <div class="admin-post-main">
+    <div class="pf-layout">
+        {{-- LEFT: Main Content --}}
+        <div class="pf-main">
 
-            {{-- Información Básica Card --}}
-            <div class="admin-project-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); margin-bottom: 1.5rem; border: 1px solid #f3f4f6;">
-                <div class="admin-project-card-header">
-                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
-                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #7c3aed, #a855f7); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fa-solid fa-pen-fancy" style="color: white; font-size: 1.1rem;"></i>
+            {{-- Card: Información Básica --}}
+            <div class="pf-card">
+                <div class="pf-card-header">
+                    <div class="pf-card-icon pf-card-icon--purple">
+                        <i class="fa-solid fa-pen-fancy" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <h2 class="pf-card-title">Información Básica</h2>
+                        <p class="pf-card-subtitle">Nombre y descripción del proyecto</p>
+                    </div>
+                </div>
+                <div class="pf-card-body">
+                    {{-- Título --}}
+                    <div class="pf-group">
+                        <label for="title" class="pf-label">
+                            <i class="fa-solid fa-heading" aria-hidden="true"></i>
+                            Título del proyecto
+                            <span class="pf-required">*</span>
+                        </label>
+                        <input type="text" id="title" name="title" class="pf-input pf-input-lg"
+                               value="{{ old('title') }}"
+                               placeholder="Ej: Rediseño completo de plataforma e-commerce"
+                               required maxlength="150">
+                        <div class="pf-help">
+                            <span>Define un nombre atractivo y descriptivo</span>
+                            <span class="pf-counter"><span id="titleCount">0</span> / 150</span>
                         </div>
-                        <div>
-                            <h3 style="font-size: 1.25rem; font-weight: 700; color: #1a1a2e; margin: 0;">Información Básica</h3>
-                            <p style="font-size: 0.875rem; color: #6b7280; margin: 0;">Nombre y descripción del proyecto</p>
+                        @error('title')<span class="pf-error">{{ $message }}</span>@enderror
+                    </div>
+
+                    {{-- Slug --}}
+                    <div class="pf-group">
+                        <label for="slug" class="pf-label">
+                            <i class="fa-solid fa-link" aria-hidden="true"></i>
+                            URL amigable (slug)
+                        </label>
+                        <div class="pf-slug-wrap">
+                            <span class="pf-slug-prefix">/proyectos/</span>
+                            <input type="text" id="slug" name="slug" class="pf-input"
+                                   value="{{ old('slug') }}"
+                                   placeholder="se-genera-automaticamente">
                         </div>
+                        <div class="pf-help">
+                            <span><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Se genera automáticamente del título</span>
+                        </div>
+                        @error('slug')<span class="pf-error">{{ $message }}</span>@enderror
                     </div>
-                </div>
 
-                {{-- Título --}}
-                <div class="admin-form-group" style="margin-bottom: 1.5rem;">
-                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
-                        <i class="fa-solid fa-heading" style="color: #7c3aed; margin-right: 0.5rem;"></i>
-                        Título del proyecto
-                        <span style="color: #ef4444;">*</span>
-                    </label>
-                    <input type="text"
-                           id="title"
-                           name="title"
-                           value="{{ old('title') }}"
-                           placeholder="Ej: Rediseño completo de plataforma e-commerce"
-                           required
-                           maxlength="150"
-                           style="width: 100%; padding: 0.875rem 1rem; font-size: 1.125rem; font-weight: 600; border: 2px solid #e5e7eb; border-radius: 12px; transition: all 0.3s; background: white;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
-                        <p style="font-size: 0.75rem; color: #9ca3af; margin: 0;">Define un nombre atractivo y descriptivo</p>
-                        <span style="font-size: 0.75rem; color: #9ca3af; font-weight: 500;">
-                            <span id="titleCount" style="color: #7c3aed; font-weight: 700;">0</span> / 150
-                        </span>
+                    {{-- Descripción --}}
+                    <div class="pf-group">
+                        <label for="description" class="pf-label">
+                            <i class="fa-solid fa-align-left" aria-hidden="true"></i>
+                            Descripción general
+                            <span class="pf-required">*</span>
+                        </label>
+                        <textarea id="description" name="description" class="pf-textarea"
+                                  placeholder="Escribe una descripción atractiva que capte la esencia del proyecto..."
+                                  required rows="4" maxlength="500">{{ old('description') }}</textarea>
+                        <div class="pf-help">
+                            <span>Aparecerá en las cards del portafolio</span>
+                            <span class="pf-counter"><span id="descCount">0</span> / 500</span>
+                        </div>
+                        @error('description')<span class="pf-error">{{ $message }}</span>@enderror
                     </div>
-                    @error('title')
-                        <span class="admin-form-error">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                {{-- Slug --}}
-                <div class="admin-form-group" style="margin-bottom: 1.5rem;">
-                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
-                        <i class="fa-solid fa-link" style="color: #7c3aed; margin-right: 0.5rem;"></i>
-                        URL amigable (slug)
-                    </label>
-                    <div style="display: flex; align-items: center; border: 2px solid #e5e7eb; border-radius: 12px; overflow: hidden; background: white;">
-                        <span style="background: #f9fafb; padding: 0.875rem 1rem; font-size: 0.875rem; color: #6b7280; border-right: 2px solid #e5e7eb; font-weight: 500;">/proyectos/</span>
-                        <input type="text"
-                               id="slug"
-                               name="slug"
-                               value="{{ old('slug') }}"
-                               placeholder="se-genera-automaticamente"
-                               style="flex: 1; padding: 0.875rem 1rem; border: none; outline: none; font-size: 0.9375rem;">
-                    </div>
-                    <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.5rem; margin-bottom: 0;">
-                        <i class="fa-solid fa-wand-magic-sparkles" style="margin-right: 0.25rem;"></i>
-                        Se genera automáticamente del título
-                    </p>
-                    @error('slug')
-                        <span class="admin-form-error">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                {{-- Descripción --}}
-                <div class="admin-form-group">
-                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
-                        <i class="fa-solid fa-align-left" style="color: #7c3aed; margin-right: 0.5rem;"></i>
-                        Descripción general
-                        <span style="color: #ef4444;">*</span>
-                    </label>
-                    <textarea id="description"
-                              name="description"
-                              placeholder="Escribe una descripción atractiva que capte la esencia del proyecto y enganche al lector..."
-                              required
-                              rows="4"
-                              maxlength="300"
-                              style="width: 100%; padding: 1rem; font-size: 0.9375rem; line-height: 1.6; border: 2px solid #e5e7eb; border-radius: 12px; transition: all 0.3s; resize: vertical; background: white;">{{ old('description') }}</textarea>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
-                        <p style="font-size: 0.75rem; color: #9ca3af; margin: 0;">Esta descripción aparecerá en las cards del portafolio</p>
-                        <span style="font-size: 0.75rem; color: #9ca3af; font-weight: 500;">
-                            <span id="descCount" style="color: #7c3aed; font-weight: 700;">0</span> / 300
-                        </span>
-                    </div>
-                    @error('description')
-                        <span class="admin-form-error">{{ $message }}</span>
-                    @enderror
                 </div>
             </div>
 
-            {{-- El Caso de Éxito --}}
-            <div class="admin-project-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); margin-bottom: 1.5rem; border: 1px solid #f3f4f6;">
-                <div class="admin-project-card-header">
-                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
-                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #34d399); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fa-solid fa-trophy" style="color: white; font-size: 1.1rem;"></i>
-                        </div>
-                        <div>
-                            <h3 style="font-size: 1.25rem; font-weight: 700; color: #1a1a2e; margin: 0;">Caso de Éxito</h3>
-                            <p style="font-size: 0.875rem; color: #6b7280; margin: 0;">Cuenta la historia del proyecto de forma convincente</p>
-                        </div>
+            {{-- Card: Caso de Éxito --}}
+            <div class="pf-card">
+                <div class="pf-card-header">
+                    <div class="pf-card-icon pf-card-icon--green">
+                        <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <h2 class="pf-card-title">Caso de Éxito</h2>
+                        <p class="pf-card-subtitle">Cuenta la historia del proyecto de forma convincente</p>
                     </div>
                 </div>
-
-                <div style="display: grid; gap: 1.5rem;">
+                <div class="pf-card-body">
                     {{-- El Desafío --}}
-                    <div style="position: relative;">
-                        <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, #f59e0b, #fbbf24); border-radius: 4px;"></div>
-                        <div style="padding-left: 1.5rem;">
-                            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
-                                <i class="fa-solid fa-mountain" style="color: #f59e0b;"></i>
-                                El Desafío
-                            </label>
-                            <textarea name="challenge"
-                                      id="challenge"
-                                      placeholder="¿Cuál era el problema inicial? ¿Qué necesidad tenía el cliente que requería solución?"
-                                      rows="4"
-                                      style="width: 100%; padding: 1rem; font-size: 0.9375rem; line-height: 1.6; border: 2px solid #e5e7eb; border-radius: 12px; transition: all 0.3s; resize: vertical; background: white;">{{ old('challenge') }}</textarea>
-                            <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.5rem; margin-bottom: 0;">
-                                <i class="fa-solid fa-lightbulb" style="color: #f59e0b; margin-right: 0.25rem;"></i>
-                                Describe la situación inicial o el reto que enfrentaba el cliente
-                            </p>
-                        </div>
+                    <div class="pf-case-item pf-case-item--challenge">
+                        <label for="challenge" class="pf-label pf-case-label pf-case-label--challenge">
+                            <i class="fa-solid fa-mountain" aria-hidden="true"></i>
+                            El Desafío
+                        </label>
+                        <textarea id="challenge" name="challenge" class="pf-textarea"
+                                  placeholder="¿Cuál era el problema inicial? ¿Qué necesidad tenía el cliente?"
+                                  rows="3">{{ old('challenge') }}</textarea>
+                        <div class="pf-help"><span>Describe la situación inicial o el reto que enfrentaba el cliente</span></div>
                     </div>
 
                     {{-- La Solución --}}
-                    <div style="position: relative;">
-                        <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, #3b82f6, #60a5fa); border-radius: 4px;"></div>
-                        <div style="padding-left: 1.5rem;">
-                            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
-                                <i class="fa-solid fa-lightbulb" style="color: #3b82f6;"></i>
-                                La Solución
-                            </label>
-                            <textarea name="solution"
-                                      id="solution"
-                                      placeholder="¿Qué estrategia implementaste? ¿Cómo abordaste el proyecto? ¿Qué soluciones creativas propusiste?"
-                                      rows="4"
-                                      style="width: 100%; padding: 1rem; font-size: 0.9375rem; line-height: 1.6; border: 2px solid #e5e7eb; border-radius: 12px; transition: all 0.3s; resize: vertical; background: white;">{{ old('solution') }}</textarea>
-                            <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.5rem; margin-bottom: 0;">
-                                <i class="fa-solid fa-rocket" style="color: #3b82f6; margin-right: 0.25rem;"></i>
-                                Explica tu enfoque, metodología y las soluciones que desarrollaste
-                            </p>
-                        </div>
+                    <div class="pf-case-item pf-case-item--solution">
+                        <label for="solution" class="pf-label pf-case-label pf-case-label--solution">
+                            <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                            La Solución
+                        </label>
+                        <textarea id="solution" name="solution" class="pf-textarea"
+                                  placeholder="¿Qué estrategia implementaste? ¿Cómo abordaste el proyecto?"
+                                  rows="3">{{ old('solution') }}</textarea>
+                        <div class="pf-help"><span>Explica tu enfoque, metodología y las soluciones que desarrollaste</span></div>
                     </div>
 
                     {{-- Los Resultados --}}
-                    <div style="position: relative;">
-                        <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, #10b981, #34d399); border-radius: 4px;"></div>
-                        <div style="padding-left: 1.5rem;">
-                            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
-                                <i class="fa-solid fa-chart-line" style="color: #10b981;"></i>
-                                Los Resultados
-                            </label>
-                            <textarea name="results"
-                                      id="results"
-                                      placeholder="¿Qué logros se obtuvieron? Ej: +200% en conversiones, nueva identidad de marca, mejora en UX..."
-                                      rows="4"
-                                      style="width: 100%; padding: 1rem; font-size: 0.9375rem; line-height: 1.6; border: 2px solid #e5e7eb; border-radius: 12px; transition: all 0.3s; resize: vertical; background: white;">{{ old('results') }}</textarea>
-                            <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.5rem; margin-bottom: 0;">
-                                <i class="fa-solid fa-star" style="color: #10b981; margin-right: 0.25rem;"></i>
-                                Métricas cuantificables, mejoras o el impacto positivo del proyecto
-                            </p>
-                        </div>
+                    <div class="pf-case-item pf-case-item--results">
+                        <label for="results" class="pf-label pf-case-label pf-case-label--results">
+                            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                            Los Resultados
+                        </label>
+                        <textarea id="results" name="results" class="pf-textarea"
+                                  placeholder="¿Qué logros se obtuvieron? Ej: +200% en conversiones, nueva identidad de marca..."
+                                  rows="3">{{ old('results') }}</textarea>
+                        <div class="pf-help"><span>Métricas cuantificables, mejoras o el impacto positivo del proyecto</span></div>
                     </div>
                 </div>
             </div>
 
-            {{-- Tecnologías y URL --}}
-            <div class="admin-project-card" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); margin-bottom: 1.5rem; border: 1px solid #f3f4f6;">
-                <div class="admin-project-card-header">
-                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
-                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6, #60a5fa); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fa-solid fa-code" style="color: white; font-size: 1.1rem;"></i>
-                        </div>
-                        <div>
-                            <h3 style="font-size: 1.25rem; font-weight: 700; color: #1a1a2e; margin: 0;">Tecnologías y Enlace</h3>
-                            <p style="font-size: 0.875rem; color: #6b7280; margin: 0;">Herramientas utilizadas y acceso al proyecto</p>
-                        </div>
+            {{-- Card: Tecnologías y URL --}}
+            <div class="pf-card">
+                <div class="pf-card-header">
+                    <div class="pf-card-icon pf-card-icon--blue">
+                        <i class="fa-solid fa-code" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <h2 class="pf-card-title">Tecnologías y Enlace</h2>
+                        <p class="pf-card-subtitle">Herramientas utilizadas y acceso al proyecto</p>
                     </div>
                 </div>
-
-                <div style="display: grid; gap: 1.5rem;">
+                <div class="pf-card-body">
                     {{-- Tecnologías --}}
-                    <div class="admin-form-group">
-                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
-                            <i class="fa-solid fa-tools" style="color: #7c3aed; margin-right: 0.5rem;"></i>
+                    <div class="pf-group">
+                        <label for="technologies" class="pf-label">
+                            <i class="fa-solid fa-tools" aria-hidden="true"></i>
                             Tecnologías / Herramientas
                         </label>
-                        <input type="text"
-                               id="technologies"
-                               name="technologies"
+                        <input type="text" id="technologies" name="technologies" class="pf-input"
                                value="{{ old('technologies') }}"
-                               placeholder="Laravel, Figma, Tailwind CSS, Adobe XD, Vue.js"
-                               style="width: 100%; padding: 0.875rem 1rem; font-size: 0.9375rem; border: 2px solid #e5e7eb; border-radius: 12px; transition: all 0.3s; background: white;">
-                        <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.5rem; margin-bottom: 0;">
-                            <i class="fa-solid fa-info-circle" style="margin-right: 0.25rem;"></i>
-                            Separa con comas cada tecnología o herramienta utilizada
-                        </p>
-                        <div id="techPreview" class="admin-project-techs" style="margin-top: 12px; display: none; gap: 0.5rem; flex-wrap: wrap;"></div>
+                               placeholder="Laravel, Figma, Tailwind CSS, Adobe XD, Vue.js">
+                        <div class="pf-help"><span>Separa con comas cada tecnología o herramienta utilizada</span></div>
+                        <div id="techPreview" class="pf-tech-preview" style="display: none;"></div>
                     </div>
 
-                    {{-- URL del proyecto --}}
-                    <div class="admin-form-group">
-                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
-                            <i class="fa-solid fa-globe" style="color: #7c3aed; margin-right: 0.5rem;"></i>
+                    {{-- URL --}}
+                    <div class="pf-group">
+                        <label for="url" class="pf-label">
+                            <i class="fa-solid fa-globe" aria-hidden="true"></i>
                             URL del proyecto
                         </label>
-                        <div style="position: relative;">
-                            <i class="fa-solid fa-external-link-alt" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #9ca3af;"></i>
-                            <input type="url"
-                                   id="url"
-                                   name="url"
-                                   value="{{ old('url') }}"
-                                   placeholder="https://ejemplo.com"
-                                   style="width: 100%; padding: 0.875rem 1rem 0.875rem 2.75rem; font-size: 0.9375rem; border: 2px solid #e5e7eb; border-radius: 12px; transition: all 0.3s; background: white;">
-                        </div>
-                        <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.5rem; margin-bottom: 0;">
-                            <i class="fa-solid fa-link" style="margin-right: 0.25rem;"></i>
-                            Enlace al proyecto en vivo (si está disponible públicamente)
-                        </p>
+                        <input type="url" id="url" name="url" class="pf-input"
+                               value="{{ old('url') }}"
+                               placeholder="https://ejemplo.com">
+                        <div class="pf-help"><span>Enlace al proyecto en vivo (si está disponible)</span></div>
+                        @error('url')<span class="pf-error">{{ $message }}</span>@enderror
                     </div>
+                </div>
+            </div>
+
+            {{-- Card: Pasos del Proceso --}}
+            <div class="pf-card">
+                <div class="pf-card-header">
+                    <div class="pf-card-icon pf-card-icon--orange">
+                        <i class="fa-solid fa-list-ol" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <h2 class="pf-card-title">Pasos del Proceso</h2>
+                        <p class="pf-card-subtitle">Define las fases del proyecto con imágenes</p>
+                    </div>
+                </div>
+                <div class="pf-card-body">
+                    <div id="stepsContainer" class="pf-steps-list">
+                        {{-- Step 1 (default) --}}
+                        <div class="pf-step" data-index="0">
+                            <div class="pf-step-header">
+                                <span class="pf-step-num">01</span>
+                                <button type="button" class="pf-step-remove" onclick="removeStep(this)" style="display: none;">
+                                    <i class="fa-solid fa-trash" aria-hidden="true"></i> Eliminar
+                                </button>
+                            </div>
+                            <div class="pf-step-fields">
+                                <div class="pf-group">
+                                    <label class="pf-label">Título del paso</label>
+                                    <input type="text" name="steps[0][title]" class="pf-input"
+                                           placeholder="Ej: Investigación, Diseño, Desarrollo...">
+                                </div>
+                                <div class="pf-group">
+                                    <label class="pf-label">Descripción</label>
+                                    <textarea name="steps[0][description]" class="pf-textarea" rows="2"
+                                              placeholder="Describe qué se hizo en este paso..."></textarea>
+                                </div>
+                            </div>
+                            <div class="pf-step-images">
+                                <div class="pf-step-img-upload">
+                                    <input type="file" name="steps[0][image1]" accept="image/*" onchange="previewStepImg(this, 0, 1)">
+                                    <i class="fa-solid fa-image" aria-hidden="true"></i>
+                                    <span>Imagen 1</span>
+                                </div>
+                                <div class="pf-step-img-upload">
+                                    <input type="file" name="steps[0][image2]" accept="image/*" onchange="previewStepImg(this, 0, 2)">
+                                    <i class="fa-solid fa-image" aria-hidden="true"></i>
+                                    <span>Imagen 2</span>
+                                </div>
+                                <div class="pf-step-img-upload">
+                                    <input type="file" name="steps[0][image3]" accept="image/*" onchange="previewStepImg(this, 0, 3)">
+                                    <i class="fa-solid fa-image" aria-hidden="true"></i>
+                                    <span>Imagen 3</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="pf-add-step" onclick="addStep()">
+                        <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                        Agregar otro paso
+                    </button>
                 </div>
             </div>
 
         </div>
 
-        {{-- Right Column: Sidebar --}}
-        <div class="admin-post-sidebar">
+        {{-- RIGHT: Sidebar --}}
+        <div class="pf-sidebar">
 
-            {{-- Thumbnail --}}
-            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); margin-bottom: 1.5rem; border: 1px solid #f3f4f6;">
-                <h3 style="display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 700; color: #1a1a2e; margin: 0 0 1rem 0;">
-                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #ec4899, #f472b6); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-image" style="color: white; font-size: 0.875rem;"></i>
+            {{-- Card: Imagen Principal --}}
+            <div class="pf-card">
+                <div class="pf-card-header pf-card-header--compact">
+                    <div class="pf-card-icon pf-card-icon--pink">
+                        <i class="fa-solid fa-image" aria-hidden="true"></i>
                     </div>
-                    Imagen Principal
-                </h3>
-                <p style="font-size: 0.8125rem; color: #6b7280; margin-bottom: 1rem;">La imagen destacada de tu proyecto</p>
-
-                <div class="admin-post-image-upload">
-                    <input type="file"
-                           id="thumbnail"
-                           name="thumbnail"
-                           accept="image/*"
-                           class="admin-file-input"
-                           onchange="previewThumbnail(event)">
-                    <div id="thumbnailPreview" style="position: relative; width: 100%; aspect-ratio: 16/10; background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%); border: 2px dashed #d1d5db; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; overflow: hidden;" onclick="document.getElementById('thumbnail').click()">
-                        <div style="text-align: center; padding: 1.5rem;">
-                            <div style="width: 50px; height: 50px; margin: 0 auto 0.75rem; background: linear-gradient(135deg, #7c3aed, #a855f7); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                                <i class="fa-solid fa-cloud-arrow-up" style="color: white; font-size: 1.5rem;"></i>
-                            </div>
-                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin: 0 0 0.25rem 0;">Click para subir imagen</p>
-                            <span style="font-size: 0.75rem; color: #9ca3af;">JPG, PNG, GIF (Max 2MB)</span>
-                        </div>
-                    </div>
-                    <label for="thumbnail" class="admin-btn admin-btn-secondary admin-btn-sm" style="width: 100%; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem; border-radius: 10px; background: #f9fafb; border: 1px solid #e5e7eb; color: #374151; font-weight: 600; cursor: pointer; transition: all 0.3s;">
-                        <i class="fa-solid fa-upload"></i>
-                        Seleccionar imagen
-                    </label>
-                </div>
-                @error('thumbnail')
-                    <span class="admin-form-error">{{ $message }}</span>
-                @enderror
-            </div>
-
-            {{-- Galería de Imágenes --}}
-            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); margin-bottom: 1.5rem; border: 1px solid #f3f4f6;">
-                <h3 style="display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 700; color: #1a1a2e; margin: 0 0 1rem 0;">
-                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #8b5cf6, #a78bfa); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-images" style="color: white; font-size: 0.875rem;"></i>
-                    </div>
-                    Galería del Proyecto
-                </h3>
-                <p style="font-size: 0.8125rem; color: #6b7280; margin-bottom: 1rem;">
-                    Sube múltiples imágenes del proceso o resultados
-                </p>
-                <div class="admin-post-image-upload">
-                    <input type="file"
-                           id="gallery"
-                           name="images[]"
-                           accept="image/*"
-                           multiple
-                           class="admin-file-input"
-                           onchange="previewGallery(event)">
-                    <div id="galleryPreview" class="admin-gallery-upload" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;">
-                        <div class="admin-gallery-item" onclick="document.getElementById('gallery').click()" style="aspect-ratio: 1; background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%); border: 2px dashed #d1d5db; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s;">
-                            <div style="text-align: center;">
-                                <i class="fa-solid fa-plus" style="color: #7c3aed; font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
-                                <p style="margin: 0; font-size: 0.75rem; color: #6b7280; font-weight: 500;">Agregar<br>imágenes</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @error('images.*')
-                    <span class="admin-form-error">{{ $message }}</span>
-                @enderror
-            </div>
-
-            {{-- Configuración de Publicación --}}
-            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); margin-bottom: 1.5rem; border: 1px solid #f3f4f6;">
-                <h3 style="display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 700; color: #1a1a2e; margin: 0 0 1rem 0;">
-                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #f59e0b, #fbbf24); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-calendar-check" style="color: white; font-size: 0.875rem;"></i>
-                    </div>
-                    Publicación
-                </h3>
-
-                <div style="margin-bottom: 1rem;">
-                    <label style="display: block; font-size: 0.8125rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
-                        <i class="fa-solid fa-circle-dot" style="color: #7c3aed; margin-right: 0.375rem; font-size: 0.75rem;"></i>
-                        Estado
-                    </label>
-                    <select name="status_select" id="status" style="width: 100%; padding: 0.75rem 1rem; font-size: 0.875rem; border: 2px solid #e5e7eb; border-radius: 10px; background: white; cursor: pointer; transition: all 0.3s;">
-                        <option value="draft" {{ old('status') === 'draft' ? 'selected' : '' }}>
-                            📝 Borrador
-                        </option>
-                        <option value="published" {{ old('status') === 'published' ? 'selected' : '' }}>
-                            ✅ Publicado
-                        </option>
-                    </select>
-                </div>
-
-                <div>
-                    <label style="display: block; font-size: 0.8125rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
-                        <i class="fa-solid fa-clock" style="color: #7c3aed; margin-right: 0.375rem; font-size: 0.75rem;"></i>
-                        Fecha de publicación
-                    </label>
-                    <input type="datetime-local"
-                           name="published_at"
-                           value="{{ old('published_at') }}"
-                           style="width: 100%; padding: 0.75rem 1rem; font-size: 0.875rem; border: 2px solid #e5e7eb; border-radius: 10px; background: white; transition: all 0.3s;">
-                    <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.375rem; margin-bottom: 0;">Déjalo vacío para publicar ahora</p>
-                </div>
-            </div>
-
-            {{-- Información del Proyecto --}}
-            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); margin-bottom: 1.5rem; border: 1px solid #f3f4f6;">
-                <h3 style="display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 700; color: #1a1a2e; margin: 0 0 1rem 0;">
-                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #06b6d4, #22d3ee); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-folder-open" style="color: white; font-size: 0.875rem;"></i>
-                    </div>
-                    Detalles del Proyecto
-                </h3>
-
-                <div style="display: grid; gap: 1rem;">
                     <div>
-                        <label style="display: block; font-size: 0.8125rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
-                            <i class="fa-solid fa-tag" style="color: #7c3aed; margin-right: 0.375rem; font-size: 0.75rem;"></i>
+                        <h2 class="pf-card-title">Imagen Principal</h2>
+                        <p class="pf-card-subtitle">La portada de tu proyecto</p>
+                    </div>
+                </div>
+                <div class="pf-card-body">
+                    <div class="pf-upload-zone" onclick="document.getElementById('thumbnail').click()">
+                        <input type="file" id="thumbnail" name="thumbnail" accept="image/*" 
+                               onchange="previewThumbnail(event)" style="display:none;">
+                        <div id="thumbnailPreview" class="pf-upload-content">
+                            <div class="pf-upload-icon">
+                                <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+                            </div>
+                            <p class="pf-upload-text">Click para subir</p>
+                            <span class="pf-upload-hint">JPG, PNG, WebP (Max 2MB)</span>
+                        </div>
+                    </div>
+                    @error('thumbnail')<span class="pf-error">{{ $message }}</span>@enderror
+                </div>
+            </div>
+
+            {{-- Card: Galería --}}
+            <div class="pf-card">
+                <div class="pf-card-header pf-card-header--compact">
+                    <div class="pf-card-icon pf-card-icon--violet">
+                        <i class="fa-solid fa-images" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <h2 class="pf-card-title">Galería</h2>
+                        <p class="pf-card-subtitle">Imágenes adicionales</p>
+                    </div>
+                </div>
+                <div class="pf-card-body">
+                    <input type="file" id="gallery" name="images[]" accept="image/*" multiple
+                           onchange="previewGallery(event)" style="display:none;">
+                    <div id="galleryPreview" class="pf-gallery-grid">
+                        <div class="pf-gallery-add" onclick="document.getElementById('gallery').click()">
+                            <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                            <span>Agregar</span>
+                        </div>
+                    </div>
+                    @error('images.*')<span class="pf-error">{{ $message }}</span>@enderror
+                </div>
+            </div>
+
+            {{-- Card: Detalles --}}
+            <div class="pf-card">
+                <div class="pf-card-header pf-card-header--compact">
+                    <div class="pf-card-icon pf-card-icon--cyan">
+                        <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <h2 class="pf-card-title">Detalles</h2>
+                        <p class="pf-card-subtitle">Información del proyecto</p>
+                    </div>
+                </div>
+                <div class="pf-card-body">
+                    <div class="pf-group">
+                        <label for="type" class="pf-label pf-label--sm">
+                            <i class="fa-solid fa-tag" aria-hidden="true"></i>
                             Tipo de proyecto
                         </label>
-                        <input type="text"
-                               id="type"
-                               name="type"
-                               value="{{ old('type') }}"
-                               placeholder="Branding, Web Design, App..."
-                               style="width: 100%; padding: 0.75rem 1rem; font-size: 0.875rem; border: 2px solid #e5e7eb; border-radius: 10px; background: white; transition: all 0.3s;">
+                        <input type="text" id="type" name="type" class="pf-input"
+                               value="{{ old('type') }}" placeholder="Web, Branding, App...">
                     </div>
-
-                    <div>
-                        <label style="display: block; font-size: 0.8125rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
-                            <i class="fa-solid fa-building" style="color: #7c3aed; margin-right: 0.375rem; font-size: 0.75rem;"></i>
+                    <div class="pf-group">
+                        <label for="client" class="pf-label pf-label--sm">
+                            <i class="fa-solid fa-building" aria-hidden="true"></i>
                             Cliente
                         </label>
-                        <input type="text"
-                               id="client"
-                               name="client"
-                               value="{{ old('client') }}"
-                               placeholder="Nombre del cliente"
-                               style="width: 100%; padding: 0.75rem 1rem; font-size: 0.875rem; border: 2px solid #e5e7eb; border-radius: 10px; background: white; transition: all 0.3s;">
+                        <input type="text" id="client" name="client" class="pf-input"
+                               value="{{ old('client') }}" placeholder="Nombre del cliente">
                     </div>
-
-                    <div>
-                        <label style="display: block; font-size: 0.8125rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">
-                            <i class="fa-solid fa-calendar" style="color: #7c3aed; margin-right: 0.375rem; font-size: 0.75rem;"></i>
+                    <div class="pf-group">
+                        <label for="year" class="pf-label pf-label--sm">
+                            <i class="fa-solid fa-calendar" aria-hidden="true"></i>
                             Año
                         </label>
-                        <input type="text"
-                               id="year"
-                               name="year"
-                               value="{{ old('year', date('Y')) }}"
-                               placeholder="2026"
-                               style="width: 100%; padding: 0.75rem 1rem; font-size: 0.875rem; border: 2px solid #e5e7eb; border-radius: 10px; background: white; transition: all 0.3s;">
+                        <input type="text" id="year" name="year" class="pf-input"
+                               value="{{ old('year', date('Y')) }}" placeholder="2025">
                     </div>
                 </div>
             </div>
 
-            {{-- Tips Card --}}
-            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(251, 191, 36, 0.15); border: 1px solid #fcd34d;">
-                <h3 style="display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 700; color: #92400e; margin: 0 0 1rem 0;">
-                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-lightbulb" style="color: white; font-size: 0.875rem;"></i>
+            {{-- Card: Publicación --}}
+            <div class="pf-card">
+                <div class="pf-card-header pf-card-header--compact">
+                    <div class="pf-card-icon pf-card-icon--amber">
+                        <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
                     </div>
-                    Tips para un buen proyecto
-                </h3>
-                <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem;">
-                    <li style="display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.8125rem; color: #78350f;">
-                        <span style="width: 20px; height: 20px; background: #f59e0b; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;">
-                            <i class="fa-solid fa-check" style="color: white; font-size: 0.625rem;"></i>
-                        </span>
-                        Usa un título descriptivo y atractivo que capte la atención
+                    <div>
+                        <h2 class="pf-card-title">Publicación</h2>
+                        <p class="pf-card-subtitle">Estado y fecha</p>
+                    </div>
+                </div>
+                <div class="pf-card-body">
+                    <div class="pf-group">
+                        <label for="status" class="pf-label pf-label--sm">
+                            <i class="fa-solid fa-circle-dot" aria-hidden="true"></i>
+                            Estado
+                        </label>
+                        <select id="status" name="status_select" class="pf-select">
+                            <option value="draft" {{ old('status') === 'draft' ? 'selected' : '' }}>📝 Borrador</option>
+                            <option value="published" {{ old('status') === 'published' ? 'selected' : '' }}>✅ Publicado</option>
+                        </select>
+                    </div>
+                    <div class="pf-group">
+                        <label for="published_at" class="pf-label pf-label--sm">
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            Fecha de publicación
+                        </label>
+                        <input type="datetime-local" id="published_at" name="published_at" class="pf-input"
+                               value="{{ old('published_at') }}">
+                        <div class="pf-help"><span>Déjalo vacío para publicar ahora</span></div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Tips --}}
+            <div class="pf-tips">
+                <div class="pf-tips-header">
+                    <div class="pf-tips-icon">
+                        <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="pf-tips-title">Tips para destacar</h3>
+                </div>
+                <ul class="pf-tips-list">
+                    <li>
+                        <span class="pf-tips-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>
+                        Usa un título atractivo y descriptivo
                     </li>
-                    <li style="display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.8125rem; color: #78350f;">
-                        <span style="width: 20px; height: 20px; background: #f59e0b; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;">
-                            <i class="fa-solid fa-check" style="color: white; font-size: 0.625rem;"></i>
-                        </span>
-                        Agrega imágenes de alta calidad del proyecto
+                    <li>
+                        <span class="pf-tips-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>
+                        Agrega imágenes de alta calidad
                     </li>
-                    <li style="display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.8125rem; color: #78350f;">
-                        <span style="width: 20px; height: 20px; background: #f59e0b; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;">
-                            <i class="fa-solid fa-check" style="color: white; font-size: 0.625rem;"></i>
-                        </span>
-                        Detalla el proceso y los resultados obtenidos
+                    <li>
+                        <span class="pf-tips-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>
+                        Detalla el proceso y resultados
                     </li>
-                    <li style="display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.8125rem; color: #78350f;">
-                        <span style="width: 20px; height: 20px; background: #f59e0b; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;">
-                            <i class="fa-solid fa-check" style="color: white; font-size: 0.625rem;"></i>
-                        </span>
-                        Incluye todas las tecnologías utilizadas
+                    <li>
+                        <span class="pf-tips-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>
+                        Incluye todas las tecnologías
                     </li>
                 </ul>
             </div>
@@ -474,18 +467,22 @@
 
 @push('scripts')
 <script>
+// ═══════════════════════════════════════════════════════════════════════════
 // Title & Slug
+// ═══════════════════════════════════════════════════════════════════════════
 const titleInput = document.getElementById('title');
 const titleCount = document.getElementById('titleCount');
 const slugInput = document.getElementById('slug');
 
 titleInput.addEventListener('input', function() {
     titleCount.textContent = this.value.length;
-
+    
     // Auto-generate slug
     if (!slugInput.value || slugInput.dataset.auto !== 'false') {
         slugInput.value = this.value
             .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
             .replace(/[^a-z0-9\s-]/g, '')
             .replace(/\s+/g, '-')
             .replace(/-+/g, '-')
@@ -498,7 +495,9 @@ slugInput.addEventListener('input', function() {
     slugInput.dataset.auto = 'false';
 });
 
+// ═══════════════════════════════════════════════════════════════════════════
 // Description counter
+// ═══════════════════════════════════════════════════════════════════════════
 const descInput = document.getElementById('description');
 const descCount = document.getElementById('descCount');
 
@@ -506,16 +505,18 @@ descInput.addEventListener('input', function() {
     descCount.textContent = this.value.length;
 });
 
+// ═══════════════════════════════════════════════════════════════════════════
 // Technologies preview
+// ═══════════════════════════════════════════════════════════════════════════
 const techInput = document.getElementById('technologies');
 const techPreview = document.getElementById('techPreview');
 
 techInput.addEventListener('input', function() {
     const techs = this.value.split(',').map(t => t.trim()).filter(t => t);
-
+    
     if (techs.length > 0) {
-        techPreview.innerHTML = techs.map(tech =>
-            `<span class="admin-project-tech">${tech}</span>`
+        techPreview.innerHTML = techs.map(tech => 
+            `<span class="pf-tech-tag">${tech}</span>`
         ).join('');
         techPreview.style.display = 'flex';
     } else {
@@ -523,44 +524,46 @@ techInput.addEventListener('input', function() {
     }
 });
 
+// ═══════════════════════════════════════════════════════════════════════════
 // Thumbnail preview
+// ═══════════════════════════════════════════════════════════════════════════
 function previewThumbnail(event) {
     const file = event.target.files[0];
     const preview = document.getElementById('thumbnailPreview');
-
+    
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            preview.innerHTML = `<img src="${e.target.result}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--admin-radius);">`;
+            preview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="pf-upload-preview">`;
         };
         reader.readAsDataURL(file);
     }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
 // Gallery preview
+// ═══════════════════════════════════════════════════════════════════════════
 let galleryFiles = [];
 
 function previewGallery(event) {
     const files = Array.from(event.target.files);
     const preview = document.getElementById('galleryPreview');
-
+    const addButton = preview.querySelector('.pf-gallery-add');
+    
     files.forEach(file => {
         galleryFiles.push(file);
-
+        
         const reader = new FileReader();
         reader.onload = function(e) {
             const itemDiv = document.createElement('div');
-            itemDiv.className = 'admin-gallery-item';
-            itemDiv.style.position = 'relative';
+            itemDiv.className = 'pf-gallery-item';
             itemDiv.innerHTML = `
-                <img src="${e.target.result}" alt="Gallery" style="width: 100%; height: 100%; object-fit: cover;">
-                <button type="button" class="admin-gallery-remove" onclick="removeGalleryItem(this, '${file.name}')">
+                <img src="${e.target.result}" alt="Gallery">
+                <button type="button" class="pf-gallery-remove" onclick="removeGalleryItem(this, '${file.name}')">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             `;
-
-            // Insert before the "add" button
-            const addButton = preview.querySelector('.admin-gallery-item:last-child');
+            
             preview.insertBefore(itemDiv, addButton);
         };
         reader.readAsDataURL(file);
@@ -568,20 +571,122 @@ function previewGallery(event) {
 }
 
 function removeGalleryItem(button, fileName) {
-    // Remove from array
     galleryFiles = galleryFiles.filter(f => f.name !== fileName);
-
-    // Remove from DOM
     button.parentElement.remove();
-
-    // Update file input
+    
     const dt = new DataTransfer();
     galleryFiles.forEach(file => dt.items.add(file));
     document.getElementById('gallery').files = dt.files;
 }
 
-// Initialize counters
-titleInput.dispatchEvent(new Event('input'));
-descInput.dispatchEvent(new Event('input'));
+// ═══════════════════════════════════════════════════════════════════════════
+// Steps Builder
+// ═══════════════════════════════════════════════════════════════════════════
+let stepCount = 1;
+
+function addStep() {
+    const container = document.getElementById('stepsContainer');
+    const index = stepCount;
+    
+    const stepHtml = `
+        <div class="pf-step" data-index="${index}">
+            <div class="pf-step-header">
+                <span class="pf-step-num">${String(index + 1).padStart(2, '0')}</span>
+                <button type="button" class="pf-step-remove" onclick="removeStep(this)">
+                    <i class="fa-solid fa-trash" aria-hidden="true"></i> Eliminar
+                </button>
+            </div>
+            <div class="pf-step-fields">
+                <div class="pf-group">
+                    <label class="pf-label">Título del paso</label>
+                    <input type="text" name="steps[${index}][title]" class="pf-input"
+                           placeholder="Ej: Investigación, Diseño, Desarrollo...">
+                </div>
+                <div class="pf-group">
+                    <label class="pf-label">Descripción</label>
+                    <textarea name="steps[${index}][description]" class="pf-textarea" rows="2"
+                              placeholder="Describe qué se hizo en este paso..."></textarea>
+                </div>
+            </div>
+            <div class="pf-step-images">
+                <div class="pf-step-img-upload">
+                    <input type="file" name="steps[${index}][image1]" accept="image/*" onchange="previewStepImg(this, ${index}, 1)">
+                    <i class="fa-solid fa-image" aria-hidden="true"></i>
+                    <span>Imagen 1</span>
+                </div>
+                <div class="pf-step-img-upload">
+                    <input type="file" name="steps[${index}][image2]" accept="image/*" onchange="previewStepImg(this, ${index}, 2)">
+                    <i class="fa-solid fa-image" aria-hidden="true"></i>
+                    <span>Imagen 2</span>
+                </div>
+                <div class="pf-step-img-upload">
+                    <input type="file" name="steps[${index}][image3]" accept="image/*" onchange="previewStepImg(this, ${index}, 3)">
+                    <i class="fa-solid fa-image" aria-hidden="true"></i>
+                    <span>Imagen 3</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', stepHtml);
+    stepCount++;
+    updateStepNumbers();
+    updateRemoveButtons();
+}
+
+function removeStep(button) {
+    const step = button.closest('.pf-step');
+    step.remove();
+    updateStepNumbers();
+    updateRemoveButtons();
+}
+
+function updateStepNumbers() {
+    const steps = document.querySelectorAll('.pf-step');
+    steps.forEach((step, idx) => {
+        const numEl = step.querySelector('.pf-step-num');
+        if (numEl) {
+            numEl.textContent = String(idx + 1).padStart(2, '0');
+        }
+    });
+}
+
+function updateRemoveButtons() {
+    const steps = document.querySelectorAll('.pf-step');
+    steps.forEach(step => {
+        const removeBtn = step.querySelector('.pf-step-remove');
+        if (removeBtn) {
+            removeBtn.style.display = steps.length > 1 ? 'block' : 'none';
+        }
+    });
+}
+
+function previewStepImg(input, stepIndex, imgNum) {
+    const file = input.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const container = input.parentElement;
+            container.innerHTML = `
+                <img src="${e.target.result}" class="pf-step-img-preview" alt="Step image">
+                <input type="file" name="steps[${stepIndex}][image${imgNum}]" accept="image/*" 
+                       onchange="previewStepImg(this, ${stepIndex}, ${imgNum})">
+            `;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Initialize
+// ═══════════════════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize counters
+    titleInput.dispatchEvent(new Event('input'));
+    descInput.dispatchEvent(new Event('input'));
+    
+    // Initialize step buttons
+    updateRemoveButtons();
+});
 </script>
 @endpush

@@ -10,13 +10,18 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('head')
 </head>
-<body class="bg-gray-950 text-white @yield('body-class')">
+<body class="@yield('body-class')">
 
-    <header class="topbar anim-hidden" data-anim="fade-down">
-        <a href="/" class="topbar-logo anim-hidden" data-anim="fade-left">
-            <span class="logo-creative">creative</span><span class="logo-up">up</span>
+    {{-- Logo flotante --}}
+    <div class="floating-logo" id="floatingLogo">
+        <a href="/" class="brand-logo">
+            <span class="brand-creative">creative</span><span class="brand-up">up</span>
         </a>
-        <button class="topbar-dots anim-hidden" data-anim="fade-right" aria-label="Menú">
+    </div>
+
+    {{-- Botón de menú flotante --}}
+    <button class="floating-menu-btn" id="menuTrigger" aria-label="Abrir menú">
+        <span class="menu-dots">
             <span class="dot"></span>
             <span class="dot"></span>
             <span class="dot"></span>
@@ -26,210 +31,177 @@
             <span class="dot"></span>
             <span class="dot"></span>
             <span class="dot"></span>
-        </button>
-    </header>
+        </span>
+        <span class="menu-close">
+            <span class="close-line"></span>
+            <span class="close-line"></span>
+        </span>
+    </button>
 
     {{-- Menú Fullscreen Premium --}}
     <div class="fullscreen-menu" id="fullscreenMenu">
-        <div class="menu-overlay"></div>
-        <div class="menu-content">
-            {{-- Header del menú --}}
-            <div class="menu-header">
-                <div class="menu-logo">
-                    <span class="menu-logo-creative">creative</span><span class="menu-logo-up">up</span>
-                </div>
-            </div>
-
-            {{-- Grid de 2 columnas --}}
-            <div class="menu-grid">
-                {{-- Columna izquierda: Navegación --}}
-                <div class="menu-left-col">
-                    <nav class="menu-nav">
-                        <ul class="menu-links">
-                            <li class="menu-link-item" style="--i: 0" data-page="home">
-                                <a href="{{ route('home') }}" class="menu-link">
-                                    <div class="menu-link-icon">
-                                        <i class="fa-solid fa-house"></i>
-                                    </div>
-                                    <div class="menu-link-content">
-                                        <span class="menu-link-number">01</span>
-                                        <span class="menu-link-text">Inicio</span>
-                                    </div>
-                                    <div class="menu-link-arrow">
-                                        <i class="fa-solid fa-arrow-right"></i>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="menu-link-item" style="--i: 1" data-page="services">
-                                <a href="{{ route('services.index') }}" class="menu-link">
-                                    <div class="menu-link-icon">
-                                        <i class="fa-solid fa-briefcase"></i>
-                                    </div>
-                                    <div class="menu-link-content">
-                                        <span class="menu-link-number">02</span>
-                                        <span class="menu-link-text">Servicios</span>
-                                    </div>
-                                    <div class="menu-link-arrow">
-                                        <i class="fa-solid fa-arrow-right"></i>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="menu-link-item" style="--i: 2" data-page="projects">
-                                <a href="{{ route('projects.index') }}" class="menu-link">
-                                    <div class="menu-link-icon">
-                                        <i class="fa-solid fa-folder-open"></i>
-                                    </div>
-                                    <div class="menu-link-content">
-                                        <span class="menu-link-number">03</span>
-                                        <span class="menu-link-text">Proyectos</span>
-                                    </div>
-                                    <div class="menu-link-arrow">
-                                        <i class="fa-solid fa-arrow-right"></i>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="menu-link-item" style="--i: 3" data-page="blog">
-                                <a href="{{ route('blog.index') }}" class="menu-link">
-                                    <div class="menu-link-icon">
-                                        <i class="fa-solid fa-newspaper"></i>
-                                    </div>
-                                    <div class="menu-link-content">
-                                        <span class="menu-link-number">04</span>
-                                        <span class="menu-link-text">Blog</span>
-                                    </div>
-                                    <div class="menu-link-arrow">
-                                        <i class="fa-solid fa-arrow-right"></i>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="menu-link-item" style="--i: 4" data-page="contact">
-                                <a href="{{ route('contact.index') }}" class="menu-link">
-                                    <div class="menu-link-icon">
-                                        <i class="fa-solid fa-paper-plane"></i>
-                                    </div>
-                                    <div class="menu-link-content">
-                                        <span class="menu-link-number">05</span>
-                                        <span class="menu-link-text">Contacto</span>
-                                    </div>
-                                    <div class="menu-link-arrow">
-                                        <i class="fa-solid fa-arrow-right"></i>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-
+        <div class="menu-backdrop"></div>
+        
+        {{-- SVG Gradients Definition --}}
+        <svg width="0" height="0" style="position: absolute;">
+            <defs>
+                <linearGradient id="nav-arrow-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#5e17eb;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#e870c2;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+        </svg>
+        
+        <div class="menu-wrapper">
+            <div class="menu-container">
+                {{-- Navegación Principal --}}
+                <nav class="menu-nav">
+                    <ul class="nav-list">
+                        <li class="nav-item" style="--delay: 0">
+                            <a href="{{ route('home') }}" class="nav-link">
+                                <span class="nav-number">01</span>
+                                <span class="nav-text" data-text="Inicio">Inicio</span>
+                                <span class="nav-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <svg class="arrow-gradient" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="url(#nav-arrow-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item" style="--delay: 1">
+                            <a href="{{ route('services.index') }}" class="nav-link">
+                                <span class="nav-number">02</span>
+                                <span class="nav-text" data-text="Servicios">Servicios</span>
+                                <span class="nav-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <svg class="arrow-gradient" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="url(#nav-arrow-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item" style="--delay: 2">
+                            <a href="{{ route('projects.index') }}" class="nav-link">
+                                <span class="nav-number">03</span>
+                                <span class="nav-text" data-text="Proyectos">Proyectos</span>
+                                <span class="nav-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <svg class="arrow-gradient" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="url(#nav-arrow-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item" style="--delay: 3">
+                            <a href="{{ route('blog.index') }}" class="nav-link">
+                                <span class="nav-number">04</span>
+                                <span class="nav-text" data-text="Blog">Blog</span>
+                                <span class="nav-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <svg class="arrow-gradient" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="url(#nav-arrow-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item" style="--delay: 4">
+                            <a href="{{ route('contact.index') }}" class="nav-link">
+                                <span class="nav-number">05</span>
+                                <span class="nav-text" data-text="Contacto">Contacto</span>
+                                <span class="nav-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <svg class="arrow-gradient" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="url(#nav-arrow-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                
+                {{-- Sección Secundaria --}}
+                <div class="menu-secondary">
+                    {{-- CTA Card --}}
+                    <div class="menu-cta" style="--delay: 5">
+                        <div class="cta-badge">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M8 1L10 5.5L14.5 6L10.5 9.5L11.5 14L8 11.5L4.5 14L5.5 9.5L1.5 6L6 5.5L8 1Z" fill="currentColor"/>
+                            </svg>
+                            Consultoría Gratuita
+                        </div>
+                        <h3 class="cta-title">¿Listo para Crecer?</h3>
+                        <p class="cta-desc">Conversemos sobre tu proyecto y descubre cómo podemos ayudarte</p>
+                        <a href="{{ route('contact.index') }}" class="cta-button">
+                            Iniciar Proyecto
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M4 10h12m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                    </div>
+                    
                     {{-- Stats --}}
-                    <div class="menu-stats">
-                        <div class="menu-stat-item">
-                            <span class="menu-stat-number">150+</span>
-                            <span class="menu-stat-label">Proyectos</span>
+                    <div class="menu-stats" style="--delay: 6">
+                        <div class="stat-item">
+                            <div class="stat-value">150+</div>
+                            <div class="stat-label">Proyectos</div>
                         </div>
-                        <div class="menu-stat-item">
-                            <span class="menu-stat-number">95%</span>
-                            <span class="menu-stat-label">Satisfacción</span>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <div class="stat-value">95%</div>
+                            <div class="stat-label">Satisfacción</div>
                         </div>
-                        <div class="menu-stat-item">
-                            <span class="menu-stat-number">5+</span>
-                            <span class="menu-stat-label">Años</span>
-                        </div>
-                    </div>
-
-                    {{-- Redes sociales --}}
-                    <div class="menu-social">
-                        <span class="menu-social-label">Síguenos</span>
-                        <div class="menu-social-links">
-                            <a href="#" class="menu-social-link" aria-label="Facebook">
-                                <i class="fa-brands fa-facebook-f"></i>
-                            </a>
-                            <a href="#" class="menu-social-link" aria-label="Instagram">
-                                <i class="fa-brands fa-instagram"></i>
-                            </a>
-                            <a href="#" class="menu-social-link" aria-label="TikTok">
-                                <i class="fa-brands fa-tiktok"></i>
-                            </a>
-                            <a href="#" class="menu-social-link" aria-label="LinkedIn">
-                                <i class="fa-brands fa-linkedin-in"></i>
-                            </a>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <div class="stat-value">10+</div>
+                            <div class="stat-label">Años</div>
                         </div>
                     </div>
-                </div>
-
-                {{-- Columna derecha: Info y CTAs --}}
-                <div class="menu-right-col">
-                    {{-- Servicios destacados --}}
-                    <div class="menu-section">
-                        <h3 class="menu-section-title">Servicios Destacados</h3>
-                        <div class="menu-services-grid">
-                            <a href="{{ route('services.index') }}" class="menu-service-card">
-                                <div class="menu-service-icon">
-                                    <i class="fa-solid fa-code"></i>
-                                </div>
-                                <span class="menu-service-name">Desarrollo Web</span>
+                    
+                    {{-- Contacto y Social --}}
+                    <div class="menu-footer" style="--delay: 7">
+                        <div class="menu-contact">
+                            <a href="mailto:hola@creativeup.com" class="contact-link">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M3 4h14a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V5a1 1 0 011-1z" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M18 5l-8 6-8-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                hola@creativeup.com
                             </a>
-                            <a href="{{ route('services.index') }}" class="menu-service-card">
-                                <div class="menu-service-icon">
-                                    <i class="fa-solid fa-palette"></i>
-                                </div>
-                                <span class="menu-service-name">Branding</span>
-                            </a>
-                            <a href="{{ route('services.index') }}" class="menu-service-card">
-                                <div class="menu-service-icon">
-                                    <i class="fa-solid fa-bullhorn"></i>
-                                </div>
-                                <span class="menu-service-name">Social Media</span>
-                            </a>
-                            <a href="{{ route('services.index') }}" class="menu-service-card">
-                                <div class="menu-service-icon">
-                                    <i class="fa-solid fa-chart-line"></i>
-                                </div>
-                                <span class="menu-service-name">SEO</span>
+                            <a href="tel:+1234567890" class="contact-link">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" stroke="currentColor" stroke-width="1.5"/>
+                                </svg>
+                                +1 (234) 567-890
                             </a>
                         </div>
-                    </div>
-
-                    {{-- CTA Principal --}}
-                    <div class="menu-section">
-                        <div class="menu-cta-card">
-                            <div class="menu-cta-badge">
-                                <i class="fa-solid fa-sparkles"></i>
-                                <span>Consultoría Gratuita</span>
+                        
+                        <div class="menu-social">
+                            <span class="social-label">Síguenos</span>
+                            <div class="social-links">
+                                <a href="#" class="social-link" aria-label="Facebook">
+                                    <i class="fa-brands fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="Instagram">
+                                    <i class="fa-brands fa-instagram"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="LinkedIn">
+                                    <i class="fa-brands fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="Twitter">
+                                    <i class="fa-brands fa-twitter"></i>
+                                </a>
                             </div>
-                            <h3 class="menu-cta-title">¿Tienes un proyecto en mente?</h3>
-                            <p class="menu-cta-desc">Conversemos sobre cómo podemos ayudarte a alcanzar tus objetivos digitales.</p>
-                            <a href="{{ route('contact.index') }}" class="menu-cta-btn">
-                                <span>Iniciar Proyecto</span>
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    {{-- Info de contacto --}}
-                    <div class="menu-section">
-                        <h3 class="menu-section-title">Contacto</h3>
-                        <div class="menu-contact-grid">
-                            <a href="mailto:hola@creativeup.com" class="menu-contact-item">
-                                <div class="menu-contact-icon">
-                                    <i class="fa-regular fa-envelope"></i>
-                                </div>
-                                <div class="menu-contact-info">
-                                    <span class="menu-contact-label">Email</span>
-                                    <span class="menu-contact-value">hola@creativeup.com</span>
-                                </div>
-                            </a>
-                            <a href="tel:+1234567890" class="menu-contact-item">
-                                <div class="menu-contact-icon">
-                                    <i class="fa-solid fa-phone"></i>
-                                </div>
-                                <div class="menu-contact-info">
-                                    <span class="menu-contact-label">Teléfono</span>
-                                    <span class="menu-contact-value">+1 (234) 567-890</span>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="menu-schedule">
-                            <i class="fa-regular fa-clock"></i>
-                            <span>Lunes a Viernes, 9:00 AM - 6:00 PM</span>
                         </div>
                     </div>
                 </div>
@@ -241,81 +213,155 @@
         @yield('content')
     </main>
 
-    <!-- Chat flotante -->
-    <div id="msgChat" class="msg-chat">
-        <div class="chat-header-anim">
-            <div class="chat-header-left">
-                <div class="chat-logo-up">UP</div>
-                <div>
-                    <div class="chat-title">Chat UP</div>
-                    <div class="chat-status">
-                        <span class="chat-status-dot"></span>Disponible ahora
-                    </div>
+    <!-- Chat Popup -->
+    <div id="msgChat" class="chat-popup">
+        {{-- Header del Chat --}}
+        <div class="chat-popup-header">
+            <div class="chat-header-content">
+                <div class="chat-header-avatar">
+                    <span class="chat-avatar-gradient">UP</span>
+                    <span class="chat-status-indicator"></span>
+                </div>
+                <div class="chat-header-info">
+                    <h4 class="chat-header-title">CreativeUP</h4>
+                    <p class="chat-header-status">
+                        <span class="status-dot"></span>
+                        En línea · Respuesta inmediata
+                    </p>
                 </div>
             </div>
-            <button id="closeMsgChat" class="chat-close-btn" aria-label="Cerrar chat">&times;</button>
+            <button id="closeMsgChat" class="chat-header-close" aria-label="Cerrar chat">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
         </div>
-        <div class="chat-body" id="chatBody">
+
+        {{-- Cuerpo del Chat --}}
+        <div class="chat-popup-body" id="chatBody">
+            <div class="chat-welcome-card">
+                <div class="welcome-icon">👋</div>
+                <h3 class="welcome-title">¡Hola! Bienvenido</h3>
+                <p class="welcome-text">Soy el asistente de CreativeUP. Estoy aquí para ayudarte con cualquier consulta sobre nuestros servicios.</p>
+            </div>
+            
             <div class="chat-message chat-message-bot">
-                <div class="chat-avatar">UP</div>
-                <div class="chat-bubble">
-                    ¡Hola! 👋 Soy el asistente de CreativeUP. ¿En qué puedo ayudarte?
+                <div class="chat-message-avatar">UP</div>
+                <div class="chat-message-content">
+                    <div class="chat-bubble chat-bubble-bot">
+                        ¿En qué puedo ayudarte hoy? 😊
+                    </div>
+                    <span class="chat-message-time">Ahora</span>
                 </div>
             </div>
         </div>
-        <div id="chatFormArea">
+
+        {{-- Área de Formularios --}}
+        <div class="chat-popup-footer" id="chatFormArea">
             {{-- Paso 1: Nombre --}}
-            <div class="chat-step" id="chatStep1">
-                <div class="chat-step-label">¿Cómo te llamas?</div>
-                <form class="chat-form" id="chatFormName">
-                    <input type="text" id="chatName" placeholder="Tu nombre..." class="chat-input" required autocomplete="off">
-                    <button type="submit" class="chat-submit-btn" aria-label="Enviar">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
-                    </button>
-                </form>
-            </div>
-            {{-- Paso 2: Email --}}
-            <div class="chat-step" id="chatStep2" style="display:none">
-                <div class="chat-step-label">¿Cuál es tu email?</div>
-                <form class="chat-form" id="chatFormEmail">
-                    <input type="email" id="chatEmail" placeholder="tu@email.com" class="chat-input" required autocomplete="off">
-                    <button type="submit" class="chat-submit-btn" aria-label="Enviar">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
-                    </button>
-                </form>
-            </div>
-            {{-- Paso 3: Mensaje --}}
-            <div class="chat-step" id="chatStep3" style="display:none">
-                <div class="chat-step-label">¿Cuéntanos en qué te ayudamos?</div>
-                <form class="chat-form" id="chatFormMsg">
-                    <input type="text" id="chatMsg" placeholder="Escribe tu mensaje..." class="chat-input" required autocomplete="off">
-                    <button type="submit" class="chat-submit-btn" aria-label="Enviar">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
-                    </button>
-                </form>
-            </div>
-            {{-- Paso final: confirmación --}}
-            <div class="chat-step" id="chatStepDone" style="display:none">
-                <div class="chat-step-done">
-                    <span class="chat-done-check">✓</span> Mensaje enviado
+            <div class="chat-input-wrapper" id="chatStep1">
+                <div class="chat-step-indicator">
+                    <span class="step-number">1/3</span>
+                    <span class="step-label">¿Cómo te llamas?</span>
                 </div>
+                <form class="chat-input-form" id="chatFormName">
+                    <input 
+                        type="text" 
+                        id="chatName" 
+                        placeholder="Escribe tu nombre aquí..." 
+                        class="chat-input" 
+                        required 
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="chat-send-btn" aria-label="Enviar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </form>
             </div>
-        </div>
-        <div class="chat-disclaimer">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-            Chat privado y seguro
+
+            {{-- Paso 2: Email --}}
+            <div class="chat-input-wrapper" id="chatStep2" style="display:none">
+                <div class="chat-step-indicator">
+                    <span class="step-number">2/3</span>
+                    <span class="step-label">¿Cuál es tu email?</span>
+                </div>
+                <form class="chat-input-form" id="chatFormEmail">
+                    <input 
+                        type="email" 
+                        id="chatEmail" 
+                        placeholder="tu@email.com" 
+                        class="chat-input" 
+                        required 
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="chat-send-btn" aria-label="Enviar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            {{-- Paso 3: Mensaje --}}
+            <div class="chat-input-wrapper" id="chatStep3" style="display:none">
+                <div class="chat-step-indicator">
+                    <span class="step-number">3/3</span>
+                    <span class="step-label">¿En qué podemos ayudarte?</span>
+                </div>
+                <form class="chat-input-form" id="chatFormMsg">
+                    <input 
+                        type="text" 
+                        id="chatMsg" 
+                        placeholder="Describe tu proyecto o consulta..." 
+                        class="chat-input" 
+                        required 
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="chat-send-btn" aria-label="Enviar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            {{-- Paso Final: Confirmación --}}
+            <div class="chat-success-state" id="chatStepDone" style="display:none">
+                <div class="success-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M8 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h4 class="success-title">¡Mensaje Enviado!</h4>
+                <p class="success-text">Nos pondremos en contacto contigo pronto.</p>
+            </div>
+
+            {{-- Disclaimer --}}
+            <div class="chat-disclaimer">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                </svg>
+                <span>Conversación segura y privada</span>
+            </div>
         </div>
     </div>
 
-    <!-- Botón flotante de mensaje -->
-    <button id="floatingMsgBtn" class="floating-msg-btn" aria-label="Abrir chat">
-        <span class="floating-msg-icon-open">
-            <i class="fa-regular fa-comment-dots"></i>
+    <!-- Botón Flotante del Chat -->
+    <button id="floatingMsgBtn" class="chat-floating-btn" aria-label="Abrir chat">
+        <span class="chat-btn-icon chat-btn-open">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
         </span>
-        <span class="floating-msg-icon-close">
-            <i class="fa-solid fa-xmark"></i>
+        <span class="chat-btn-icon chat-btn-close">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
         </span>
-        <span class="floating-msg-badge" id="chatBadge">1</span>
+        <span class="chat-notification-badge" id="chatBadge">1</span>
     </button>
 
     <script>
@@ -390,9 +436,9 @@
             const wrapper = document.createElement('div');
             wrapper.className = 'chat-message chat-message-' + type;
             if (type === 'bot') {
-                wrapper.innerHTML = '<div class="chat-avatar">UP</div><div class="chat-bubble">' + text + '</div>';
+                wrapper.innerHTML = '<div class="chat-message-avatar">UP</div><div class="chat-message-content"><div class="chat-bubble chat-bubble-bot">' + text + '</div><span class="chat-message-time">Ahora</span></div>';
             } else {
-                wrapper.innerHTML = '<div class="chat-bubble">' + text + '</div>';
+                wrapper.innerHTML = '<div class="chat-message-content"><div class="chat-bubble chat-bubble-user">' + text + '</div><span class="chat-message-time">Ahora</span></div>';
             }
             chatBody.appendChild(wrapper);
             scrollChat();
@@ -402,8 +448,8 @@
         // Mostrar typing indicator
         function showTyping() {
             const typing = document.createElement('div');
-            typing.className = 'chat-message chat-message-bot chat-typing-wrapper';
-            typing.innerHTML = '<div class="chat-avatar">UP</div><div class="chat-bubble chat-typing"><span></span><span></span><span></span></div>';
+            typing.className = 'chat-message chat-message-bot chat-typing-indicator';
+            typing.innerHTML = '<div class="chat-message-avatar">UP</div><div class="chat-message-content"><div class="chat-bubble chat-bubble-bot chat-typing-dots"><span></span><span></span><span></span></div></div>';
             chatBody.appendChild(typing);
             scrollChat();
             return typing;
@@ -424,8 +470,8 @@
 
         // Abrir chat
         function openChat() {
-            msgChat.classList.add('chat-visible');
-            floatingMsgBtn.classList.add('chat-active');
+            msgChat.classList.add('chat-popup-active');
+            floatingMsgBtn.classList.add('btn-active');
             chatBadge.style.display = 'none';
             chatOpen = true;
             scrollChat();
@@ -434,8 +480,8 @@
 
         // Cerrar chat
         function closeChat() {
-            msgChat.classList.remove('chat-visible');
-            floatingMsgBtn.classList.remove('chat-active');
+            msgChat.classList.remove('chat-popup-active');
+            floatingMsgBtn.classList.remove('btn-active');
             chatOpen = false;
         }
 
@@ -574,105 +620,192 @@
     </script>
 
     <footer class="site-footer">
-        {{-- Línea gradiente superior --}}
-        <div class="footer-gradient-line"></div>
-
-        {{-- CTA Banner --}}
-        <div class="footer-cta">
-            <div class="footer-cta-inner">
-                <div class="footer-cta-text">
-                    <h3 class="footer-cta-title">¿Listo para llevar tu marca al siguiente nivel?</h3>
-                    <p class="footer-cta-desc">Hablemos de tu próximo proyecto. Sin compromiso.</p>
-                </div>
-                <a href="{{ route('contact.index') }}" class="footer-cta-btn">
-                    <span>Iniciar conversación</span>
-                    <i class="fa-solid fa-arrow-right"></i>
-                </a>
-            </div>
-        </div>
-
-        {{-- Contenido principal del footer --}}
-        <div class="footer-main">
-            <div class="footer-container">
-
-                {{-- Col 1: Marca --}}
-                <div class="footer-col footer-col--brand">
-                    <a href="/" class="footer-logo">
-                        <span class="footer-logo-creative">creative</span><span class="footer-logo-up">up</span>
-                    </a>
-                    <p class="footer-brand-desc">Potenciamos la experiencia digital de negocios en cualquier etapa y en cualquier parte del mundo.</p>
-                    <div class="footer-social">
-                        <a href="#" aria-label="Facebook" class="footer-social-link">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </a>
-                        <a href="#" aria-label="Instagram" class="footer-social-link">
-                            <i class="fa-brands fa-instagram"></i>
-                        </a>
-                        <a href="#" aria-label="TikTok" class="footer-social-link">
-                            <i class="fa-brands fa-tiktok"></i>
+        {{-- CTA Banner Superior --}}
+        <div class="footer-cta-banner">
+            <div class="container-custom">
+                <div class="cta-banner-content">
+                    <div class="cta-banner-text">
+                        <span class="cta-banner-label">¿Tienes un proyecto en mente?</span>
+                        <h3 class="cta-banner-title">Hagamos Algo <span class="text-gradient">Increíble</span> Juntos</h3>
+                        <p class="cta-banner-desc">Conversemos sobre cómo podemos ayudarte a alcanzar tus objetivos</p>
+                    </div>
+                    <div class="cta-banner-action">
+                        <a href="{{ route('contact.index') }}" class="btn btn-primary">
+                            Iniciar Proyecto
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M4 10h12m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
                         </a>
                     </div>
                 </div>
-
-                {{-- Col 2: Navegación --}}
-                <div class="footer-col">
-                    <h4 class="footer-heading">Navegación</h4>
-                    <ul class="footer-links">
-                        <li><a href="{{ route('home') }}" class="footer-link">Inicio</a></li>
-                        <li><a href="{{ route('services.index') }}" class="footer-link">Servicios</a></li>
-                        <li><a href="{{ route('projects.index') }}" class="footer-link">Proyectos</a></li>
-                        <li><a href="{{ route('blog.index') }}" class="footer-link">Blog</a></li>
-                        <li><a href="{{ route('contact.index') }}" class="footer-link">Contacto</a></li>
-                    </ul>
-                </div>
-
-                {{-- Col 3: Servicios --}}
-                <div class="footer-col">
-                    <h4 class="footer-heading">Servicios</h4>
-                    <ul class="footer-links">
-                        <li><a href="{{ route('services.index') }}" class="footer-link">Desarrollo Web</a></li>
-                        <li><a href="{{ route('services.index') }}" class="footer-link">Branding</a></li>
-                        <li><a href="{{ route('services.index') }}" class="footer-link">Social Media</a></li>
-                        <li><a href="{{ route('services.index') }}" class="footer-link">SEO Profesional</a></li>
-                    </ul>
-                </div>
-
-                {{-- Col 4: Contacto --}}
-                <div class="footer-col">
-                    <h4 class="footer-heading">Contacto</h4>
-                    <ul class="footer-links">
-                        <li>
-                            <a href="mailto:hola@creativeup.com" class="footer-link footer-link--icon">
-                                <i class="fa-regular fa-envelope"></i>
-                                hola@creativeup.com
-                            </a>
-                        </li>
-                        <li>
-                            <a href="tel:+1234567890" class="footer-link footer-link--icon">
-                                <i class="fa-solid fa-phone"></i>
-                                +1 (234) 567-890
-                            </a>
-                        </li>
-                        <li>
-                            <span class="footer-link footer-link--icon footer-link--static">
-                                <i class="fa-solid fa-location-dot"></i>
-                                Ciudad de México, MX
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-
             </div>
         </div>
 
-        {{-- Barra inferior --}}
+        {{-- Contenido Principal del Footer --}}
+        <div class="footer-content">
+            <div class="container-custom">
+                <div class="footer-grid">
+                    {{-- Columna 1: Marca --}}
+                    <div class="footer-brand">
+                        <a href="/" class="footer-logo-link">
+                            <span class="footer-logo-text">creative</span><span class="footer-logo-gradient">up</span>
+                        </a>
+                        <p class="footer-tagline">Transformamos ideas en experiencias digitales que conectan y convierten</p>
+                        
+                        <div class="footer-social-links">
+                            <a href="#" class="social-icon" aria-label="Facebook">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="social-icon" aria-label="Instagram">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                            <a href="#" class="social-icon" aria-label="LinkedIn">
+                                <i class="fa-brands fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="social-icon" aria-label="Twitter">
+                                <i class="fa-brands fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    {{-- Columna 2: Navegación --}}
+                    <div class="footer-column">
+                        <h4 class="footer-title">Navegación</h4>
+                        <ul class="footer-list">
+                            <li><a href="{{ route('home') }}" class="footer-link">Inicio</a></li>
+                            <li><a href="{{ route('services.index') }}" class="footer-link">Servicios</a></li>
+                            <li><a href="{{ route('projects.index') }}" class="footer-link">Proyectos</a></li>
+                            <li><a href="{{ route('blog.index') }}" class="footer-link">Blog</a></li>
+                            <li><a href="{{ route('contact.index') }}" class="footer-link">Contacto</a></li>
+                        </ul>
+                    </div>
+
+                    {{-- Columna 3: Servicios --}}
+                    <div class="footer-column">
+                        <h4 class="footer-title">Servicios</h4>
+                        <ul class="footer-list">
+                            <li><a href="{{ route('services.index') }}" class="footer-link">Desarrollo Web</a></li>
+                            <li><a href="{{ route('services.index') }}" class="footer-link">Diseño UI/UX</a></li>
+                            <li><a href="{{ route('services.index') }}" class="footer-link">Branding</a></li>
+                            <li><a href="{{ route('services.index') }}" class="footer-link">Marketing Digital</a></li>
+                            <li><a href="{{ route('services.index') }}" class="footer-link">SEO</a></li>
+                        </ul>
+                    </div>
+
+                    {{-- Columna 4: Contacto --}}
+                    <div class="footer-column">
+                        <h4 class="footer-title">Contacto</h4>
+                        <ul class="footer-list footer-contact">
+                            <li>
+                                <a href="mailto:hola@creativeup.com" class="footer-contact-link">
+                                    <i class="fa-regular fa-envelope"></i>
+                                    <span>hola@creativeup.com</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="tel:+1234567890" class="footer-contact-link">
+                                    <i class="fa-solid fa-phone"></i>
+                                    <span>+1 (234) 567-890</span>
+                                </a>
+                            </li>
+                            <li>
+                                <span class="footer-contact-link">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <span>Ciudad de México, MX</span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Barra Inferior --}}
         <div class="footer-bottom">
-            <div class="footer-bottom-inner">
-                <p class="footer-copyright">&copy; {{ date('Y') }} CreativeUP. Todos los derechos reservados.</p>
-                <p class="footer-credit">Diseñado con <span class="footer-heart">&hearts;</span> por el equipo CreativeUP</p>
+            <div class="container-custom">
+                <div class="footer-bottom-content">
+                    <p class="footer-copyright">
+                        &copy; {{ date('Y') }} CreativeUp. Todos los derechos reservados.
+                    </p>
+                    <div class="footer-legal">
+                        <a href="#" class="footer-legal-link">Política de Privacidad</a>
+                        <span class="footer-separator">·</span>
+                        <a href="#" class="footer-legal-link">Términos de Uso</a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
+
+    <script>
+        // Menu Toggle & Logo Scroll Effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuTrigger = document.getElementById('menuTrigger');
+            const fullscreenMenu = document.getElementById('fullscreenMenu');
+            const floatingLogo = document.getElementById('floatingLogo');
+            
+            // Toggle Menu
+            if (menuTrigger && fullscreenMenu) {
+                menuTrigger.addEventListener('click', function() {
+                    menuTrigger.classList.toggle('active');
+                    fullscreenMenu.classList.toggle('active');
+                    document.body.style.overflow = fullscreenMenu.classList.contains('active') ? 'hidden' : '';
+                });
+                
+                // Cerrar al hacer click en el backdrop
+                const backdrop = fullscreenMenu.querySelector('.menu-backdrop');
+                if (backdrop) {
+                    backdrop.addEventListener('click', function() {
+                        menuTrigger.classList.remove('active');
+                        fullscreenMenu.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                }
+                
+                // Cerrar al hacer click en un link
+                const navLinks = fullscreenMenu.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        menuTrigger.classList.remove('active');
+                        fullscreenMenu.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                });
+                
+                // Cerrar al hacer click en el botón CTA
+                const ctaButton = fullscreenMenu.querySelector('.cta-button');
+                if (ctaButton) {
+                    ctaButton.addEventListener('click', function() {
+                        menuTrigger.classList.remove('active');
+                        fullscreenMenu.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                }
+                
+                // Cerrar con tecla ESC
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && fullscreenMenu.classList.contains('active')) {
+                        menuTrigger.classList.remove('active');
+                        fullscreenMenu.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+            
+            // Logo Scroll Effect
+            if (floatingLogo) {
+                window.addEventListener('scroll', function() {
+                    const currentScroll = window.pageYOffset;
+                    
+                    if (currentScroll > 100) {
+                        floatingLogo.classList.add('scrolled');
+                    } else {
+                        floatingLogo.classList.remove('scrolled');
+                    }
+                });
+            }
+        });
+    </script>
 
 @stack('scripts')
 </body>

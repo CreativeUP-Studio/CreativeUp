@@ -13,7 +13,12 @@ class ServiceController extends Controller
     public function index()
     {
         $services = Service::withCount('leads')->latest()->paginate(10);
-        return view('admin.services.index', compact('services'));
+        $totalServices = Service::count();
+        $activeServices = Service::where('is_active', true)->count();
+        $inactiveServices = Service::where('is_active', false)->count();
+        $totalLeads = \App\Models\Lead::whereNotNull('service_id')->count();
+        
+        return view('admin.services.index', compact('services', 'totalServices', 'activeServices', 'inactiveServices', 'totalLeads'));
     }
 
     public function create()
@@ -46,11 +51,11 @@ class ServiceController extends Controller
             'meta_description'  => 'nullable|string|max:500',
             'color'             => 'nullable|string|max:7',
             'order'             => 'nullable|integer|min:0',
-            'is_active'         => 'boolean',
+            'is_active'         => 'nullable',
         ]);
 
         $validated['slug'] = $validated['slug'] ?: Str::slug($validated['title']);
-        $validated['is_active'] = $request->has('is_active');
+        $validated['is_active'] = $request->input('is_active') == '1';
         $validated['order'] = $validated['order'] ?? 0;
 
         if ($request->hasFile('image')) {
@@ -124,11 +129,11 @@ class ServiceController extends Controller
             'meta_description'  => 'nullable|string|max:500',
             'color'             => 'nullable|string|max:7',
             'order'             => 'nullable|integer|min:0',
-            'is_active'         => 'boolean',
+            'is_active'         => 'nullable',
         ]);
 
         $validated['slug'] = $validated['slug'] ?: Str::slug($validated['title']);
-        $validated['is_active'] = $request->has('is_active');
+        $validated['is_active'] = $request->input('is_active') == '1';
         $validated['order'] = $validated['order'] ?? 0;
 
         if ($request->hasFile('image')) {

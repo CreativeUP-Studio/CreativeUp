@@ -9,7 +9,9 @@
     @csrf
     @method('PUT')
 
-    {{-- Header --}}
+    {{-- ═══════════════════════════════════════════════════
+         HEADER
+         ═══════════════════════════════════════════════════ --}}
     <div class="svc-header">
         <a href="{{ route('admin.services.index') }}" class="svc-header-back">
             <i class="fa-solid fa-arrow-left"></i>
@@ -58,170 +60,256 @@
     @endif
 
     <div class="svc-layout">
-        {{-- Main Column --}}
+        {{-- ═══════════════════════════════════════════════════
+             COLUMNA PRINCIPAL
+             ═══════════════════════════════════════════════════ --}}
         <div class="svc-main">
 
-            {{-- Basic Info --}}
+            {{-- Información Básica --}}
             <section class="svc-card">
                 <header class="svc-card-header">
-                    <span class="svc-card-icon svc-card-icon--purple"><i class="fa-solid fa-info"></i></span>
+                    <span class="svc-card-icon svc-card-icon--purple">
+                        <i class="fa-solid fa-info"></i>
+                    </span>
                     <div>
                         <h2>Información básica</h2>
                         <p>Datos principales del servicio</p>
                     </div>
                 </header>
 
-                <div class="svc-field">
-                    <label for="title">Título del servicio <span class="required">*</span></label>
-                    <input type="text" id="title" name="title" value="{{ old('title', $service->title) }}" required maxlength="150">
-                    @error('title')<span class="svc-error">{{ $message }}</span>@enderror
-                </div>
-
-                <div class="svc-field">
-                    <label for="slug">URL amigable</label>
-                    <div class="svc-input-group">
-                        <span class="svc-input-prefix">/servicios/</span>
-                        <input type="text" id="slug" name="slug" value="{{ old('slug', $service->slug) }}">
+                <div class="svc-card-body">
+                    <div class="svc-field">
+                        <label for="title">Título del servicio <span class="required">*</span></label>
+                        <input type="text" 
+                               id="title" 
+                               name="title" 
+                               value="{{ old('title', $service->title) }}" 
+                               placeholder="Ej: Diseño de Identidad Corporativa"
+                               required 
+                               maxlength="150">
+                        @error('title')<span class="svc-error">{{ $message }}</span>@enderror
                     </div>
-                </div>
 
-                <div class="svc-field">
-                    <label for="short_description">Descripción corta</label>
-                    <input type="text" id="short_description" name="short_description" value="{{ old('short_description', $service->short_description) }}" maxlength="300" placeholder="Breve resumen para las tarjetas de servicios...">
-                    <div class="svc-field-footer">
-                        <small>Aparecerá en las cards de servicios</small>
-                        <span class="svc-counter"><span id="shortDescCount">{{ strlen(old('short_description', $service->short_description) ?? '') }}</span>/300</span>
+                    <div class="svc-field">
+                        <label for="slug">URL amigable</label>
+                        <div class="svc-input-group">
+                            <span class="svc-input-prefix">/servicios/</span>
+                            <input type="text" 
+                                   id="slug" 
+                                   name="slug" 
+                                   value="{{ old('slug', $service->slug) }}" 
+                                   placeholder="url-del-servicio">
+                        </div>
+                        <small><i class="fa-solid fa-info-circle"></i> Déjalo vacío para generarlo automáticamente</small>
+                        @error('slug')<span class="svc-error">{{ $message }}</span>@enderror
                     </div>
-                </div>
 
-                <div class="svc-field">
-                    <label for="description">Descripción completa <span class="required">*</span></label>
-                    <textarea id="description" name="description" rows="5" required>{{ old('description', $service->description) }}</textarea>
-                    @error('description')<span class="svc-error">{{ $message }}</span>@enderror
-                </div>
+                    <div class="svc-field">
+                        <label for="short_description">Descripción corta</label>
+                        <input type="text" 
+                               id="short_description" 
+                               name="short_description" 
+                               value="{{ old('short_description', $service->short_description) }}" 
+                               placeholder="Breve resumen para las tarjetas de servicios..."
+                               maxlength="300">
+                        <div class="svc-field-footer">
+                            <small>Aparecerá en las cards de servicios</small>
+                            <span class="svc-counter"><span id="shortDescCount">{{ strlen(old('short_description', $service->short_description) ?? '') }}</span>/300</span>
+                        </div>
+                    </div>
 
-                <div class="svc-field">
-                    <label for="cta_text">Texto de llamada a la acción</label>
-                    <input type="text" id="cta_text" name="cta_text" value="{{ old('cta_text', $service->cta_text) }}" maxlength="255">
+                    <div class="svc-field">
+                        <label for="description">Descripción completa <span class="required">*</span></label>
+                        <textarea id="description" 
+                                  name="description" 
+                                  rows="6" 
+                                  required 
+                                  placeholder="Descripción detallada que aparecerá en la página del servicio...">{{ old('description', $service->description) }}</textarea>
+                        @error('description')<span class="svc-error">{{ $message }}</span>@enderror
+                    </div>
+
+                    <div class="svc-field">
+                        <label for="cta_text">Texto de llamada a la acción</label>
+                        <input type="text" 
+                               id="cta_text" 
+                               name="cta_text" 
+                               value="{{ old('cta_text', $service->cta_text) }}" 
+                               placeholder="Ej: ¿Listo para transformar tu marca?"
+                               maxlength="255">
+                        <small>Se mostrará sobre el botón de contacto</small>
+                    </div>
                 </div>
             </section>
 
-            {{-- Features --}}
+            {{-- Características --}}
             <section class="svc-card">
                 <header class="svc-card-header">
-                    <span class="svc-card-icon svc-card-icon--emerald"><i class="fa-solid fa-list-check"></i></span>
+                    <span class="svc-card-icon svc-card-icon--emerald">
+                        <i class="fa-solid fa-list-check"></i>
+                    </span>
                     <div>
                         <h2>Características</h2>
                         <p>Lo que incluye este servicio</p>
                     </div>
                 </header>
 
-                <div id="features-container" class="svc-dynamic-list">
-                    @php $feats = old('features', $service->features ?? []); @endphp
-                    @forelse($feats as $feat)
-                        @if(!empty(trim($feat ?? '')))
-                        <div class="svc-dynamic-item">
-                            <span class="svc-dynamic-icon"><i class="fa-solid fa-check"></i></span>
-                            <input type="text" name="features[]" value="{{ $feat }}" placeholder="Característica...">
-                            <button type="button" class="svc-dynamic-remove" onclick="removeItem(this)"><i class="fa-solid fa-xmark"></i></button>
-                        </div>
-                        @endif
-                    @empty
-                        <p class="svc-empty-hint">No hay características añadidas. Haz clic en el botón para agregar.</p>
-                    @endforelse
+                <div class="svc-card-body">
+                    <div id="features-container" class="svc-dynamic-list">
+                        @php $features = old('features', $service->features ?? []); @endphp
+                        @forelse($features as $feature)
+                            @if(trim($feature) !== '')
+                            <div class="svc-dynamic-item">
+                                <span class="svc-dynamic-icon"><i class="fa-solid fa-check"></i></span>
+                                <input type="text" name="features[]" value="{{ $feature }}" placeholder="Característica...">
+                                <button type="button" class="svc-dynamic-remove" onclick="removeItem(this)">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                            @endif
+                        @empty
+                            <p class="svc-empty-hint">No hay características añadidas. Haz clic en el botón para agregar.</p>
+                        @endforelse
+                    </div>
+                    <button type="button" class="svc-add-btn" onclick="addFeature()">
+                        <i class="fa-solid fa-plus"></i> Agregar característica
+                    </button>
                 </div>
-                <button type="button" class="svc-add-btn" onclick="addFeature()">
-                    <i class="fa-solid fa-plus"></i> Agregar característica
-                </button>
             </section>
 
-            {{-- Benefits --}}
+            {{-- Beneficios --}}
             <section class="svc-card">
                 <header class="svc-card-header">
-                    <span class="svc-card-icon svc-card-icon--amber"><i class="fa-solid fa-star"></i></span>
+                    <span class="svc-card-icon svc-card-icon--amber">
+                        <i class="fa-solid fa-star"></i>
+                    </span>
                     <div>
                         <h2>Beneficios</h2>
                         <p>Ventajas clave para el cliente</p>
                     </div>
                 </header>
 
-                <div id="benefits-container" class="svc-benefits-list">
-                    @php $bens = old('benefits', $service->benefits ?? []); @endphp
-                    @forelse($bens as $i => $ben)
-                        @if(!empty(trim($ben['title'] ?? '')))
-                        <div class="svc-benefit-card" data-index="{{ $i }}">
-                            <input type="text" name="benefits[{{ $i }}][icon]" value="{{ $ben['icon'] ?? '' }}" placeholder="🚀" class="svc-benefit-emoji">
-                            <input type="text" name="benefits[{{ $i }}][title]" value="{{ $ben['title'] ?? '' }}" placeholder="Título del beneficio" class="svc-benefit-title">
-                            <input type="text" name="benefits[{{ $i }}][desc]" value="{{ $ben['desc'] ?? '' }}" placeholder="Descripción breve" class="svc-benefit-desc">
-                            <button type="button" class="svc-benefit-remove" onclick="removeItem(this)"><i class="fa-solid fa-xmark"></i></button>
-                        </div>
-                        @endif
-                    @empty
-                        <p class="svc-empty-hint">No hay beneficios añadidos. Haz clic en el botón para agregar.</p>
-                    @endforelse
+                <div class="svc-card-body">
+                    <div id="benefits-container" class="svc-benefits-list">
+                        @php $benefits = old('benefits', $service->benefits ?? []); @endphp
+                        @forelse($benefits as $i => $benefit)
+                            @if(!empty(trim($benefit['title'] ?? '')))
+                            <div class="svc-benefit-card" data-index="{{ $i }}">
+                                <input type="text" 
+                                       name="benefits[{{ $i }}][icon]" 
+                                       value="{{ $benefit['icon'] ?? '' }}" 
+                                       placeholder="🚀" 
+                                       class="svc-benefit-emoji">
+                                <input type="text" 
+                                       name="benefits[{{ $i }}][title]" 
+                                       value="{{ $benefit['title'] ?? '' }}" 
+                                       placeholder="Título del beneficio" 
+                                       class="svc-benefit-title">
+                                <input type="text" 
+                                       name="benefits[{{ $i }}][desc]" 
+                                       value="{{ $benefit['desc'] ?? '' }}" 
+                                       placeholder="Descripción breve" 
+                                       class="svc-benefit-desc">
+                                <button type="button" class="svc-benefit-remove" onclick="removeItem(this)">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                            @endif
+                        @empty
+                            <p class="svc-empty-hint">No hay beneficios añadidos. Haz clic en el botón para agregar.</p>
+                        @endforelse
+                    </div>
+                    <button type="button" class="svc-add-btn svc-add-btn--amber" onclick="addBenefit()">
+                        <i class="fa-solid fa-plus"></i> Agregar beneficio
+                    </button>
                 </div>
-                <button type="button" class="svc-add-btn svc-add-btn--amber" onclick="addBenefit()">
-                    <i class="fa-solid fa-plus"></i> Agregar beneficio
-                </button>
             </section>
 
-            {{-- Process Steps --}}
+            {{-- Proceso de trabajo --}}
             <section class="svc-card">
                 <header class="svc-card-header">
-                    <span class="svc-card-icon svc-card-icon--blue"><i class="fa-solid fa-route"></i></span>
+                    <span class="svc-card-icon svc-card-icon--blue">
+                        <i class="fa-solid fa-route"></i>
+                    </span>
                     <div>
                         <h2>Proceso de trabajo</h2>
                         <p>Pasos para ejecutar el servicio</p>
                     </div>
                 </header>
 
-                <div id="steps-container" class="svc-steps-list">
-                    @php $steps = old('process_steps', $service->process_steps ?? []); @endphp
-                    @forelse($steps as $i => $step)
-                        @if(!empty(trim($step['title'] ?? '')))
-                        <div class="svc-step-card" data-index="{{ $i }}">
-                            <span class="svc-step-number">{{ $loop->iteration }}</span>
-                            <div class="svc-step-inputs">
-                                <input type="text" name="process_steps[{{ $i }}][title]" value="{{ $step['title'] ?? '' }}" placeholder="Título del paso">
-                                <input type="text" name="process_steps[{{ $i }}][desc]" value="{{ $step['desc'] ?? '' }}" placeholder="Descripción del paso">
+                <div class="svc-card-body">
+                    <div id="steps-container" class="svc-steps-list">
+                        @php $steps = old('process_steps', $service->process_steps ?? []); @endphp
+                        @forelse($steps as $i => $step)
+                            @if(!empty(trim($step['title'] ?? '')))
+                            <div class="svc-step-card" data-index="{{ $i }}">
+                                <span class="svc-step-number">{{ $loop->iteration }}</span>
+                                <div class="svc-step-inputs">
+                                    <input type="text" 
+                                           name="process_steps[{{ $i }}][title]" 
+                                           value="{{ $step['title'] ?? '' }}" 
+                                           placeholder="Título del paso">
+                                    <input type="text" 
+                                           name="process_steps[{{ $i }}][desc]" 
+                                           value="{{ $step['desc'] ?? '' }}" 
+                                           placeholder="Descripción del paso">
+                                </div>
+                                <button type="button" class="svc-step-remove" onclick="removeStep(this)">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
                             </div>
-                            <button type="button" class="svc-step-remove" onclick="removeStep(this)"><i class="fa-solid fa-xmark"></i></button>
-                        </div>
-                        @endif
-                    @empty
-                        <p class="svc-empty-hint">No hay pasos definidos. Haz clic en el botón para agregar.</p>
-                    @endforelse
+                            @endif
+                        @empty
+                            <p class="svc-empty-hint">No hay pasos definidos. Haz clic en el botón para agregar.</p>
+                        @endforelse
+                    </div>
+                    <button type="button" class="svc-add-btn svc-add-btn--blue" onclick="addStep()">
+                        <i class="fa-solid fa-plus"></i> Agregar paso
+                    </button>
                 </div>
-                <button type="button" class="svc-add-btn svc-add-btn--blue" onclick="addStep()">
-                    <i class="fa-solid fa-plus"></i> Agregar paso
-                </button>
             </section>
 
             {{-- SEO --}}
             <section class="svc-card">
                 <header class="svc-card-header">
-                    <span class="svc-card-icon svc-card-icon--cyan"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <span class="svc-card-icon svc-card-icon--cyan">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
                     <div>
                         <h2>SEO</h2>
                         <p>Optimización para buscadores (opcional)</p>
                     </div>
                 </header>
 
-                <div class="svc-field">
-                    <label for="meta_title">Meta título</label>
-                    <input type="text" id="meta_title" name="meta_title" value="{{ old('meta_title', $service->meta_title) }}" maxlength="200">
-                </div>
+                <div class="svc-card-body">
+                    <div class="svc-field">
+                        <label for="meta_title">Meta título</label>
+                        <input type="text" 
+                               id="meta_title" 
+                               name="meta_title" 
+                               value="{{ old('meta_title', $service->meta_title) }}" 
+                               placeholder="Título para buscadores (60 caracteres recomendados)"
+                               maxlength="200">
+                        <small>Si se deja vacío, se usará el título del servicio</small>
+                    </div>
 
-                <div class="svc-field">
-                    <label for="meta_description">Meta descripción</label>
-                    <textarea id="meta_description" name="meta_description" rows="2" maxlength="500">{{ old('meta_description', $service->meta_description) }}</textarea>
+                    <div class="svc-field">
+                        <label for="meta_description">Meta descripción</label>
+                        <textarea id="meta_description" 
+                                  name="meta_description" 
+                                  rows="3" 
+                                  placeholder="Descripción para buscadores (160 caracteres recomendados)"
+                                  maxlength="500">{{ old('meta_description', $service->meta_description) }}</textarea>
+                        <small>Si se deja vacío, se usará la descripción corta</small>
+                    </div>
                 </div>
             </section>
         </div>
 
-        {{-- Sidebar --}}
+        {{-- ═══════════════════════════════════════════════════
+             SIDEBAR
+             ═══════════════════════════════════════════════════ --}}
         <aside class="svc-sidebar">
-            {{-- Status Card --}}
+            {{-- Estado --}}
             <div class="svc-sidebar-card svc-status-card">
                 <div class="svc-status-indicator {{ $service->is_active ? 'active' : 'inactive' }}">
                     <i class="fa-solid fa-circle"></i>
@@ -236,10 +324,16 @@
                         <span>Actualizado:</span>
                         <strong>{{ $service->updated_at->format('d/m/Y H:i') }}</strong>
                     </div>
+                    @if($service->leads_count ?? false)
+                    <div class="svc-status-item">
+                        <span>Leads:</span>
+                        <strong>{{ $service->leads_count }}</strong>
+                    </div>
+                    @endif
                 </div>
             </div>
 
-            {{-- Image Upload --}}
+            {{-- Imagen Principal --}}
             <div class="svc-sidebar-card">
                 <h3><i class="fa-solid fa-image"></i> Imagen principal</h3>
 
@@ -264,7 +358,7 @@
                 @error('image')<span class="svc-error">{{ $message }}</span>@enderror
             </div>
 
-            {{-- Gallery --}}
+            {{-- Galería --}}
             <div class="svc-sidebar-card">
                 <h3><i class="fa-solid fa-images"></i> Galería</h3>
                 <p class="svc-sidebar-hint">Hasta 8 imágenes adicionales</p>
@@ -291,14 +385,19 @@
                 </div>
             </div>
 
-            {{-- Appearance --}}
+            {{-- Apariencia --}}
             <div class="svc-sidebar-card">
                 <h3><i class="fa-solid fa-palette"></i> Apariencia</h3>
 
                 <div class="svc-field svc-field--compact">
                     <label for="icon">Icono / Emoji</label>
-                    <input type="text" id="icon" name="icon" value="{{ old('icon', $service->icon) }}" placeholder="🎨" class="svc-emoji-input">
-                    <small>Un emoji o clase de Font Awesome</small>
+                    <input type="text" 
+                           id="icon" 
+                           name="icon" 
+                           value="{{ old('icon', $service->icon) }}" 
+                           placeholder="🎨" 
+                           class="svc-emoji-input">
+                    <small>Un emoji o clase de Font Awesome (fa-icon)</small>
                 </div>
 
                 <div class="svc-field svc-field--compact">
@@ -311,12 +410,17 @@
 
                 <div class="svc-field svc-field--compact">
                     <label for="order">Orden de aparición</label>
-                    <input type="number" id="order" name="order" value="{{ old('order', $service->order ?? 0) }}" min="0" placeholder="0">
+                    <input type="number" 
+                           id="order" 
+                           name="order" 
+                           value="{{ old('order', $service->order ?? 0) }}" 
+                           min="0" 
+                           placeholder="0">
                     <small>Menor número = aparece primero</small>
                 </div>
             </div>
 
-            {{-- Danger Zone --}}
+            {{-- Zona de peligro --}}
             <div class="svc-sidebar-card svc-danger-zone">
                 <h3><i class="fa-solid fa-triangle-exclamation"></i> Zona de peligro</h3>
                 <p>Esta acción eliminará permanentemente el servicio y no se puede deshacer.</p>
@@ -340,7 +444,7 @@
 @push('styles')
 <style>
 /* ═══════════════════════════════════════════════════
-   SERVICES FORM STYLES
+   SERVICES EDIT - ESTILOS PROFESIONALES
    ═══════════════════════════════════════════════════ */
 
 /* Header */
@@ -527,7 +631,7 @@
 /* Layout */
 .svc-layout {
     display: grid;
-    grid-template-columns: 1fr 380px;
+    grid-template-columns: 1fr 360px;
     gap: 1.5rem;
     align-items: start;
 }
@@ -546,33 +650,34 @@
     top: 96px;
 }
 
-/* Card */
+/* Cards */
 .svc-card {
     background: white;
-    border-radius: 20px;
-    padding: 2rem;
+    border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
     border: 1px solid #f3f4f6;
+    overflow: hidden;
 }
 
 .svc-card-header {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1.75rem;
-    padding-bottom: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    background: #fafafa;
     border-bottom: 1px solid #f3f4f6;
 }
 
 .svc-card-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.125rem;
+    font-size: 1rem;
     color: white;
+    flex-shrink: 0;
 }
 
 .svc-card-icon--purple { background: linear-gradient(135deg, #7c3aed, #a855f7); }
@@ -583,20 +688,24 @@
 
 .svc-card-header h2 {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #1a1a2e;
 }
 
 .svc-card-header p {
-    margin: 0.25rem 0 0 0;
-    font-size: 0.875rem;
+    margin: 0.125rem 0 0 0;
+    font-size: 0.8125rem;
     color: #6b7280;
 }
 
-/* Fields */
+.svc-card-body {
+    padding: 1.5rem;
+}
+
+/* Campos */
 .svc-field {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 
 .svc-field:last-child {
@@ -611,7 +720,7 @@
     margin-bottom: 0.5rem;
 }
 
-.svc-field .required {
+.required {
     color: #ef4444;
 }
 
@@ -619,12 +728,12 @@
 .svc-field input[type="number"],
 .svc-field textarea {
     width: 100%;
-    padding: 0.875rem 1rem;
+    padding: 0.75rem 1rem;
     border: 2px solid #e5e7eb;
-    border-radius: 12px;
+    border-radius: 10px;
     font-size: 0.9375rem;
     font-family: inherit;
-    transition: all 0.3s;
+    transition: all 0.2s;
     background: white;
 }
 
@@ -632,21 +741,25 @@
 .svc-field textarea:focus {
     outline: none;
     border-color: #7c3aed;
-    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
 }
 
 .svc-field small {
     display: block;
-    margin-top: 0.5rem;
+    margin-top: 0.375rem;
     font-size: 0.75rem;
     color: #9ca3af;
+}
+
+.svc-field small i {
+    margin-right: 0.25rem;
 }
 
 .svc-field-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 0.5rem;
+    margin-top: 0.375rem;
 }
 
 .svc-counter {
@@ -661,7 +774,7 @@
 
 .svc-error {
     display: block;
-    margin-top: 0.5rem;
+    margin-top: 0.375rem;
     font-size: 0.8125rem;
     color: #ef4444;
 }
@@ -670,57 +783,70 @@
 .svc-input-group {
     display: flex;
     border: 2px solid #e5e7eb;
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
 }
 
 .svc-input-prefix {
-    padding: 0.875rem 1rem;
+    padding: 0.75rem 1rem;
     background: #f9fafb;
     color: #6b7280;
     font-size: 0.875rem;
     font-weight: 500;
     border-right: 2px solid #e5e7eb;
+    white-space: nowrap;
 }
 
 .svc-input-group input {
     flex: 1;
     border: none !important;
     border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Empty hint */
+.svc-empty-hint {
+    padding: 1.5rem;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 0.875rem;
+    background: #f9fafb;
+    border-radius: 10px;
+    border: 2px dashed #e5e7eb;
 }
 
 /* Dynamic Lists */
 .svc-dynamic-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.625rem;
 }
 
 .svc-dynamic-item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.625rem;
 }
 
 .svc-dynamic-icon {
     width: 36px;
     height: 36px;
     background: linear-gradient(135deg, #10b981, #34d399);
-    border-radius: 10px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     flex-shrink: 0;
 }
 
 .svc-dynamic-item input {
     flex: 1;
-    padding: 0.75rem 1rem;
+    padding: 0.625rem 0.875rem;
     border: 2px solid #e5e7eb;
-    border-radius: 10px;
-    font-size: 0.9375rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
 }
 
 .svc-dynamic-item input:focus {
@@ -736,13 +862,13 @@
     height: 36px;
     background: #fef2f2;
     border: 1px solid #fecaca;
-    border-radius: 10px;
+    border-radius: 8px;
     color: #ef4444;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s;
+    transition: all 0.2s;
     flex-shrink: 0;
 }
 
@@ -754,20 +880,21 @@
     border-color: #ef4444;
 }
 
+/* Add Button */
 .svc-add-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    margin-top: 1rem;
+    padding: 0.625rem 1rem;
+    margin-top: 0.75rem;
     background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.05));
     border: 2px dashed #10b981;
-    border-radius: 12px;
+    border-radius: 10px;
     color: #10b981;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.2s;
 }
 
 .svc-add-btn:hover {
@@ -780,50 +907,59 @@
     color: #d97706;
 }
 
+.svc-add-btn--amber:hover {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.1));
+}
+
 .svc-add-btn--blue {
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(96, 165, 250, 0.05));
     border-color: #3b82f6;
     color: #2563eb;
 }
 
+.svc-add-btn--blue:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(96, 165, 250, 0.1));
+}
+
 /* Benefits */
 .svc-benefits-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .svc-benefit-card {
     display: grid;
-    grid-template-columns: 60px 1fr 1fr auto;
-    gap: 0.75rem;
-    padding: 1rem;
+    grid-template-columns: 56px 1fr 1fr 36px;
+    gap: 0.625rem;
+    padding: 0.875rem;
     background: linear-gradient(135deg, #fffbeb, #fef3c7);
     border: 1px solid #fde68a;
-    border-radius: 14px;
+    border-radius: 12px;
     align-items: center;
 }
 
 .svc-benefit-emoji {
-    padding: 0.75rem;
+    padding: 0.625rem;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     border: 2px solid #fcd34d !important;
-    border-radius: 10px;
+    border-radius: 8px;
     background: white;
 }
 
 .svc-benefit-title,
 .svc-benefit-desc {
-    padding: 0.75rem 1rem;
+    padding: 0.625rem 0.875rem;
     border: 2px solid #fcd34d;
-    border-radius: 10px;
-    font-size: 0.9375rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
     background: white;
 }
 
 .svc-benefit-title:focus,
-.svc-benefit-desc:focus {
+.svc-benefit-desc:focus,
+.svc-benefit-emoji:focus {
     outline: none;
     border-color: #f59e0b;
     box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
@@ -833,29 +969,29 @@
 .svc-steps-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .svc-step-card {
     display: flex;
-    gap: 1rem;
-    padding: 1rem;
+    gap: 0.875rem;
+    padding: 0.875rem;
     background: linear-gradient(135deg, #eff6ff, #dbeafe);
     border: 1px solid #bfdbfe;
-    border-radius: 14px;
+    border-radius: 12px;
     align-items: flex-start;
 }
 
 .svc-step-number {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     background: linear-gradient(135deg, #3b82f6, #60a5fa);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 1rem;
+    font-size: 0.875rem;
     font-weight: 800;
     flex-shrink: 0;
 }
@@ -868,10 +1004,10 @@
 }
 
 .svc-step-inputs input {
-    padding: 0.75rem 1rem;
+    padding: 0.625rem 0.875rem;
     border: 2px solid #93c5fd;
-    border-radius: 10px;
-    font-size: 0.9375rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
     background: white;
 }
 
@@ -884,8 +1020,8 @@
 /* Sidebar */
 .svc-sidebar-card {
     background: white;
-    border-radius: 16px;
-    padding: 1.5rem;
+    border-radius: 14px;
+    padding: 1.25rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
     border: 1px solid #f3f4f6;
 }
@@ -894,8 +1030,8 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin: 0 0 1rem 0;
-    font-size: 1rem;
+    margin: 0 0 0.875rem 0;
+    font-size: 0.9375rem;
     font-weight: 700;
     color: #1a1a2e;
 }
@@ -960,25 +1096,16 @@
     color: #374151;
 }
 
-/* Empty Hint */
-.svc-empty-hint {
-    padding: 1.5rem;
-    text-align: center;
-    color: #9ca3af;
-    font-size: 0.875rem;
-    background: #f9fafb;
-    border-radius: 10px;
-    border: 2px dashed #e5e7eb;
-}
-
 /* Current Image */
 .svc-current-image {
-    margin-bottom: 1rem;
+    margin-bottom: 0.875rem;
 }
 
 .svc-current-image img {
     width: 100%;
-    border-radius: 12px;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    border-radius: 10px;
     border: 1px solid #e5e7eb;
 }
 
@@ -986,7 +1113,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-top: 0.75rem;
+    margin-top: 0.625rem;
     font-size: 0.8125rem;
     color: #ef4444;
     cursor: pointer;
@@ -995,48 +1122,7 @@
 .svc-remove-checkbox input {
     width: 16px;
     height: 16px;
-}
-
-/* Current Gallery */
-.svc-current-gallery {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-}
-
-.svc-gallery-existing {
-    position: relative;
-}
-
-.svc-gallery-existing img {
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
-}
-
-.svc-gallery-existing label {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(239, 68, 68, 0.95);
-    color: white;
-    padding: 0.375rem;
-    font-size: 0.6875rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.25rem;
     cursor: pointer;
-    border-radius: 0 0 10px 10px;
-}
-
-.svc-gallery-existing input {
-    width: 12px;
-    height: 12px;
 }
 
 /* Image Upload */
@@ -1044,11 +1130,11 @@
     width: 100%;
     aspect-ratio: 16/10;
     border: 2px dashed #d1d5db;
-    border-radius: 14px;
+    border-radius: 12px;
     background: linear-gradient(135deg, #f9fafb, #f3f4f6);
     cursor: pointer;
     overflow: hidden;
-    transition: all 0.3s;
+    transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1061,13 +1147,14 @@
 
 .svc-image-placeholder {
     text-align: center;
-    padding: 1.5rem;
+    padding: 1rem;
 }
 
 .svc-image-placeholder i {
     font-size: 2rem;
     color: #7c3aed;
     margin-bottom: 0.5rem;
+    display: block;
 }
 
 .svc-image-placeholder span {
@@ -1077,6 +1164,13 @@
     color: #374151;
 }
 
+.svc-image-placeholder small {
+    display: block;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-top: 0.25rem;
+}
+
 .svc-image-upload img {
     width: 100%;
     height: 100%;
@@ -1084,22 +1178,67 @@
 }
 
 /* Gallery */
+.svc-current-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.625rem;
+    margin-bottom: 0.875rem;
+}
+
+.svc-gallery-existing {
+    position: relative;
+}
+
+.svc-gallery-existing img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.svc-gallery-existing label {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.75rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.svc-gallery-existing:hover label {
+    opacity: 1;
+}
+
+.svc-gallery-existing input {
+    display: none;
+}
+
 .svc-gallery-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
+    gap: 0.625rem;
 }
 
 .svc-gallery-add {
     aspect-ratio: 1;
     border: 2px dashed #d1d5db;
-    border-radius: 12px;
+    border-radius: 10px;
     background: linear-gradient(135deg, #f9fafb, #f3f4f6);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s;
+    transition: all 0.2s;
 }
 
 .svc-gallery-add:hover {
@@ -1108,14 +1247,18 @@
 }
 
 .svc-gallery-add i {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: #9ca3af;
+}
+
+.svc-gallery-add:hover i {
+    color: #7c3aed;
 }
 
 .svc-gallery-item {
     position: relative;
     aspect-ratio: 1;
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
 }
 
@@ -1136,12 +1279,12 @@
     border-radius: 50%;
     color: white;
     cursor: pointer;
-    font-size: 0.75rem;
+    font-size: 0.625rem;
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.2s;
 }
 
 .svc-gallery-item:hover button {
@@ -1151,7 +1294,7 @@
 /* Emoji Input */
 .svc-emoji-input {
     text-align: center;
-    font-size: 1.5rem !important;
+    font-size: 1.25rem !important;
 }
 
 /* Color Picker */
@@ -1162,17 +1305,17 @@
 }
 
 .svc-color-picker input[type="color"] {
-    width: 50px;
-    height: 40px;
+    width: 48px;
+    height: 36px;
     padding: 2px;
     border: 2px solid #e5e7eb;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
 }
 
 .svc-color-picker span {
-    font-family: 'SF Mono', monospace;
-    font-size: 0.875rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.8125rem;
     color: #6b7280;
 }
 
@@ -1187,7 +1330,7 @@
 }
 
 .svc-field--compact input {
-    padding: 0.75rem 1rem;
+    padding: 0.625rem 0.875rem;
 }
 
 /* Danger Zone */
@@ -1207,7 +1350,7 @@
 .svc-danger-zone p {
     margin: 0 0 1rem 0;
     font-size: 0.8125rem;
-    color: #b91c1c;
+    color: #991b1b;
 }
 
 .svc-delete-btn {
@@ -1216,19 +1359,20 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.875rem 1.5rem;
+    padding: 0.75rem;
     background: #ef4444;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     color: white;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.2s;
 }
 
 .svc-delete-btn:hover {
     background: #dc2626;
+    transform: translateY(-1px);
 }
 
 /* Responsive */
@@ -1246,10 +1390,27 @@
     .svc-header {
         flex-direction: column;
         text-align: center;
+        padding: 1.5rem;
+    }
+
+    .svc-header-back {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
     }
 
     .svc-header-info {
         text-align: center;
+    }
+
+    .svc-header-info h1 {
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    .svc-header-info p {
+        justify-content: center;
+        flex-wrap: wrap;
     }
 
     .svc-header-actions {
@@ -1263,6 +1424,11 @@
 
     .svc-benefit-card {
         grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .svc-benefit-emoji {
+        width: 60px;
     }
 }
 </style>

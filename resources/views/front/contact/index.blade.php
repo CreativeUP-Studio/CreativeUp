@@ -3,23 +3,143 @@
 @section('title', 'Contacto')
 
 @section('content')
-{{-- ── Hero de contacto ── --}}
-<section class="cf-hero">
-    <div class="cf-hero-bg">
-        <div class="cf-hero-shape cf-hero-shape--1"></div>
-        <div class="cf-hero-shape cf-hero-shape--2"></div>
-        <div class="cf-hero-shape cf-hero-shape--3"></div>
+{{-- ── Hero de Contacto Premium ── --}}
+<section class="contact-hero">
+    {{-- Fondo decorativo --}}
+    <div class="contact-hero-bg">
+        <div class="ch-orb ch-orb--1"></div>
+        <div class="ch-orb ch-orb--2"></div>
+        <div class="ch-orb ch-orb--3"></div>
+        <div class="ch-grid"></div>
     </div>
-    <div class="cf-hero-inner">
-        <span class="cf-hero-badge anim-hidden" data-anim="fade-up">
-            <i class="fa-solid fa-paper-plane"></i> Hablemos de tu proyecto
-        </span>
-        <h1 class="cf-hero-title anim-hidden" data-anim="fade-up">
-            Convirtamos tu idea en <span class="cf-hero-gradient">realidad</span>
-        </h1>
-        <p class="cf-hero-desc anim-hidden" data-anim="fade-up">
-            Estamos listos para escucharte. Cuéntanos sobre tu proyecto y te responderemos en menos de 24 horas.
-        </p>
+
+    <div class="contact-hero-container">
+        {{-- Columna izquierda: Contenido --}}
+        <div class="contact-hero-content">
+            <div class="ch-badge anim-hidden" data-anim="fade-up">
+                <span class="ch-badge-dot"></span>
+                Disponibles para nuevos proyectos
+            </div>
+            
+            <h1 class="ch-title anim-hidden" data-anim="fade-up">
+                Transformemos tu
+                <span class="ch-title-highlight">
+                    <span class="ch-title-gradient">visión</span>
+                    <svg class="ch-title-underline" viewBox="0 0 200 12" preserveAspectRatio="none">
+                        <path d="M2 8 Q100 2 198 8" stroke="url(#underline-gradient)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        <defs>
+                            <linearGradient id="underline-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#5e17eb"/>
+                                <stop offset="100%" stop-color="#e870c2"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </span>
+                en realidad
+            </h1>
+
+            <p class="ch-desc anim-hidden" data-anim="fade-up">
+                Cuéntanos sobre tu proyecto y descubre cómo podemos ayudarte a alcanzar tus objetivos. 
+                Respuesta garantizada en menos de 24 horas.
+            </p>
+
+            {{-- Métodos de contacto --}}
+            <div class="ch-contact-methods anim-hidden" data-anim="fade-up">
+                <a href="mailto:hola@creativeup.com" class="ch-method">
+                    <span class="ch-method-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                    </span>
+                    <span class="ch-method-info">
+                        <span class="ch-method-label">Email</span>
+                        <span class="ch-method-value">hola@creativeup.com</span>
+                    </span>
+                </a>
+                <a href="tel:+1234567890" class="ch-method">
+                    <span class="ch-method-icon">
+                        <i class="fa-solid fa-phone"></i>
+                    </span>
+                    <span class="ch-method-info">
+                        <span class="ch-method-label">Teléfono</span>
+                        <span class="ch-method-value">+1 (234) 567-890</span>
+                    </span>
+                </a>
+                <a href="#" class="ch-method">
+                    <span class="ch-method-icon">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </span>
+                    <span class="ch-method-info">
+                        <span class="ch-method-label">WhatsApp</span>
+                        <span class="ch-method-value">Escríbenos</span>
+                    </span>
+                </a>
+            </div>
+
+            {{-- Stats --}}
+            <div class="ch-stats anim-hidden" data-anim="fade-up">
+                <div class="ch-stat">
+                    <span class="ch-stat-value">150+</span>
+                    <span class="ch-stat-label">Proyectos completados</span>
+                </div>
+                <div class="ch-stat-divider"></div>
+                <div class="ch-stat">
+                    <span class="ch-stat-value">24h</span>
+                    <span class="ch-stat-label">Tiempo de respuesta</span>
+                </div>
+                <div class="ch-stat-divider"></div>
+                <div class="ch-stat">
+                    <span class="ch-stat-value">98%</span>
+                    <span class="ch-stat-label">Clientes satisfechos</span>
+                </div>
+            </div>
+        </div>
+
+        {{-- Columna derecha: Visual --}}
+        <div class="contact-hero-visual anim-hidden" data-anim="fade-up">
+            <div class="ch-visual-card">
+                <div class="ch-visual-header">
+                    <div class="ch-visual-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span class="ch-visual-title">Nuevo mensaje</span>
+                </div>
+                <div class="ch-visual-body">
+                    <div class="ch-visual-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="ch-visual-message">
+                        <div class="ch-visual-bubble">
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                        </div>
+                        <span class="ch-visual-status">Escribiendo...</span>
+                    </div>
+                </div>
+                <div class="ch-visual-input">
+                    <span>Escribe tu mensaje...</span>
+                    <i class="fa-solid fa-paper-plane"></i>
+                </div>
+            </div>
+
+            {{-- Floating elements --}}
+            <div class="ch-float ch-float--1">
+                <i class="fa-solid fa-star"></i>
+            </div>
+            <div class="ch-float ch-float--2">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+            <div class="ch-float ch-float--3">
+                <i class="fa-solid fa-check"></i>
+            </div>
+        </div>
+    </div>
+
+    {{-- Scroll indicator --}}
+    <div class="ch-scroll-indicator">
+        <span>Scroll</span>
+        <div class="ch-scroll-line">
+            <div class="ch-scroll-dot"></div>
+        </div>
     </div>
 </section>
 
@@ -625,6 +745,23 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+});
+
+// Intersection Observer for scroll animations
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('anim-visible');
+            observer.unobserve(entry.target);
+        }
+    });
+}, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+});
+
+document.querySelectorAll('.anim-hidden').forEach(el => {
+    observer.observe(el);
 });
 </script>
 @endpush

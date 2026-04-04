@@ -33,7 +33,7 @@
             <i class="fa-solid fa-cubes"></i>
         </div>
         <div class="services-stat-content">
-            <span class="services-stat-value">{{ $services->total() }}</span>
+            <span class="services-stat-value">{{ $totalServices }}</span>
             <span class="services-stat-label">Total Servicios</span>
         </div>
     </div>
@@ -42,7 +42,7 @@
             <i class="fa-solid fa-circle-check"></i>
         </div>
         <div class="services-stat-content">
-            <span class="services-stat-value">{{ $services->where('is_active', true)->count() }}</span>
+            <span class="services-stat-value">{{ $activeServices }}</span>
             <span class="services-stat-label">Activos</span>
         </div>
     </div>
@@ -51,8 +51,17 @@
             <i class="fa-solid fa-circle-pause"></i>
         </div>
         <div class="services-stat-content">
-            <span class="services-stat-value">{{ $services->where('is_active', false)->count() }}</span>
+            <span class="services-stat-value">{{ $inactiveServices }}</span>
             <span class="services-stat-label">Inactivos</span>
+        </div>
+    </div>
+    <div class="services-stat services-stat--leads">
+        <div class="services-stat-icon">
+            <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="services-stat-content">
+            <span class="services-stat-value">{{ $totalLeads }}</span>
+            <span class="services-stat-label">Leads Recibidos</span>
         </div>
     </div>
 </div>
@@ -133,10 +142,10 @@
                     {{ count($service->benefits) }} beneficios
                 </span>
                 @endif
-                @if($service->process_steps && count($service->process_steps) > 0)
-                <span class="service-tag service-tag--blue">
-                    <i class="fa-solid fa-route"></i>
-                    {{ count($service->process_steps) }} pasos
+                @if($service->leads_count > 0)
+                <span class="service-tag service-tag--emerald">
+                    <i class="fa-solid fa-users"></i>
+                    {{ $service->leads_count }} leads
                 </span>
                 @endif
             </div>
@@ -144,6 +153,10 @@
 
         {{-- Actions Footer --}}
         <div class="service-card-footer">
+            <a href="{{ route('services.show', $service->slug) }}" target="_blank" class="service-action service-action--view">
+                <i class="fa-solid fa-eye"></i>
+                Ver
+            </a>
             <a href="{{ route('admin.services.edit', $service) }}" class="service-action service-action--edit">
                 <i class="fa-solid fa-pen-to-square"></i>
                 Editar
@@ -272,7 +285,7 @@
 /* Stats Section */
 .services-stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.25rem;
     margin-bottom: 2rem;
 }
@@ -316,6 +329,11 @@
 
 .services-stat--inactive .services-stat-icon {
     background: linear-gradient(135deg, #6b7280, #9ca3af);
+    color: white;
+}
+
+.services-stat--leads .services-stat-icon {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
     color: white;
 }
 
@@ -535,6 +553,11 @@
     color: #2563eb;
 }
 
+.service-tag--emerald {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.05));
+    color: #059669;
+}
+
 /* Card Footer */
 .service-card-footer {
     display: flex;
@@ -555,6 +578,16 @@
     border: none;
     cursor: pointer;
     background: transparent;
+}
+
+.service-action--view {
+    color: #10b981;
+    border-right: 1px solid #f3f4f6;
+}
+
+.service-action--view:hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(52, 211, 153, 0.02));
+    color: #059669;
 }
 
 .service-action--edit {
@@ -623,6 +656,12 @@
 }
 
 /* Responsive */
+@media (max-width: 1200px) {
+    .services-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
     .services-hero {
         flex-direction: column;
