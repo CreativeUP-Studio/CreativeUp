@@ -4,111 +4,249 @@
 @section('page-title', 'Detalle del Lead')
 
 @section('content')
-<div class="admin-detail-grid">
-    {{-- Columna principal --}}
-    <div>
-        {{-- Header del lead --}}
-        <div class="admin-form-card admin-mb-md">
-            <div class="admin-lead-header">
-                <h2 class="admin-section-title admin-mb-0">
-                    <i class="fa-solid fa-user" style="color:var(--admin-purple);font-size:0.95rem"></i>
-                    {{ $lead->name }}
-                </h2>
-                <div class="admin-lead-header-badges">
-                    @if($lead->source === 'chat')
-                        <span class="admin-badge admin-badge-purple"><i class="fa-solid fa-comment-dots"></i> Chat</span>
-                    @else
-                        <span class="admin-badge admin-badge-blue"><i class="fa-solid fa-envelope"></i> Contacto</span>
-                    @endif
-                    @if($lead->read_at)
-                        <span class="admin-badge admin-badge-gray"><i class="fa-solid fa-eye"></i> Leído {{ $lead->read_at->diffForHumans() }}</span>
-                    @endif
-                </div>
+{{-- ═══════════════════════════════════════════════════════════════════════════
+     HEADER DEL LEAD CON BADGES
+     ═══════════════════════════════════════════════════════════════════════════ --}}
+<div class="admin-lead-show-header">
+    <div class="admin-lead-show-header-content">
+        <div class="admin-lead-show-title-wrapper">
+            <div class="admin-lead-show-avatar">
+                <i class="fa-solid fa-user"></i>
             </div>
-
-            <div class="admin-form-grid admin-mb-lg" style="margin-top:1rem">
-                <div>
-                    <p class="admin-detail-label">Email</p>
-                    <p class="admin-detail-value"><a href="mailto:{{ $lead->email }}">{{ $lead->email }}</a></p>
-                </div>
-                <div>
-                    <p class="admin-detail-label">Teléfono</p>
-                    <p class="admin-detail-value">{{ $lead->phone ?? 'No proporcionado' }}</p>
-                </div>
-                <div>
-                    <p class="admin-detail-label">Servicio de interés</p>
-                    <p class="admin-detail-value">{{ $lead->service->title ?? 'No especificado' }}</p>
-                </div>
-                <div>
-                    <p class="admin-detail-label">Fecha de contacto</p>
-                    <p class="admin-detail-value">{{ $lead->created_at->format('d/m/Y \a \l\a\s H:i') }}</p>
-                </div>
-                <div>
-                    <p class="admin-detail-label">Presupuesto estimado</p>
-                    <p class="admin-detail-value">
-                        @if($lead->budget)
-                            <span class="admin-badge admin-badge-purple"><i class="fa-solid fa-dollar-sign"></i> {{ $lead->budget }}</span>
-                        @else
-                            No especificado
-                        @endif
-                    </p>
-                </div>
-            </div>
-
             <div>
-                <p class="admin-detail-label">Mensaje del cliente</p>
-                <div class="admin-message-box">
-                    {{ $lead->message }}
+                <h1 class="admin-lead-show-title">{{ $lead->name }}</h1>
+                <p class="admin-lead-show-subtitle">
+                    <i class="fa-regular fa-clock"></i>
+                    Contactó {{ $lead->created_at->diffForHumans() }}
+                </p>
+            </div>
+        </div>
+        <div class="admin-lead-show-badges">
+            @if(!$lead->read_at)
+                <span class="admin-badge admin-badge-red admin-badge-pulse">
+                    <i class="fa-solid fa-circle"></i> Nuevo
+                </span>
+            @endif
+            
+            @if($lead->status === 'new')
+                <span class="admin-badge admin-badge-green"><i class="fa-solid fa-sparkles"></i> Nuevo</span>
+            @elseif($lead->status === 'contacted')
+                <span class="admin-badge admin-badge-yellow"><i class="fa-solid fa-phone"></i> Contactado</span>
+            @else
+                <span class="admin-badge admin-badge-gray"><i class="fa-solid fa-check-circle"></i> Cerrado</span>
+            @endif
+
+            @if($lead->priority === 'high')
+                <span class="admin-badge admin-badge-red"><i class="fa-solid fa-arrow-up"></i> Alta prioridad</span>
+            @elseif($lead->priority === 'medium')
+                <span class="admin-badge admin-badge-amber"><i class="fa-solid fa-minus"></i> Media</span>
+            @else
+                <span class="admin-badge admin-badge-gray"><i class="fa-solid fa-arrow-down"></i> Baja</span>
+            @endif
+
+            @if($lead->source === 'chat')
+                <span class="admin-badge admin-badge-purple"><i class="fa-solid fa-comment-dots"></i> Chat</span>
+            @else
+                <span class="admin-badge admin-badge-blue"><i class="fa-solid fa-envelope"></i> Formulario</span>
+            @endif
+        </div>
+    </div>
+</div>
+
+<div class="admin-detail-grid">
+    {{-- ═══════════════════════════════════════════════════════════════════════════
+         COLUMNA PRINCIPAL
+         ═══════════════════════════════════════════════════════════════════════════ --}}
+    <div>
+        {{-- Información del contacto --}}
+        <div class="admin-form-card admin-mb-md">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">
+                    <i class="fa-solid fa-address-card"></i>
+                    Información de contacto
+                </h2>
+            </div>
+
+            <div class="admin-lead-info-grid">
+                <div class="admin-lead-info-item">
+                    <div class="admin-lead-info-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <div class="admin-lead-info-content">
+                        <span class="admin-lead-info-label">Email</span>
+                        <a href="mailto:{{ $lead->email }}" class="admin-lead-info-value admin-lead-info-link">
+                            {{ $lead->email }}
+                        </a>
+                    </div>
                 </div>
+
+                <div class="admin-lead-info-item">
+                    <div class="admin-lead-info-icon" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                    <div class="admin-lead-info-content">
+                        <span class="admin-lead-info-label">Teléfono</span>
+                        @if($lead->phone)
+                            <a href="tel:{{ $lead->phone }}" class="admin-lead-info-value admin-lead-info-link">
+                                {{ $lead->phone }}
+                            </a>
+                        @else
+                            <span class="admin-lead-info-value admin-text-muted">No proporcionado</span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="admin-lead-info-item">
+                    <div class="admin-lead-info-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+                    <div class="admin-lead-info-content">
+                        <span class="admin-lead-info-label">Servicio de interés</span>
+                        <span class="admin-lead-info-value">
+                            {{ $lead->service->title ?? 'No especificado' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="admin-lead-info-item">
+                    <div class="admin-lead-info-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <i class="fa-solid fa-dollar-sign"></i>
+                    </div>
+                    <div class="admin-lead-info-content">
+                        <span class="admin-lead-info-label">Presupuesto estimado</span>
+                        <span class="admin-lead-info-value">
+                            {{ $lead->budget ?? 'No especificado' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="admin-lead-info-item">
+                    <div class="admin-lead-info-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="fa-solid fa-calendar"></i>
+                    </div>
+                    <div class="admin-lead-info-content">
+                        <span class="admin-lead-info-label">Fecha de contacto</span>
+                        <span class="admin-lead-info-value">
+                            {{ $lead->created_at->format('d/m/Y \a \l\a\s H:i') }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="admin-lead-info-item">
+                    <div class="admin-lead-info-icon" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <div class="admin-lead-info-content">
+                        <span class="admin-lead-info-label">Respuestas enviadas</span>
+                        <span class="admin-lead-info-value">
+                            {{ $lead->replies->count() }} {{ $lead->replies->count() === 1 ? 'respuesta' : 'respuestas' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Mensaje original --}}
+        <div class="admin-form-card admin-mb-md">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">
+                    <i class="fa-solid fa-message"></i>
+                    Mensaje del cliente
+                </h2>
+            </div>
+            <div class="admin-lead-message-box">
+                <div class="admin-lead-message-quote">
+                    <i class="fa-solid fa-quote-left"></i>
+                </div>
+                <p class="admin-lead-message-text">{{ $lead->message }}</p>
             </div>
         </div>
 
         {{-- Conversación / Historial de respuestas --}}
         <div class="admin-form-card admin-mb-md">
-            <h3 class="admin-section-title">
-                <i class="fa-solid fa-comments" style="color:var(--admin-purple);font-size:0.95rem"></i>
-                Conversación
-            </h3>
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">
+                    <i class="fa-solid fa-comments"></i>
+                    Historial de conversación
+                </h2>
+                <span class="admin-badge admin-badge-blue">
+                    {{ $lead->replies->count() + 1 }} {{ $lead->replies->count() + 1 === 1 ? 'mensaje' : 'mensajes' }}
+                </span>
+            </div>
 
-            <div class="admin-conversation">
+            <div class="admin-conversation-timeline">
                 {{-- Mensaje original del lead --}}
-                <div class="admin-conv-message admin-conv-message--client">
-                    <div class="admin-conv-avatar admin-conv-avatar--client">
-                        {{ strtoupper(substr($lead->name, 0, 2)) }}
-                    </div>
-                    <div class="admin-conv-content">
-                        <div class="admin-conv-meta">
-                            <strong>{{ $lead->name }}</strong>
-                            <span>{{ $lead->created_at->format('d/m/Y H:i') }}</span>
+                <div class="admin-timeline-item admin-timeline-item--client">
+                    <div class="admin-timeline-marker admin-timeline-marker--client">
+                        <div class="admin-timeline-avatar">
+                            {{ strtoupper(substr($lead->name, 0, 2)) }}
                         </div>
-                        <div class="admin-conv-bubble admin-conv-bubble--client">
-                            {{ $lead->message }}
+                    </div>
+                    <div class="admin-timeline-content">
+                        <div class="admin-timeline-header">
+                            <div>
+                                <strong class="admin-timeline-name">{{ $lead->name }}</strong>
+                                <span class="admin-timeline-role">Cliente</span>
+                            </div>
+                            <span class="admin-timeline-date">
+                                <i class="fa-regular fa-clock"></i>
+                                {{ $lead->created_at->format('d/m/Y H:i') }}
+                            </span>
+                        </div>
+                        <div class="admin-timeline-bubble admin-timeline-bubble--client">
+                            <div class="admin-timeline-message">{{ $lead->message }}</div>
+                            <div class="admin-timeline-footer">
+                                <span class="admin-timeline-badge">
+                                    @if($lead->source === 'chat')
+                                        <i class="fa-solid fa-comment-dots"></i> Desde Chat
+                                    @else
+                                        <i class="fa-solid fa-envelope"></i> Desde Formulario
+                                    @endif
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {{-- Respuestas --}}
                 @forelse($lead->replies as $reply)
-                    <div class="admin-conv-message admin-conv-message--admin">
-                        <div class="admin-conv-content">
-                            <div class="admin-conv-meta">
-                                <strong>{{ $reply->user->name ?? 'Admin' }}</strong>
-                                <span>{{ $reply->created_at->format('d/m/Y H:i') }}</span>
-                                @if($reply->sent_to_email)
-                                    <span class="admin-badge admin-badge-green" style="font-size:10px; padding:2px 6px;"><i class="fa-solid fa-envelope"></i> Enviado por email</span>
-                                @endif
-                            </div>
-                            <div class="admin-conv-bubble admin-conv-bubble--admin">
-                                {!! nl2br(e($reply->message)) !!}
+                    <div class="admin-timeline-item admin-timeline-item--admin">
+                        <div class="admin-timeline-marker admin-timeline-marker--admin">
+                            <div class="admin-timeline-avatar">
+                                <i class="fa-solid fa-user-tie"></i>
                             </div>
                         </div>
-                        <div class="admin-conv-avatar admin-conv-avatar--admin">
-                            UP
+                        <div class="admin-timeline-content">
+                            <div class="admin-timeline-header">
+                                <div>
+                                    <strong class="admin-timeline-name">{{ $reply->user->name ?? 'Admin' }}</strong>
+                                    <span class="admin-timeline-role">Tu equipo</span>
+                                </div>
+                                <span class="admin-timeline-date">
+                                    <i class="fa-regular fa-clock"></i>
+                                    {{ $reply->created_at->format('d/m/Y H:i') }}
+                                </span>
+                            </div>
+                            <div class="admin-timeline-bubble admin-timeline-bubble--admin">
+                                <div class="admin-timeline-message">{!! nl2br(e($reply->message)) !!}</div>
+                                @if($reply->sent_to_email)
+                                    <div class="admin-timeline-footer">
+                                        <span class="admin-timeline-badge admin-timeline-badge--success">
+                                            <i class="fa-solid fa-check-circle"></i> Enviado por email
+                                        </span>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 @empty
-                    <div class="admin-empty-conv">
-                        <p>No hay respuestas aún. Escribe la primera respuesta abajo.</p>
+                    <div class="admin-timeline-empty">
+                        <div class="admin-timeline-empty-icon">
+                            <i class="fa-solid fa-inbox"></i>
+                        </div>
+                        <p class="admin-timeline-empty-text">
+                            No hay respuestas aún. Escribe la primera respuesta abajo.
+                        </p>
                     </div>
                 @endforelse
             </div>
@@ -116,64 +254,121 @@
 
         {{-- Formulario de respuesta --}}
         <div class="admin-form-card">
-            <h3 class="admin-section-title">
-                <i class="fa-solid fa-paper-plane" style="color:var(--admin-purple);font-size:0.95rem"></i>
-                Responder a {{ $lead->name }}
-            </h3>
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Responder a {{ $lead->name }}
+                </h2>
+            </div>
 
-            <form method="POST" action="{{ route('admin.leads.reply', $lead) }}">
+            <form method="POST" action="{{ route('admin.leads.reply', $lead) }}" class="admin-reply-form">
                 @csrf
                 <div class="admin-form-group">
-                    <label class="admin-form-label">Tu respuesta</label>
-                    <textarea name="message" class="admin-form-control admin-textarea-lg" rows="5"
-                              placeholder="Escribe tu respuesta aquí..." required>{{ old('message') }}</textarea>
+                    <label class="admin-form-label">
+                        <i class="fa-solid fa-message"></i>
+                        Tu respuesta
+                    </label>
+                    <div class="admin-reply-textarea-wrapper">
+                        <textarea name="message" 
+                                  class="admin-form-control admin-textarea-modern" 
+                                  rows="6"
+                                  placeholder="Escribe tu respuesta aquí... Puedes incluir detalles sobre presupuestos, tiempos de entrega, siguientes pasos, etc." 
+                                  required>{{ old('message') }}</textarea>
+                        <div class="admin-textarea-tools">
+                            <span class="admin-textarea-hint">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                Tip: Sé claro y profesional en tu respuesta
+                            </span>
+                        </div>
+                    </div>
                     @error('message')
                         <p class="admin-error-text">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="admin-reply-options">
-                    <label class="admin-checkbox-label">
-                        <input type="checkbox" name="send_to_email" value="1" checked class="admin-checkbox">
-                        <span><i class="fa-solid fa-envelope"></i> Enviar respuesta al email del cliente ({{ $lead->email }})</span>
-                    </label>
-                    <label class="admin-checkbox-label">
-                        <input type="checkbox" name="send_copy" value="1" class="admin-checkbox">
-                        <span><i class="fa-regular fa-copy"></i> Enviar copia a mi correo</span>
-                    </label>
+                <div class="admin-reply-options-modern">
+                    <div class="admin-checkbox-card">
+                        <label class="admin-checkbox-card-label">
+                            <input type="checkbox" name="send_to_email" value="1" checked class="admin-checkbox-card-input">
+                            <div class="admin-checkbox-card-content">
+                                <div class="admin-checkbox-card-icon">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div class="admin-checkbox-card-text">
+                                    <strong>Enviar por email</strong>
+                                    <span>Se enviará a {{ $lead->email }}</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="admin-checkbox-card">
+                        <label class="admin-checkbox-card-label">
+                            <input type="checkbox" name="send_copy" value="1" class="admin-checkbox-card-input">
+                            <div class="admin-checkbox-card-content">
+                                <div class="admin-checkbox-card-icon">
+                                    <i class="fa-regular fa-copy"></i>
+                                </div>
+                                <div class="admin-checkbox-card-text">
+                                    <strong>Enviar copia</strong>
+                                    <span>Recibirás una copia en tu email</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="admin-form-actions">
-                    <button type="submit" class="admin-btn admin-btn-primary">
-                        <i class="fa-solid fa-paper-plane"></i> Enviar respuesta
+                    <button type="submit" class="admin-btn admin-btn-primary admin-btn-lg">
+                        <i class="fa-solid fa-paper-plane"></i> 
+                        Enviar respuesta
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    {{-- Panel lateral --}}
+    {{-- ═══════════════════════════════════════════════════════════════════════════
+         PANEL LATERAL
+         ═══════════════════════════════════════════════════════════════════════════ --}}
     <div>
         {{-- Estado y Prioridad --}}
         <div class="admin-form-card admin-mb-md">
-            <h3 class="admin-section-title admin-section-title--sm">Estado y Prioridad</h3>
+            <div class="admin-card-header">
+                <h3 class="admin-card-title admin-card-title--sm">
+                    <i class="fa-solid fa-sliders"></i>
+                    Estado y Prioridad
+                </h3>
+            </div>
             <form method="POST" action="{{ route('admin.leads.update', $lead) }}">
                 @csrf @method('PUT')
                 <div class="admin-form-group">
-                    <label class="admin-form-label" style="font-size:0.75rem;color:var(--admin-text-muted)">Estado</label>
-                    <select name="status" class="admin-form-control">
-                        <option value="new" {{ $lead->status === 'new' ? 'selected' : '' }}>● Nuevo</option>
-                        <option value="contacted" {{ $lead->status === 'contacted' ? 'selected' : '' }}>● Contactado</option>
-                        <option value="closed" {{ $lead->status === 'closed' ? 'selected' : '' }}>● Cerrado</option>
-                    </select>
+                    <label class="admin-form-label">Estado del lead</label>
+                    <div class="admin-select-modern">
+                        <select name="status" class="admin-form-control">
+                            <option value="new" {{ $lead->status === 'new' ? 'selected' : '' }}>
+                                <span class="admin-select-icon">●</span> Nuevo
+                            </option>
+                            <option value="contacted" {{ $lead->status === 'contacted' ? 'selected' : '' }}>
+                                <span class="admin-select-icon">●</span> Contactado
+                            </option>
+                            <option value="closed" {{ $lead->status === 'closed' ? 'selected' : '' }}>
+                                <span class="admin-select-icon">●</span> Cerrado
+                            </option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
                 </div>
                 <div class="admin-form-group">
-                    <label class="admin-form-label" style="font-size:0.75rem;color:var(--admin-text-muted)">Prioridad</label>
-                    <select name="priority" class="admin-form-control">
-                        <option value="high" {{ $lead->priority === 'high' ? 'selected' : '' }}>🔴 Alta</option>
-                        <option value="medium" {{ $lead->priority === 'medium' ? 'selected' : '' }}>🟡 Media</option>
-                        <option value="low" {{ $lead->priority === 'low' ? 'selected' : '' }}>⚪ Baja</option>
-                    </select>
+                    <label class="admin-form-label">Nivel de prioridad</label>
+                    <div class="admin-select-modern">
+                        <select name="priority" class="admin-form-control">
+                            <option value="high" {{ $lead->priority === 'high' ? 'selected' : '' }}>🔴 Alta</option>
+                            <option value="medium" {{ $lead->priority === 'medium' ? 'selected' : '' }}>🟡 Media</option>
+                            <option value="low" {{ $lead->priority === 'low' ? 'selected' : '' }}>⚪ Baja</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
                 </div>
                 <button type="submit" class="admin-btn admin-btn-primary admin-btn-block">
                     <i class="fa-solid fa-save"></i> Guardar cambios
@@ -181,17 +376,60 @@
             </form>
         </div>
 
+        {{-- Estadísticas rápidas --}}
+        <div class="admin-form-card admin-mb-md">
+            <div class="admin-card-header">
+                <h3 class="admin-card-title admin-card-title--sm">
+                    <i class="fa-solid fa-chart-simple"></i>
+                    Estadísticas
+                </h3>
+            </div>
+            <div class="admin-stats-grid-sidebar">
+                <div class="admin-stat-card-mini">
+                    <div class="admin-stat-mini-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <div class="admin-stat-mini-content">
+                        <span class="admin-stat-mini-value">{{ $lead->replies->count() }}</span>
+                        <span class="admin-stat-mini-label">Respuestas</span>
+                    </div>
+                </div>
+                <div class="admin-stat-card-mini">
+                    <div class="admin-stat-mini-icon" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <div class="admin-stat-mini-content">
+                        <span class="admin-stat-mini-value">{{ $lead->replies->where('sent_to_email', true)->count() }}</span>
+                        <span class="admin-stat-mini-label">Emails</span>
+                    </div>
+                </div>
+                <div class="admin-stat-card-mini">
+                    <div class="admin-stat-mini-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <i class="fa-solid fa-calendar-day"></i>
+                    </div>
+                    <div class="admin-stat-mini-content">
+                        <span class="admin-stat-mini-value">{{ $lead->created_at->diffInDays(now()) }}</span>
+                        <span class="admin-stat-mini-label">Días</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{-- Notas internas --}}
         <div class="admin-form-card admin-mb-md">
-            <h3 class="admin-section-title admin-section-title--sm">
-                <i class="fa-solid fa-sticky-note" style="color:var(--admin-purple);font-size:0.85rem"></i>
-                Notas internas
-            </h3>
+            <div class="admin-card-header">
+                <h3 class="admin-card-title admin-card-title--sm">
+                    <i class="fa-solid fa-sticky-note"></i>
+                    Notas internas
+                </h3>
+            </div>
             <form method="POST" action="{{ route('admin.leads.update', $lead) }}">
                 @csrf @method('PUT')
                 <div class="admin-form-group">
-                    <textarea name="notes" class="admin-form-control" rows="4"
-                              placeholder="Notas privadas sobre este lead...">{{ old('notes', $lead->notes) }}</textarea>
+                    <textarea name="notes" 
+                              class="admin-form-control admin-textarea-notes" 
+                              rows="4"
+                              placeholder="Notas privadas sobre este lead... Estas notas solo son visibles para tu equipo.">{{ old('notes', $lead->notes) }}</textarea>
                 </div>
                 <button type="submit" class="admin-btn admin-btn-secondary admin-btn-block admin-btn-sm">
                     <i class="fa-solid fa-save"></i> Guardar notas
@@ -199,48 +437,42 @@
             </form>
         </div>
 
-        {{-- Info rápida --}}
-        <div class="admin-form-card admin-mb-md">
-            <h3 class="admin-section-title admin-section-title--sm">Resumen</h3>
-            <div class="admin-quick-stats">
-                <div class="admin-quick-stat">
-                    <span class="admin-quick-stat-value">{{ $lead->replies->count() }}</span>
-                    <span class="admin-quick-stat-label">Respuestas</span>
-                </div>
-                <div class="admin-quick-stat">
-                    <span class="admin-quick-stat-value">{{ $lead->replies->where('sent_to_email', true)->count() }}</span>
-                    <span class="admin-quick-stat-label">Emails enviados</span>
-                </div>
-            </div>
-        </div>
-
-        {{-- Acciones --}}
+        {{-- Acciones rápidas --}}
         <div class="admin-form-card">
-            <h3 class="admin-section-title admin-section-title--sm">Acciones</h3>
+            <div class="admin-card-header">
+                <h3 class="admin-card-title admin-card-title--sm">
+                    <i class="fa-solid fa-bolt"></i>
+                    Acciones rápidas
+                </h3>
+            </div>
             <div class="admin-actions-stack">
-                <a href="mailto:{{ $lead->email }}" class="admin-btn admin-btn-success admin-btn-block">
-                    <i class="fa-solid fa-envelope"></i> Abrir email directo
+                <a href="mailto:{{ $lead->email }}" class="admin-btn admin-btn-success admin-btn-block admin-btn-action">
+                    <i class="fa-solid fa-envelope"></i> 
+                    Abrir cliente de email
                 </a>
                 @if($lead->phone)
-                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $lead->phone) }}" target="_blank"
-                       class="admin-btn admin-btn-secondary admin-btn-block">
-                        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $lead->phone) }}" 
+                       target="_blank"
+                       class="admin-btn admin-btn-whatsapp admin-btn-block admin-btn-action">
+                        <i class="fa-brands fa-whatsapp"></i> 
+                        Contactar por WhatsApp
                     </a>
                 @endif
-                <form method="POST" action="{{ route('admin.leads.destroy', $lead) }}" onsubmit="return confirm('¿Eliminar este lead y todas sus respuestas?')">
+                <a href="{{ route('admin.leads.index') }}" class="admin-btn admin-btn-secondary admin-btn-block admin-btn-action">
+                    <i class="fa-solid fa-arrow-left"></i> 
+                    Volver a leads
+                </a>
+                <form method="POST" 
+                      action="{{ route('admin.leads.destroy', $lead) }}" 
+                      onsubmit="return confirm('¿Estás seguro de eliminar este lead? Esta acción eliminará también todas las respuestas asociadas y no se puede deshacer.')">
                     @csrf @method('DELETE')
-                    <button type="submit" class="admin-btn admin-btn-danger admin-btn-block">
-                        <i class="fa-solid fa-trash"></i> Eliminar lead
+                    <button type="submit" class="admin-btn admin-btn-danger admin-btn-block admin-btn-action">
+                        <i class="fa-solid fa-trash"></i> 
+                        Eliminar lead
                     </button>
                 </form>
             </div>
         </div>
     </div>
-</div>
-
-<div class="admin-mt-lg">
-    <a href="{{ route('admin.leads.index') }}" class="admin-btn admin-btn-secondary">
-        <i class="fa-solid fa-arrow-left"></i> Volver a leads
-    </a>
 </div>
 @endsection

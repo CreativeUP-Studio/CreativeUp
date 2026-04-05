@@ -1,0 +1,282 @@
+/*
+   ╔══════════════════════════════════════════════════════════════════════════════╗
+   ║                    CREATIVEUP - AJAX COMPONENTS CSS                          ║
+   ║                    Loading states, transitions, overlays                      ║
+   ╚══════════════════════════════════════════════════════════════════════════════╝
+*/
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CSS VARIABLES
+   ═══════════════════════════════════════════════════════════════════════════════ */
+:root {
+    --ajax-primary: #5e17eb;
+    --ajax-secondary: #e870c2;
+    --ajax-overlay-bg: rgba(255, 255, 255, 0.85);
+    --ajax-transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+    --ajax-overlay-bg: rgba(15, 15, 35, 0.85);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   LOADING OVERLAY
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.ajax-loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--ajax-overlay-bg);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    animation: fadeIn var(--ajax-transition) ease-out;
+    border-radius: inherit;
+}
+
+.ajax-loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner-ring {
+    width: 48px;
+    height: 48px;
+    border: 3px solid transparent;
+    border-top-color: var(--ajax-primary);
+    border-right-color: var(--ajax-secondary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESULTS CONTAINER STATES
+   ═══════════════════════════════════════════════════════════════════════════════ */
+[data-ajax-results] {
+    position: relative;
+    min-height: 200px;
+    transition: opacity var(--ajax-transition);
+}
+
+[data-ajax-results].is-loading {
+    pointer-events: none;
+}
+
+[data-ajax-results].is-fading {
+    opacity: 0.5;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   FILTER BUTTONS ACTIVE STATE
+   ═══════════════════════════════════════════════════════════════════════════════ */
+[data-filter-button] {
+    cursor: pointer;
+    transition: all var(--ajax-transition);
+}
+
+[data-filter-button]:hover {
+    transform: translateY(-2px);
+}
+
+[data-filter-button].active,
+[data-filter-button].is-active {
+    background: linear-gradient(135deg, var(--ajax-primary) 0%, var(--ajax-secondary) 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(94, 23, 235, 0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SEARCH INPUT ENHANCEMENTS
+   ═══════════════════════════════════════════════════════════════════════════════ */
+[data-search-input] {
+    transition: all var(--ajax-transition);
+}
+
+[data-search-input]:focus {
+    box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.15);
+}
+
+/* Clear button for search inputs */
+.search-clear-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 4px;
+    opacity: 0;
+    transition: opacity var(--ajax-transition);
+}
+
+[data-search-input]:not(:placeholder-shown) + .search-clear-btn {
+    opacity: 1;
+}
+
+.search-clear-btn:hover {
+    color: var(--ajax-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   PAGINATION AJAX STYLES
+   ═══════════════════════════════════════════════════════════════════════════════ */
+[data-ajax-pagination] {
+    transition: opacity var(--ajax-transition);
+}
+
+[data-ajax-pagination] a {
+    cursor: pointer;
+}
+
+[data-ajax-pagination] a:not(.disabled):hover {
+    transform: translateY(-2px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ITEM ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════════ */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+[data-ajax-results] > * {
+    animation: slideUp 0.4s ease-out backwards;
+}
+
+[data-ajax-results] > *:nth-child(1) { animation-delay: 0ms; }
+[data-ajax-results] > *:nth-child(2) { animation-delay: 50ms; }
+[data-ajax-results] > *:nth-child(3) { animation-delay: 100ms; }
+[data-ajax-results] > *:nth-child(4) { animation-delay: 150ms; }
+[data-ajax-results] > *:nth-child(5) { animation-delay: 200ms; }
+[data-ajax-results] > *:nth-child(6) { animation-delay: 250ms; }
+[data-ajax-results] > *:nth-child(7) { animation-delay: 300ms; }
+[data-ajax-results] > *:nth-child(8) { animation-delay: 350ms; }
+[data-ajax-results] > *:nth-child(9) { animation-delay: 400ms; }
+[data-ajax-results] > *:nth-child(10) { animation-delay: 450ms; }
+[data-ajax-results] > *:nth-child(11) { animation-delay: 500ms; }
+[data-ajax-results] > *:nth-child(12) { animation-delay: 550ms; }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   TOAST NOTIFICATIONS (for errors/success)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.ajax-toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 16px 24px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 9999;
+    animation: toastIn 0.3s ease-out;
+}
+
+.ajax-toast.is-error {
+    border-left: 4px solid #ef4444;
+}
+
+.ajax-toast.is-success {
+    border-left: 4px solid #10b981;
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   NO RESULTS STATE
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.ajax-no-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.ajax-no-results-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(94, 23, 235, 0.1) 0%, rgba(232, 112, 194, 0.1) 100%);
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.ajax-no-results-icon i {
+    font-size: 2rem;
+    background: linear-gradient(135deg, var(--ajax-primary) 0%, var(--ajax-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.ajax-no-results-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+}
+
+.ajax-no-results-text {
+    color: #6b7280;
+    max-width: 400px;
+}
+
+[data-theme="dark"] .ajax-no-results-title {
+    color: #f1f1f1;
+}
+
+[data-theme="dark"] .ajax-no-results-text {
+    color: #9ca3af;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+    .spinner-ring {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .ajax-toast {
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+    }
+}

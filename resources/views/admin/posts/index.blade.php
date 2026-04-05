@@ -55,7 +55,7 @@
 {{-- ═══════════════════════════════════════════════════
      FILTERS & SEARCH
      ═══════════════════════════════════════════════════ --}}
-<form method="GET" action="{{ route('admin.posts.index') }}" class="admin-posts-filters">
+<form method="GET" action="{{ route('admin.posts.index') }}" class="admin-posts-filters" data-ajax-filter>
     <div class="admin-filter-group">
         <label class="admin-filter-label">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -65,7 +65,8 @@
                name="search"
                value="{{ request('search') }}"
                placeholder="Buscar por título o contenido..."
-               class="admin-form-input">
+               class="admin-form-input"
+               data-search-input>
     </div>
 
     <div class="admin-filter-group">
@@ -73,7 +74,7 @@
             <i class="fa-solid fa-filter"></i>
             Estado
         </label>
-        <select name="status" class="admin-form-select">
+        <select name="status" class="admin-form-select" data-filter-select>
             <option value="">Todos los estados</option>
             <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Publicados</option>
             <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Borradores</option>
@@ -85,7 +86,7 @@
             <i class="fa-solid fa-calendar"></i>
             Ordenar por
         </label>
-        <select name="sort" class="admin-form-select">
+        <select name="sort" class="admin-form-select" data-filter-select>
             <option value="newest" {{ request('sort') === 'newest' || !request('sort') ? 'selected' : '' }}>Más recientes</option>
             <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Más antiguos</option>
             <option value="title" {{ request('sort') === 'title' ? 'selected' : '' }}>Título A-Z</option>
@@ -98,10 +99,10 @@
             Filtrar
         </button>
         @if(request()->hasAny(['search', 'status', 'sort']))
-        <a href="{{ route('admin.posts.index') }}" class="admin-btn admin-btn-secondary admin-btn-sm">
+        <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" data-filter-clear>
             <i class="fa-solid fa-xmark"></i>
             Limpiar
-        </a>
+        </button>
         @endif
     </div>
 </form>
@@ -109,6 +110,7 @@
 {{-- ═══════════════════════════════════════════════════
      POSTS GRID/LIST
      ═══════════════════════════════════════════════════ --}}
+<div data-ajax-results>
 @if($posts->count() > 0)
 <div class="admin-posts-grid">
     @foreach($posts as $post)
@@ -204,7 +206,7 @@
 
 {{-- Pagination --}}
 @if($posts->hasPages())
-<div class="admin-pagination">
+<div class="admin-pagination" data-ajax-pagination>
     {{ $posts->appends(request()->query())->links() }}
 </div>
 @endif
@@ -237,5 +239,6 @@
     @endif
 </div>
 @endif
+</div>{{-- End data-ajax-results --}}
 
 @endsection

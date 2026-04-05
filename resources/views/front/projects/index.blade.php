@@ -87,18 +87,24 @@
 
     {{-- Filtros tipo tabs --}}
     @if($types->count() > 0)
-    <nav class="pidx-filters anim-hidden" data-anim="fade-up" aria-label="Filtrar proyectos por categoría">
-        <a href="{{ route('projects.index') }}"
+    <nav class="pidx-filters anim-hidden" data-anim="fade-up" data-ajax-filter data-ajax-nav aria-label="Filtrar proyectos por categoría">
+        <button type="button"
            class="pidx-filter {{ !request('type') ? 'is-active' : '' }}"
+           data-filter-button
+           data-filter-key="type"
+           data-filter-value=""
            {{ !request('type') ? 'aria-current=page' : '' }}>
             <span>Todos</span>
-        </a>
+        </button>
         @foreach($types as $type)
-            <a href="{{ route('projects.index', ['type' => $type]) }}"
+            <button type="button"
                class="pidx-filter {{ request('type') === $type ? 'is-active' : '' }}"
+               data-filter-button
+               data-filter-key="type"
+               data-filter-value="{{ $type }}"
                {{ request('type') === $type ? 'aria-current=page' : '' }}>
                 <span>{{ $type }}</span>
-            </a>
+            </button>
         @endforeach
     </nav>
     @endif
@@ -108,6 +114,7 @@
 <section class="pidx-section" aria-labelledby="pidx-projects-heading">
     <h2 id="pidx-projects-heading" class="sr-only">Lista de proyectos</h2>
     
+    <div data-ajax-results>
     @if($projects->count() > 0)
 
         <div class="pidx-list" role="list">
@@ -199,7 +206,7 @@
 
         {{-- Paginación --}}
         @if($projects->hasPages())
-        <nav class="pidx-pagination" aria-label="Paginación de proyectos">
+        <nav class="pidx-pagination" aria-label="Paginación de proyectos" data-ajax-pagination>
             {{ $projects->appends(request()->query())->links() }}
         </nav>
         @endif
@@ -218,6 +225,7 @@
             <p>Estamos preparando nuestros mejores proyectos para compartirlos contigo.</p>
         </div>
     @endif
+    </div>{{-- End data-ajax-results --}}
 </section>
 
 {{-- ═══ CTA ═══ --}}

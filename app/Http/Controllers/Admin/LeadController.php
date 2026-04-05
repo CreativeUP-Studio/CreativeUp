@@ -49,6 +49,16 @@ class LeadController extends Controller
             'high'      => Lead::where('priority', 'high')->count(),
         ];
 
+        // AJAX Response
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admin.leads._leads-table', compact('leads'))->render(),
+                'pagination' => $leads->appends($request->query())->links()->toHtml(),
+                'total' => $leads->total(),
+                'stats' => $stats
+            ]);
+        }
+
         return view('admin.leads.index', compact('leads', 'stats'));
     }
 
@@ -132,7 +142,7 @@ class LeadController extends Controller
         $callback = function () use ($leads) {
             $file = fopen('php://output', 'w');
             fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            fputcsv($file, ['ID', 'Nombre', 'Email', 'Teléfono', 'Servicio', 'Presupuesto', 'Estado', 'Prioridad', 'Origen', 'Respuestas', 'Mensaje', 'Fecha']);
+            fputcsv($file, ['ID', 'Nombre', 'Email', 'Telï¿½fono', 'Servicio', 'Presupuesto', 'Estado', 'Prioridad', 'Origen', 'Respuestas', 'Mensaje', 'Fecha']);
             foreach ($leads as $lead) {
                 fputcsv($file, [
                     $lead->id,

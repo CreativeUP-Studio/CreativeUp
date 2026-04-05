@@ -64,7 +64,7 @@
 {{-- ═══════════════════════════════════════════════════
      FILTERS & SEARCH
      ═══════════════════════════════════════════════════ --}}
-<form method="GET" action="{{ route('admin.projects.index') }}" class="admin-posts-filters" role="search">
+<form method="GET" action="{{ route('admin.projects.index') }}" class="admin-posts-filters" role="search" data-ajax-filter>
     <div class="admin-filter-group">
         <label for="search-input" class="admin-filter-label">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
@@ -75,7 +75,8 @@
                name="search"
                value="{{ request('search') }}"
                placeholder="Buscar por título, cliente o descripción..."
-               class="admin-form-input">
+               class="admin-form-input"
+               data-search-input>
     </div>
 
     <div class="admin-filter-group">
@@ -83,7 +84,7 @@
             <i class="fa-solid fa-filter" aria-hidden="true"></i>
             Estado
         </label>
-        <select id="status-filter" name="status" class="admin-form-select">
+        <select id="status-filter" name="status" class="admin-form-select" data-filter-select>
             <option value="">Todos los estados</option>
             <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Publicados</option>
             <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Borradores</option>
@@ -95,12 +96,18 @@
             <i class="fa-solid fa-tag" aria-hidden="true"></i>
             Tipo
         </label>
-        <select id="type-filter" name="type" class="admin-form-select">
+        <select id="type-filter" name="type" class="admin-form-select" data-filter-select>
             <option value="">Todos los tipos</option>
+            @if(isset($types))
+                @foreach($types as $type)
+                <option value="{{ $type }}" {{ request('type') === $type ? 'selected' : '' }}>{{ $type }}</option>
+                @endforeach
+            @else
             <option value="branding" {{ request('type') === 'branding' ? 'selected' : '' }}>Branding</option>
             <option value="web" {{ request('type') === 'web' ? 'selected' : '' }}>Diseño Web</option>
             <option value="marketing" {{ request('type') === 'marketing' ? 'selected' : '' }}>Marketing</option>
             <option value="app" {{ request('type') === 'app' ? 'selected' : '' }}>App Design</option>
+            @endif
         </select>
     </div>
 
@@ -109,7 +116,7 @@
             <i class="fa-solid fa-calendar" aria-hidden="true"></i>
             Ordenar por
         </label>
-        <select id="sort-filter" name="sort" class="admin-form-select">
+        <select id="sort-filter" name="sort" class="admin-form-select" data-filter-select>
             <option value="newest" {{ request('sort') === 'newest' || !request('sort') ? 'selected' : '' }}>Más recientes</option>
             <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Más antiguos</option>
             <option value="title" {{ request('sort') === 'title' ? 'selected' : '' }}>Título A-Z</option>
@@ -122,10 +129,10 @@
             Filtrar
         </button>
         @if(request()->hasAny(['search', 'status', 'type', 'sort']))
-        <a href="{{ route('admin.projects.index') }}" class="admin-btn admin-btn-secondary admin-btn-sm">
+        <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" data-filter-clear>
             <i class="fa-solid fa-xmark" aria-hidden="true"></i>
             Limpiar
-        </a>
+        </button>
         @endif
     </div>
 </form>
@@ -133,6 +140,7 @@
 {{-- ═══════════════════════════════════════════════════
      PROJECTS GRID
      ═══════════════════════════════════════════════════ --}}
+<div data-ajax-results>
 @if($projects->count() > 0)
 <div class="admin-posts-grid" role="list">
     @foreach($projects as $project)
@@ -270,7 +278,7 @@
 
 {{-- Pagination --}}
 @if($projects->hasPages())
-<nav class="admin-pagination" aria-label="Paginación de proyectos">
+<nav class="admin-pagination" aria-label="Paginación de proyectos" data-ajax-pagination>
     {{ $projects->appends(request()->query())->links() }}
 </nav>
 @endif
@@ -303,5 +311,6 @@
     @endif
 </div>
 @endif
+</div>{{-- End data-ajax-results --}}
 
 @endsection

@@ -1,10 +1,16 @@
 @import "tailwindcss";
 @import "./home.css";
+@import "./home-responsive-premium.css";
 @import "./admin.css";
 @import "./contact.css";
 @import "./services.css";
 @import "./projects.css";
 @import "./admin-projects.css";
+@import "./blog.css";
+@import "./ajax.css";
+@import "./admin-leads.css";
+@import "./admin-leads-premium.css";
+@import "./admin-leads-cards.css";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';

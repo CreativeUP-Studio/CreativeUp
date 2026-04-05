@@ -20,20 +20,17 @@
     --admin-text-secondary: #6b7280;
     --admin-text-muted: #9ca3af;
 
-    /* Brand */
-    --admin-primary: #7c3aed;
-    --admin-primary-dark: #5e17eb;
-    --admin-primary-light: #a855f7;
-    --admin-gradient: linear-gradient(
-        135deg,
-        #5e17eb 0%,
-        #7c3aed 50%,
-        #a855f7 100%
-    );
+    /* Brand - Matching Website Colors */
+    --admin-primary: #5e17eb;
+    --admin-primary-dark: #4a12ba;
+    --admin-secondary: #e870c2;
+    --admin-accent: #00d4ff;
+    --admin-gradient: linear-gradient(135deg, #5e17eb 0%, #e870c2 100%);
+    --admin-gradient-text: linear-gradient(135deg, #5e17eb 0%, #e870c2 50%, #00d4ff 100%);
     --admin-gradient-subtle: linear-gradient(
         135deg,
-        rgba(124, 58, 237, 0.05),
-        rgba(168, 85, 247, 0.03)
+        rgba(94, 23, 235, 0.05),
+        rgba(232, 112, 194, 0.03)
     );
 
     /* Status Colors */
@@ -55,6 +52,7 @@
     --admin-shadow-lg:
         0 20px 25px -5px rgba(0, 0, 0, 0.1),
         0 10px 10px -5px rgba(0, 0, 0, 0.02);
+    --admin-shadow-glow: 0 4px 15px rgba(94, 23, 235, 0.3);
 
     /* Border Radius */
     --admin-radius: 12px;
@@ -114,43 +112,58 @@ body.admin-body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(135deg, rgba(124, 58, 237, 0.03) 0%, rgba(168, 85, 247, 0.01) 100%);
+    background: linear-gradient(135deg, rgba(94, 23, 235, 0.03) 0%, rgba(232, 112, 194, 0.02) 100%);
 }
 
 .sidebar-brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     text-decoration: none;
 }
 
 .sidebar-brand-icon {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--admin-gradient);
     border-radius: 12px;
     color: white;
-    font-size: 1.125rem;
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    font-size: 1.25rem;
+    box-shadow: var(--admin-shadow-glow);
+    transition: var(--admin-transition);
+}
+
+.sidebar-brand:hover .sidebar-brand-icon {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(94, 23, 235, 0.4);
 }
 
 .sidebar-brand-text {
     display: flex;
     flex-direction: column;
+    gap: 2px;
 }
 
+/* Logo Text - Website Style */
 .sidebar-brand-name {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: var(--admin-text);
+    font-size: 1.375rem;
+    font-weight: 400;
     letter-spacing: -0.02em;
-    line-height: 1.2;
+    line-height: 1.1;
+    display: flex;
+    align-items: baseline;
 }
 
-.sidebar-brand-name span {
+.sidebar-brand-name .brand-creative {
+    color: var(--admin-text);
+    font-weight: 300;
+}
+
+.sidebar-brand-name .brand-up {
+    font-weight: 700;
     background: var(--admin-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -158,11 +171,22 @@ body.admin-body {
 }
 
 .sidebar-brand-tagline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-size: 0.6875rem;
-    font-weight: 500;
-    color: var(--admin-text-muted);
+    font-weight: 600;
+    color: var(--admin-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
+}
+
+.sidebar-brand-tagline::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--admin-gradient);
+    border-radius: 50%;
 }
 
 .sidebar-collapse-btn {
@@ -180,9 +204,10 @@ body.admin-body {
 }
 
 .sidebar-collapse-btn:hover {
-    background: var(--admin-primary-light);
-    border-color: var(--admin-primary);
+    background: var(--admin-gradient);
+    border-color: transparent;
     color: white;
+    box-shadow: var(--admin-shadow-glow);
 }
 
 /* ─────────────────────────────────────────────────────
@@ -202,7 +227,7 @@ body.admin-body {
     gap: 6px;
     padding: 10px 8px;
     background: var(--admin-gradient-subtle);
-    border: 1px dashed rgba(124, 58, 237, 0.3);
+    border: 1px dashed rgba(94, 23, 235, 0.3);
     border-radius: 10px;
     font-size: 0.75rem;
     font-weight: 600;
@@ -217,7 +242,7 @@ body.admin-body {
     border-color: transparent;
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+    box-shadow: var(--admin-shadow-glow);
 }
 
 .sidebar-quick-btn i {
@@ -332,13 +357,13 @@ body.admin-body {
 }
 
 .sidebar-nav-badge--new {
-    background: rgba(59, 130, 246, 0.1);
-    color: var(--admin-info);
+    background: rgba(94, 23, 235, 0.1);
+    color: var(--admin-primary);
 }
 
 .sidebar-nav-badge--warning {
-    background: rgba(245, 158, 11, 0.1);
-    color: var(--admin-warning);
+    background: rgba(232, 112, 194, 0.15);
+    color: var(--admin-secondary);
 }
 
 .sidebar-nav-badge--success {
@@ -358,7 +383,7 @@ body.admin-body {
 }
 
 .sidebar-nav-item:hover .sidebar-nav-icon {
-    background: rgba(124, 58, 237, 0.1);
+    background: rgba(94, 23, 235, 0.1);
 }
 
 .sidebar-nav-item:hover .sidebar-nav-icon i {
@@ -373,7 +398,7 @@ body.admin-body {
 
 .sidebar-nav-item.active .sidebar-nav-icon {
     background: var(--admin-gradient);
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+    box-shadow: var(--admin-shadow-glow);
 }
 
 .sidebar-nav-item.active .sidebar-nav-icon i {
@@ -1403,12 +1428,12 @@ body[data-sidebar-collapsed="true"] .admin-main {
 .admin-btn-primary {
     background: var(--admin-gradient);
     color: #ffffff;
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+    box-shadow: var(--admin-shadow-glow);
 }
 
 .admin-btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.35);
+    box-shadow: 0 8px 25px rgba(94, 23, 235, 0.4);
 }
 
 .admin-btn-secondary {

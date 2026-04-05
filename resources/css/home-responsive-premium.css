@@ -1,0 +1,815 @@
+/* ================================
+   CreativeUp - Home Responsive Premium
+   Mejoras completas de responsive para todos los dispositivos
+   Mobile-first approach con cero imperfecciones
+================================ */
+
+/* ================================
+   MEJORAS RESPONSIVE - TODAS LAS RESOLUCIONES
+================================ */
+
+/* Ultra Small Devices (320px - 479px) */
+@media (max-width: 479px) {
+    /* Container más pequeño en móviles tiny */
+    .container-custom {
+        padding: 0 1rem;
+    }
+    
+    /* Hero Section - Mobile tiny */
+    .hero-heading {
+        font-size: clamp(2rem, 8vw, 3rem) !important;
+        line-height: 1.15 !important;
+    }
+    
+    .hero-badge {
+        font-size: 0.75rem !important;
+        padding: 0.5rem 1rem !important;
+        white-space: nowrap;
+    }
+    
+    .hero-lead {
+        font-size: clamp(0.95rem, 3vw, 1.125rem) !important;
+    }
+    
+    .hero-actions {
+        gap: 0.75rem !important;
+    }
+    
+    .btn {
+        padding: 0.875rem 1.5rem !important;
+        font-size: 0.9375rem !important;
+    }
+    
+    /* Metrics - Stack en 3 filas en ultra mobile */
+    .hero-metrics {
+        flex-direction: column !important;
+        gap: 1.25rem !important;
+        align-items: stretch !important;
+    }
+    
+    .metric-item {
+        text-align: center !important;
+        padding: 1rem !important;
+        background: rgba(94, 23, 235, 0.03) !important;
+        border-radius: 12px !important;
+    }
+    
+    .metric-value {
+        font-size: 2rem !important;
+    }
+    
+    .metric-label {
+        font-size: 0.875rem !important;
+    }
+    
+    /* Visual Cards - Mejor aspect ratio en móvil */
+    .visual-card {
+        aspect-ratio: 4/3 !important;
+    }
+    
+    .visual-secondary {
+        margin-top: 0 !important;
+    }
+    
+    /* Featured Project */
+    .featured-title {
+        font-size: 1.75rem !important;
+    }
+    
+    .featured-desc {
+        font-size: 0.9375rem !important;
+    }
+    
+    /* Section Headers */
+    .section-heading {
+        font-size: clamp(1.5rem, 5vw, 2.5rem) !important;
+    }
+    
+    .section-desc {
+        font-size: 0.9375rem !important;
+    }
+    
+    /* Cards - Gap reducido */
+    .projects-masonry,
+    .services-grid,
+    .blog-cards {
+        gap: 1.25rem !important;
+    }
+    
+    /* Service Icon - Más pequeño en móvil */
+    .service-icon-box {
+        width: 52px !important;
+        height: 52px !important;
+    }
+    
+    .service-icon-box i,
+    .service-icon-box svg {
+        font-size: 1.25rem !important;
+    }
+    
+    /* Blog Cover - Aspect ratio ajustado */
+    .blog-cover {
+        aspect-ratio: 16/9 !important;
+    }
+    
+    /* Newsletter */
+    .newsletter-box {
+        padding: 2rem 1.25rem !important;
+    }
+    
+    .newsletter-title {
+        font-size: 1.25rem !important;
+    }
+    
+    .newsletter-input {
+        padding: 0.875rem 1.25rem !important;
+        font-size: 0.9375rem !important;
+    }
+    
+    /* Navigation */
+    .nav-text {
+        font-size: 1.5rem !important;
+    }
+    
+    .nav-number {
+        font-size: 0.75rem !important;
+    }
+    
+    /* Footer */
+    .cta-banner-title {
+        font-size: clamp(1.5rem, 5vw, 2.5rem) !important;
+    }
+    
+    .cta-banner-desc {
+        font-size: 1rem !important;
+    }
+    
+    /* Chat - Más compacto */
+    .chat-floating-btn {
+        width: 52px !important;
+        height: 52px !important;
+        bottom: 1.25rem !important;
+        right: 1.25rem !important;
+    }
+    
+    .chat-popup {
+        max-height: 100vh !important;
+    }
+}
+
+/* Small Mobile Devices (480px - 639px) */
+@media (min-width: 480px) and (max-width: 639px) {
+    /* Hero */
+    .hero-heading {
+        font-size: clamp(2.5rem, 7vw, 3.5rem) !important;
+    }
+    
+    .hero-lead {
+        font-size: clamp(1rem, 2.5vw, 1.125rem) !important;
+    }
+    
+    .hero-metrics {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 1rem !important;
+    }
+    
+    .metric-item {
+        flex: 1 1 calc(33.333% - 1rem) !important;
+        min-width: 100px !important;
+    }
+    
+    /* Cards */
+    .projects-masonry,
+    .services-grid,
+    .blog-cards {
+        gap: 1.5rem !important;
+    }
+    
+    /* Service Icon */
+    .service-icon-box {
+        width: 56px !important;
+        height: 56px !important;
+    }
+}
+
+/* Mobile Large / Tablet Small (640px - 767px) */
+@media (min-width: 640px) and (max-width: 767px) {
+    /* Hero Visual - 2 columnas si hay espacio */
+    .hero-visual {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.25rem !important;
+    }
+    
+    .visual-primary {
+        grid-row: 1 / 3 !important;
+    }
+    
+    .visual-secondary {
+        grid-row: 1 / 2 !important;
+        margin-top: 2rem !important;
+    }
+    
+    /* Clients - 3 columnas */
+    .clients-showcase {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+/* Tablet (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    /* Container ajustado */
+    .container-custom {
+        padding: 0 3rem !important;
+    }
+    
+    /* Hero Grid - Mantener 2 columnas en tablet horizontal */
+    .hero-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 3rem !important;
+    }
+    
+    /* Hero Visual */
+    .hero-visual {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
+    }
+    
+    .visual-primary {
+        grid-row: 1 / 3 !important;
+        aspect-ratio: 3/4 !important;
+    }
+    
+    .visual-secondary {
+        grid-row: 1 / 2 !important;
+        margin-top: 3rem !important;
+        aspect-ratio: 4/3 !important;
+    }
+    
+    /* Projects Grid - 2 columnas */
+    .projects-masonry {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 2rem !important;
+    }
+    
+    /* Services Grid - 2 columnas */
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 2rem !important;
+    }
+    
+    /* Blog Grid - 2 columnas */
+    .blog-cards {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 2rem !important;
+    }
+    
+    /* Clients - 4 columnas */
+    .clients-showcase {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+    
+    /* Featured Wrapper - Mantener 2 columnas */
+    .featured-wrapper {
+        grid-template-columns: 1.3fr 1fr !important;
+        gap: 2.5rem !important;
+    }
+    
+    /* Newsletter - Row en tablet */
+    .newsletter-box {
+        grid-template-columns: 1.2fr 1fr !important;
+    }
+    
+    .newsletter-field {
+        flex-direction: row !important;
+    }
+    
+    /* Menu Container - 2 columnas */
+    .menu-container {
+        grid-template-columns: 1.3fr 1fr !important;
+    }
+    
+    /* Footer Grid */
+    .footer-grid {
+        grid-template-columns: 1.2fr 1fr 1fr 1fr !important;
+        gap: 2.5rem !important;
+    }
+}
+
+/* Desktop Small (1024px - 1279px) */
+@media (min-width: 1024px) and (max-width: 1279px) {
+    /* Container */
+    .container-custom {
+        max-width: 1200px !important;
+        padding: 0 3rem !important;
+    }
+    
+    /* Hero */
+    .hero-heading {
+        font-size: clamp(3.5rem, 5vw, 4.5rem) !important;
+    }
+    
+    /* Projects - 3 columnas */
+    .projects-masonry {
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)) !important;
+    }
+    
+    /* Services - 3 columnas */
+    .services-grid {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+    }
+    
+    /* Blog - 3 columnas */
+    .blog-cards {
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)) !important;
+    }
+}
+
+/* Desktop Large (1280px+) */
+@media (min-width: 1280px) {
+    /* Hero más grande */
+    .hero-heading {
+        font-size: clamp(4rem, 5vw, 5.5rem) !important;
+    }
+    
+    .hero-lead {
+        font-size: 1.375rem !important;
+    }
+    
+    /* Metrics más espaciados */
+    .hero-metrics {
+        gap: 3rem !important;
+    }
+    
+    /* Projects - hasta 4 columnas en pantallas muy grandes */
+    .projects-masonry {
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)) !important;
+    }
+    
+    /* Services - hasta 3 columnas máximo */
+    .services-grid {
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)) !important;
+    }
+}
+
+/* ================================
+   MEJORAS DE HEIGHT - LANDSCAPE
+================================ */
+
+/* Mobile Landscape (max 500px height) */
+@media (max-height: 500px) and (orientation: landscape) {
+    .home-hero {
+        min-height: auto !important;
+        padding: 3rem 0 !important;
+    }
+    
+    .hero-visual {
+        display: none !important;
+    }
+    
+    .hero-metrics {
+        flex-direction: row !important;
+        gap: 1.5rem !important;
+    }
+    
+    .metric-item {
+        flex: 1 !important;
+    }
+    
+    /* Menu compacto */
+    .nav-text {
+        font-size: 1.25rem !important;
+    }
+    
+    .menu-container {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+    
+    .menu-secondary {
+        display: none !important;
+    }
+}
+
+/* Tablet Landscape (500px - 700px height) */
+@media (min-height: 501px) and (max-height: 700px) and (orientation: landscape) {
+    .home-hero {
+        min-height: 85vh !important;
+    }
+    
+    .visual-card {
+        aspect-ratio: 4/3 !important;
+    }
+}
+
+/* ================================
+   MEJORAS DE HOVER - TOUCH DEVICES
+================================ */
+@media (hover: none) and (pointer: coarse) {
+    /* Eliminar hover effects en touch */
+    .project-thumbnail::before,
+    .service-media::before,
+    .blog-cover::before {
+        opacity: 0.4 !important;
+    }
+    
+    .project-link {
+        opacity: 1 !important;
+    }
+    
+    /* Botones más grandes para touch */
+    .btn {
+        min-height: 48px !important;
+        touch-action: manipulation !important;
+    }
+    
+    /* Links más grandes */
+    .footer-link,
+    .nav-link {
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+}
+
+/* ================================
+   PRINT STYLES
+================================ */
+@media print {
+    .floating-logo,
+    .floating-menu-btn,
+    .chat-floating-btn,
+    .fullscreen-menu {
+        display: none !important;
+    }
+    
+    .home-hero {
+        min-height: auto !important;
+        page-break-after: always;
+    }
+    
+    .visual-decoration {
+        display: none !important;
+    }
+    
+    .text-gradient,
+    .metric-value {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}
+
+/* ================================
+   MEJORAS DE ACCESIBILIDAD
+================================ */
+
+/* Reducir movimiento para usuarios con preferencias */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .text-gradient {
+        animation: none !important;
+    }
+    
+    .visual-decoration {
+        filter: none !important;
+    }
+}
+
+/* Alto contraste */
+@media (prefers-contrast: high) {
+    .hero-badge,
+    .project-tag,
+    .blog-category {
+        border: 2px solid currentColor !important;
+    }
+    
+    .btn-outline {
+        border-width: 3px !important;
+    }
+    
+    .text-gradient {
+        -webkit-text-fill-color: var(--primary) !important;
+        background: none !important;
+    }
+}
+
+/* ================================
+   MEJORAS ESPECÍFICAS POR SECCIÓN
+================================ */
+
+/* Hero Section - Responsive Complete */
+@media (max-width: 1023px) {
+    .home-hero {
+        padding: 4rem 0 !important;
+    }
+    
+    .hero-grid {
+        grid-template-columns: 1fr !important;
+        gap: 3rem !important;
+    }
+    
+    .hero-left {
+        order: 1 !important;
+    }
+    
+    .hero-right {
+        order: 2 !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .home-hero {
+        padding: 3rem 0 !important;
+    }
+    
+    .hero-visual {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+    }
+    
+    .visual-primary {
+        grid-row: auto !important;
+    }
+}
+
+/* Featured Project - Responsive */
+@media (max-width: 1023px) {
+    .featured-wrapper {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+    
+    .featured-image,
+    .featured-thumb {
+        max-height: 500px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .featured-image,
+    .featured-thumb {
+        max-height: 400px !important;
+    }
+}
+
+/* Projects/Services/Blog Grid - Responsive */
+@media (max-width: 767px) {
+    .projects-masonry,
+    .services-grid,
+    .blog-cards {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+}
+
+/* Clients Showcase - Responsive */
+@media (max-width: 767px) {
+    .clients-showcase {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
+    }
+}
+
+@media (max-width: 479px) {
+    .clients-showcase {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+}
+
+/* Newsletter - Responsive */
+@media (max-width: 1023px) {
+    .newsletter-box {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+        text-align: center !important;
+    }
+    
+    .newsletter-field {
+        flex-direction: column !important;
+    }
+    
+    .newsletter-input,
+    .newsletter-field button {
+        width: 100% !important;
+    }
+}
+
+/* Menu - Responsive */
+@media (max-width: 767px) {
+    .menu-wrapper {
+        padding: 2rem 1rem !important;
+    }
+    
+    .menu-container {
+        grid-template-columns: 1fr !important;
+        gap: 3rem !important;
+    }
+    
+    .nav-text {
+        font-size: 1.75rem !important;
+    }
+    
+    .menu-stats {
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+    }
+    
+    .stat-divider {
+        display: none !important;
+    }
+    
+    .menu-social {
+        flex-direction: column !important;
+        gap: 1rem !important;
+    }
+}
+
+/* Footer - Responsive */
+@media (max-width: 1023px) {
+    .footer-grid {
+        grid-template-columns: 1.2fr 1fr 1fr !important;
+        gap: 2.5rem !important;
+    }
+    
+    .footer-column:last-child {
+        grid-column: 1 / -1 !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .cta-banner-content {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+        text-align: center !important;
+    }
+    
+    .cta-banner-action {
+        justify-content: center !important;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 2rem !important;
+    }
+    
+    .footer-brand {
+        grid-column: 1 / -1 !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+    
+    .footer-social-links {
+        justify-content: center !important;
+    }
+}
+
+@media (max-width: 639px) {
+    .footer-cta-banner {
+        padding: 3rem 0 !important;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+    
+    .footer-column {
+        text-align: center !important;
+        align-items: center !important;
+    }
+    
+    .footer-list {
+        align-items: center !important;
+    }
+    
+    .footer-legal {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+    
+    .footer-separator {
+        display: none !important;
+    }
+}
+
+/* ================================
+   FIX DE OVERFLOW Y SCROLL
+================================ */
+@media (max-width: 767px) {
+    /* Prevenir overflow horizontal */
+    body {
+        overflow-x: hidden !important;
+    }
+    
+    .home-hero,
+    .section-projects,
+    .section-services,
+    .section-blog,
+    .section-clients,
+    .section-featured {
+        overflow-x: hidden !important;
+    }
+    
+    /* Imágenes responsive */
+    .visual-card img,
+    .project-thumbnail img,
+    .service-media img,
+    .blog-cover img,
+    .client-logo img,
+    .featured-image img,
+    .featured-thumb img {
+        max-width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+}
+
+/* ================================
+   MEJORAS DE PERFORMANCE
+================================ */
+@media (max-width: 767px) {
+    /* Reducir blur en móvil para mejor performance */
+    .visual-decoration {
+        filter: blur(60px) !important;
+        opacity: 0.4 !important;
+    }
+    
+    /* Simplificar gradients en móvil */
+    .hero-badge,
+    .project-tag,
+    .blog-category {
+        backdrop-filter: blur(8px) !important;
+    }
+    
+    /* Lazy loading hints */
+    .project-thumbnail img,
+    .service-media img,
+    .blog-cover img {
+        content-visibility: auto !important;
+    }
+}
+
+/* ================================
+   SAFE AREAS - iOS Notch Support
+================================ */
+@media (max-width: 767px) {
+    .floating-logo {
+        top: max(1.25rem, env(safe-area-inset-top)) !important;
+        left: max(1.25rem, env(safe-area-inset-left)) !important;
+    }
+    
+    .floating-menu-btn {
+        top: max(1.25rem, env(safe-area-inset-top)) !important;
+        right: max(1.25rem, env(safe-area-inset-right)) !important;
+    }
+    
+    .chat-floating-btn {
+        bottom: max(1.5rem, env(safe-area-inset-bottom)) !important;
+        right: max(1.5rem, env(safe-area-inset-right)) !important;
+    }
+    
+    .fullscreen-menu {
+        padding-top: env(safe-area-inset-top) !important;
+        padding-bottom: env(safe-area-inset-bottom) !important;
+    }
+}
+
+/* ================================
+   MEJORAS FINALES
+================================ */
+
+/* Smooth scroll behavior */
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth !important;
+    }
+}
+
+/* Focus visible para accesibilidad */
+@media (min-width: 768px) {
+    *:focus-visible {
+        outline: 3px solid var(--primary) !important;
+        outline-offset: 3px !important;
+        border-radius: 4px !important;
+    }
+}
+
+/* Texto seleccionable con colores brand */
+::selection {
+    background: rgba(94, 23, 235, 0.2) !important;
+    color: inherit !important;
+}
+
+::-moz-selection {
+    background: rgba(94, 23, 235, 0.2) !important;
+    color: inherit !important;
+}

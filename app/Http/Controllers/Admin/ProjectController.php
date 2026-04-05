@@ -12,10 +12,65 @@ use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Project::with('images')->latest()->paginate(10);
-        return view('admin.projects.index', compact('projects'));
+        $query = Project::with('images');
+
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('client', 'like', "%{$search}%");
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Type filter
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        // Sorting
+        switch ($request->get('sort', 'newest')) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'title':
+                $query->orderBy('title', 'asc');
+                break;
+            default:
+                $query->latest();
+        }
+
+        $projects = $query->paginate(10);
+
+        // Get unique types for filter
+        $types = Project::whereNotNull('type')
+            ->where('type', '!=', '')
+            ->distinct()
+            ->pluck('type');
+
+        // AJAX Response
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admin.projects._projects-grid', compact('projects'))->render(),
+                'pagination' => $projects->appends($request->query())->links()->toHtml(),
+                'total' => $projects->total(),
+                'stats' => [
+                    'published' => Project::where('status', 'published')->count(),
+                    'draft' => Project::where('status', 'draft')->count(),
+                    'total' => Project::count(),
+                ]
+            ]);
+        }
+
+        return view('admin.projects.index', compact('projects', 'types'));
     }
 
     public function create()

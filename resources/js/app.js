@@ -276,3 +276,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+// Import AJAX Filters
+import './ajax-filters.js';

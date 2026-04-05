@@ -18,6 +18,16 @@ class ProjectController extends Controller
             $query->where('type', $request->type);
         }
 
+        // Búsqueda
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('client', 'like', "%{$search}%");
+            });
+        }
+
         $projects = $query->latest()->paginate(12);
 
         // Tipos únicos para filtros
@@ -26,6 +36,15 @@ class ProjectController extends Controller
             ->where('type', '!=', '')
             ->distinct()
             ->pluck('type');
+
+        // AJAX Response
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('front.projects._projects-grid', compact('projects'))->render(),
+                'pagination' => $projects->links()->toHtml(),
+                'total' => $projects->total(),
+            ]);
+        }
 
         return view('front.projects.index', compact('projects', 'types'));
     }

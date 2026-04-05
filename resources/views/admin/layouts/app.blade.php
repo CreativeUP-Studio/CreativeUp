@@ -27,7 +27,9 @@
                     <i class="fa-solid fa-bolt" aria-hidden="true"></i>
                 </div>
                 <div class="sidebar-brand-text">
-                    <span class="sidebar-brand-name">Creative<span>UP</span></span>
+                    <span class="sidebar-brand-name">
+                        <span class="brand-creative">creative</span><span class="brand-up">up</span>
+                    </span>
                     <span class="sidebar-brand-tagline">Admin Panel</span>
                 </div>
             </a>

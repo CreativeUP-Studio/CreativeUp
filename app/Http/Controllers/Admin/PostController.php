@@ -11,9 +11,52 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::with('user')->latest()->paginate(10);
+        $query = Post::with('user');
+
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Sorting
+        switch ($request->get('sort', 'newest')) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'title':
+                $query->orderBy('title', 'asc');
+                break;
+            default:
+                $query->latest();
+        }
+
+        $posts = $query->paginate(10);
+
+        // AJAX Response
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admin.posts._posts-grid', compact('posts'))->render(),
+                'pagination' => $posts->appends($request->query())->links()->toHtml(),
+                'total' => $posts->total(),
+                'stats' => [
+                    'published' => Post::where('status', 'published')->count(),
+                    'draft' => Post::where('status', 'draft')->count(),
+                    'total' => Post::count(),
+                ]
+            ]);
+        }
+
         return view('admin.posts.index', compact('posts'));
     }
 
