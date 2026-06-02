@@ -1,0 +1,25 @@
+/* ================================
+   CreativeUp - Frontend Consolidated CSS
+   Todos los estilos del frontend en un archivo
+   
+   Fecha: 2026-04-25
+   Version: 1.0.0 - Consolidated
+================================ */
+
+/* ================================
+   HOME PAGE
+================================ */
+@import "./frontend/home.css";
+
+/* ================================
+   LAYOUT (Logo, Menu, Footer)
+================================ */
+@import "./frontend/layout-responsive.css";
+
+/* ================================
+   PUBLIC PAGES
+================================ */
+@import "./frontend/contact.css";
+@import "./frontend/services.css";
+@import "./frontend/projects.css";
+@import "./frontend/blog.css";

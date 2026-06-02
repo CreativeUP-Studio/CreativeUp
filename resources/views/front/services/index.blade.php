@@ -85,12 +85,12 @@
     <h2 id="svc-showcase-title" class="sr-only">Nuestros Servicios</h2>
     
     @forelse($services as $index => $service)
-    <article class="svc-showcase-item {{ $index % 2 !== 0 ? 'svc-showcase-item--reverse' : '' }}">
+    <article class="svc-showcase-item {{ $index % 2 !== 0 ? 'svc-showcase-item--reverse' : '' }}" style="--service-color: {{ $service->color ?? '#ff006e' }};" data-aos="fade-up" data-aos-duration="1000" data-aos-once="true">
         {{-- Número decorativo --}}
-        <span class="svc-showcase-number anim-scroll" data-anim="fade-in" aria-hidden="true">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</span>
+        <span class="svc-showcase-number" aria-hidden="true" data-aos="fade-in" data-aos-delay="200" data-aos-once="true">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</span>
 
         {{-- Visual --}}
-        <div class="svc-showcase-visual anim-scroll" data-anim="{{ $index % 2 === 0 ? 'fade-right' : 'fade-left' }}">
+        <div class="svc-showcase-visual" data-aos="{{ $index % 2 === 0 ? 'fade-right' : 'fade-left' }}" data-aos-delay="150" data-aos-once="true">
             <div class="svc-showcase-img-wrap">
                 @if($service->image)
                     <img 
@@ -102,9 +102,15 @@
                         height="450"
                     >
                 @else
-                    <div class="svc-showcase-placeholder" style="--svc-color: {{ $service->color ?? '#5e17eb' }}">
+                    <div class="svc-showcase-placeholder" style="--svc-color: {{ $service->color ?? '#ff006e' }}">
                         <span class="svc-showcase-placeholder-icon">
-                            <i class="{{ $service->icon ?? 'fa-solid fa-star' }}" aria-hidden="true"></i>
+                            @if($service->icon && Str::contains($service->icon, 'fa-'))
+                                <i class="{{ $service->icon }}" aria-hidden="true"></i>
+                            @elseif($service->icon)
+                                <span class="svc-showcase-emoji">{{ $service->icon }}</span>
+                            @else
+                                <i class="fa-solid fa-star" aria-hidden="true"></i>
+                            @endif
                         </span>
                     </div>
                 @endif
@@ -116,7 +122,13 @@
             {{-- Badge de icono flotante --}}
             @if($service->icon)
             <div class="svc-showcase-icon-badge" aria-hidden="true">
-                <span><i class="{{ $service->icon }}"></i></span>
+                <span>
+                    @if(Str::contains($service->icon, 'fa-'))
+                        <i class="{{ $service->icon }}"></i>
+                    @else
+                        <span class="svc-showcase-emoji-badge">{{ $service->icon }}</span>
+                    @endif
+                </span>
             </div>
             @endif
             
@@ -138,7 +150,7 @@
         </div>
 
         {{-- Contenido --}}
-        <div class="svc-showcase-content anim-scroll" data-anim="{{ $index % 2 === 0 ? 'fade-left' : 'fade-right' }}">
+        <div class="svc-showcase-content" data-aos="{{ $index % 2 === 0 ? 'fade-left' : 'fade-right' }}" data-aos-delay="150" data-aos-once="true">
             <div class="svc-showcase-content-inner">
                 <div class="svc-showcase-tag">
                     <span class="svc-showcase-tag-line" aria-hidden="true"></span>
@@ -204,12 +216,12 @@
 {{-- ═══ PROCESO DE TRABAJO ═══ --}}
 <section class="svc-process" aria-labelledby="svc-process-title">
     <div class="svc-process-header">
-        <div class="svc-process-badge anim-scroll" data-anim="fade-up">Cómo trabajamos</div>
-        <h2 id="svc-process-title" class="svc-process-title anim-scroll" data-anim="fade-up">
+        <div class="svc-process-badge" data-aos="fade-down" data-aos-duration="800" data-aos-once="true">Cómo trabajamos</div>
+        <h2 id="svc-process-title" class="svc-process-title" data-aos="fade-up" data-aos-duration="1000" data-aos-once="true">
             Un proceso pensado para
             <span class="svc-hero-title-gradient">resultados</span>
         </h2>
-        <p class="svc-process-sub anim-scroll" data-anim="fade-up">
+        <p class="svc-process-sub" data-aos="fade-up" data-aos-duration="1200" data-aos-once="true">
             Cada proyecto sigue una metodología probada que asegura calidad y eficiencia.
         </p>
     </div>
@@ -219,7 +231,7 @@
             <div class="svc-process-line-fill" id="svcProcessLineFill"></div>
         </div>
 
-        <div class="svc-process-step anim-scroll" data-anim="fade-up" role="listitem">
+        <div class="svc-process-step" data-aos="fade-up" data-aos-duration="800" data-aos-once="true" role="listitem">
             <div class="svc-process-step-dot" aria-hidden="true">
                 <span>01</span>
             </div>
@@ -230,7 +242,7 @@
             </div>
         </div>
 
-        <div class="svc-process-step anim-scroll" data-anim="fade-up" role="listitem">
+        <div class="svc-process-step" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100" data-aos-once="true" role="listitem">
             <div class="svc-process-step-dot" aria-hidden="true">
                 <span>02</span>
             </div>
@@ -241,7 +253,7 @@
             </div>
         </div>
 
-        <div class="svc-process-step anim-scroll" data-anim="fade-up" role="listitem">
+        <div class="svc-process-step" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200" data-aos-once="true" role="listitem">
             <div class="svc-process-step-dot" aria-hidden="true">
                 <span>03</span>
             </div>
@@ -252,7 +264,7 @@
             </div>
         </div>
 
-        <div class="svc-process-step anim-scroll" data-anim="fade-up" role="listitem">
+        <div class="svc-process-step" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300" data-aos-once="true" role="listitem">
             <div class="svc-process-step-dot" aria-hidden="true">
                 <span>04</span>
             </div>
@@ -297,7 +309,7 @@
         <div class="svc-cta-shape svc-cta-shape--1"></div>
         <div class="svc-cta-shape svc-cta-shape--2"></div>
     </div>
-    <div class="svc-cta-content anim-scroll" data-anim="fade-up">
+    <div class="svc-cta-content" data-aos="zoom-in" data-aos-duration="1200" data-aos-once="true">
         <div class="svc-cta-badge">
             <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
             ¿Listo para el siguiente paso?

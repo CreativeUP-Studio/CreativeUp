@@ -1,25 +1,21 @@
-{{-- Admin Leads Grid Partial - Premium Design --}}
-<div class="leads-cards-grid">
+{{-- Admin Leads Grid Partial - Rediseño Premium --}}
+<div class="svc-grid" id="leadsGrid">
     @forelse($leads as $lead)
-    <article class="lead-card {{ !$lead->read_at ? 'lead-card--unread' : '' }}" 
-             data-lead-id="{{ $lead->id }}"
-             data-aos="fade-up"
-             data-aos-delay="{{ $loop->index * 50 }}">
+    @php
+        $cardColor = '#6366f1';
+        if ($lead->priority === 'high') {
+            $cardColor = '#ef4444';
+        } elseif ($lead->priority === 'medium') {
+            $cardColor = '#f59e0b';
+        }
+    @endphp
+    <div class="svc-card-item {{ !$lead->read_at ? 'lead-card--unread' : '' }}" style="--card-color: {{ $cardColor }};" data-id="{{ $lead->id }}">
         
-        {{-- Card Glow Effect --}}
-        <div class="lead-card-glow"></div>
-        
-        {{-- Priority Indicator --}}
-        <div class="lead-card-priority-bar lead-card-priority-bar--{{ $lead->priority }}"></div>
-        
-        {{-- Card Header --}}
-        <div class="lead-card-header">
-            <div class="lead-card-checkbox-wrapper">
-                <input type="checkbox" 
-                       name="lead_ids[]" 
-                       value="{{ $lead->id }}" 
-                       class="lead-checkbox-input lead-check"
-                       id="lead-{{ $lead->id }}">
+        {{-- Card Top Banner --}}
+        <div class="svc-card-banner" style="background: linear-gradient(135deg, {{ $cardColor }}e0 0%, #1e293b 100%); position: relative; height: 120px;">
+            {{-- Bulk Action Checkbox inside Banner --}}
+            <div style="position: absolute; top: 1rem; left: 1rem; z-index: 3;" onclick="event.stopPropagation();">
+                <input type="checkbox" name="lead_ids[]" value="{{ $lead->id }}" class="lead-checkbox-input lead-check" id="lead-{{ $lead->id }}" onchange="updateBulkBar()">
                 <label for="lead-{{ $lead->id }}" class="lead-checkbox-label">
                     <svg class="lead-checkbox-icon" viewBox="0 0 24 24" fill="none">
                         <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -27,75 +23,46 @@
                 </label>
             </div>
 
-            <div class="lead-card-avatar-wrapper">
-                <div class="lead-card-avatar lead-card-avatar--{{ $lead->priority }}">
-                    <span class="lead-card-avatar-text">{{ strtoupper(substr($lead->name, 0, 2)) }}</span>
-                    @if(!$lead->read_at)
-                        <span class="lead-card-new-badge">
-                            <span class="lead-card-new-badge-dot"></span>
-                        </span>
-                    @endif
-                </div>
-                <div class="lead-card-priority-icon lead-card-priority-icon--{{ $lead->priority }}">
-                    @if($lead->priority === 'high')
-                        <i class="fa-solid fa-flag"></i>
-                    @elseif($lead->priority === 'medium')
-                        <i class="fa-solid fa-flag"></i>
-                    @else
-                        <i class="fa-regular fa-flag"></i>
-                    @endif
-                </div>
+            {{-- Priority Badge in Top Right --}}
+            <div style="position: absolute; top: 1rem; right: 1rem; z-index: 3;">
+                <span style="font-size: 0.65rem; font-weight: 800; color: white; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); padding: 0.35rem 0.65rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px;">
+                    {{ $lead->priority === 'high' ? '🔴 Alta' : ($lead->priority === 'medium' ? '🟡 Media' : '⚪ Baja') }}
+                </span>
             </div>
+            
+            <div class="svc-card-overlay"></div>
+        </div>
+
+        {{-- Overlapping Avatar Badge --}}
+        <div class="svc-card-emoji-wrap" style="top: 98px; width: 44px; height: 44px; border-radius: 12px; font-size: 1.15rem; font-weight: 800; text-transform: uppercase; font-family: inherit; border: 3px solid white; display: flex; align-items: center; justify-content: center; background: {{ $cardColor }}; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+            <span>{{ strtoupper(substr($lead->name, 0, 2)) }}</span>
         </div>
 
         {{-- Card Body --}}
-        <div class="lead-card-body">
-            <h3 class="lead-card-name">
-                <a href="{{ route('admin.leads.show', $lead) }}" class="lead-card-name-link">
+        <div class="svc-card-body" style="padding-top: 1.75rem;">
+            <h3 class="svc-card-title">
+                <a href="{{ route('admin.leads.show', $lead) }}" style="color: var(--text-main); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-main)'">
                     {{ $lead->name }}
                 </a>
             </h3>
+            
+            <span class="svc-card-slug" style="font-size: 0.8rem; color: var(--text-muted); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                <i class="fa-regular fa-envelope" style="margin-right: 0.25rem;"></i>{{ $lead->email }}
+            </span>
 
-            <div class="lead-card-contacts">
-                <div class="lead-card-contact-item">
-                    <div class="lead-card-contact-icon lead-card-contact-icon--email">
-                        <i class="fa-solid fa-envelope"></i>
-                    </div>
-                    <a href="mailto:{{ $lead->email }}" class="lead-card-contact-text lead-card-contact-text--link">
-                        {{ $lead->email }}
-                    </a>
-                </div>
-                
-                @if($lead->phone)
-                <div class="lead-card-contact-item">
-                    <div class="lead-card-contact-icon lead-card-contact-icon--phone">
-                        <i class="fa-solid fa-phone"></i>
-                    </div>
-                    <span class="lead-card-contact-text">{{ $lead->phone }}</span>
-                </div>
-                @endif
-            </div>
-
-            @if($lead->service)
-            <div class="lead-card-service">
-                <i class="fa-solid fa-briefcase"></i>
-                <span>{{ $lead->service->title }}</span>
+            @if($lead->phone)
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+                <i class="fa-solid fa-phone" style="margin-right: 0.25rem;"></i>{{ $lead->phone }}
             </div>
             @endif
 
-            @if($lead->message)
-            <div class="lead-card-message">
-                <div class="lead-card-message-icon">
-                    <i class="fa-solid fa-quote-left"></i>
-                </div>
-                <p class="lead-card-message-text">{{ Str::limit($lead->message, 120) }}</p>
-            </div>
-            @endif
-        </div>
+            <p class="svc-card-desc" style="-webkit-line-clamp: 2; margin: 1rem 0 1.25rem 0;">
+                {{ $lead->message }}
+            </p>
 
-        {{-- Card Footer --}}
-        <div class="lead-card-footer">
-            <div class="lead-card-badges">
+            {{-- Metadata Badges --}}
+            <div class="svc-card-metadata">
+                {{-- Status Badge --}}
                 @if($lead->status === 'new')
                     <span class="lead-badge lead-badge--new">
                         <i class="fa-solid fa-sparkles"></i>
@@ -103,106 +70,74 @@
                     </span>
                 @elseif($lead->status === 'contacted')
                     <span class="lead-badge lead-badge--contacted">
-                        <i class="fa-solid fa-phone-volume"></i>
-                        <span>Contactado</span>
+                        <i class="fa-solid fa-spinner"></i>
+                        <span>En Proceso</span>
                     </span>
                 @else
                     <span class="lead-badge lead-badge--closed">
-                        <i class="fa-solid fa-check-circle"></i>
+                        <i class="fa-solid fa-circle-check"></i>
                         <span>Cerrado</span>
                     </span>
                 @endif
 
+                {{-- Source Badge --}}
                 @if($lead->source === 'chat')
                     <span class="lead-badge lead-badge--chat">
                         <i class="fa-solid fa-comment-dots"></i>
                         <span>Chat</span>
                     </span>
+                @elseif($lead->source === 'newsletter')
+                    <span class="lead-badge lead-badge--newsletter">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Boletín</span>
+                    </span>
                 @else
-                    <span class="lead-badge lead-badge--form">
+                    <span class="lead-badge lead-badge--web">
                         <i class="fa-solid fa-envelope"></i>
                         <span>Web</span>
                     </span>
                 @endif
-            </div>
 
-            <div class="lead-card-meta">
-                <span class="lead-card-meta-item" title="Respuestas">
-                    <i class="fa-solid fa-reply"></i>
-                    <span>{{ $lead->replies_count }}</span>
-                </span>
-                <span class="lead-card-meta-item" title="Fecha">
+                {{-- Date Badge --}}
+                <span class="svc-card-badge" title="Fecha">
                     <i class="fa-regular fa-clock"></i>
                     <span>{{ $lead->created_at->diffForHumans() }}</span>
                 </span>
             </div>
-        </div>
 
-        {{-- Card Actions --}}
-        <div class="lead-card-actions">
-            <a href="{{ route('admin.leads.show', $lead) }}" 
-               class="lead-card-btn lead-card-btn--primary">
-                <i class="fa-solid fa-eye"></i>
-                <span>Ver detalles</span>
-            </a>
-
-            <div class="lead-card-quick-actions">
+            {{-- Actions Grid --}}
+            <div class="svc-card-actions" style="margin-top: auto; display: flex; gap: 0.5rem; align-items: center;">
+                <a href="{{ route('admin.leads.show', $lead) }}" class="svc-card-btn svc-card-btn--preview" title="Ver Detalles" onclick="event.stopPropagation();">
+                    <i class="fa-solid fa-eye"></i>
+                    <span>Ver Detalles</span>
+                </a>
+                
                 @if($lead->phone)
-                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $lead->phone) }}" 
-                   target="_blank"
-                   class="lead-card-quick-btn lead-card-quick-btn--whatsapp"
-                   title="WhatsApp">
-                    <i class="fa-brands fa-whatsapp"></i>
+                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $lead->phone) }}" target="_blank" class="svc-card-btn" title="WhatsApp" onclick="event.stopPropagation();" style="flex: 0 0 38px; width: 38px; height: 38px; padding: 0; display: flex; align-items: center; justify-content: center; background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; text-decoration: none;">
+                    <i class="fa-brands fa-whatsapp" style="font-size: 1.15rem;"></i>
                 </a>
                 @endif
 
-                <a href="mailto:{{ $lead->email }}" 
-                   class="lead-card-quick-btn lead-card-quick-btn--email"
-                   title="Enviar email">
-                    <i class="fa-solid fa-envelope"></i>
+                <a href="mailto:{{ $lead->email }}" class="svc-card-btn" title="Enviar Email" onclick="event.stopPropagation();" style="flex: 0 0 38px; width: 38px; height: 38px; padding: 0; display: flex; align-items: center; justify-content: center; background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px; text-decoration: none;">
+                    <i class="fa-solid fa-envelope" style="font-size: 1rem;"></i>
                 </a>
 
-                <form method="POST" 
-                      action="{{ route('admin.leads.destroy', $lead) }}" 
-                      onsubmit="return confirm('¿Eliminar este lead permanentemente?')"
-                      style="display: inline;">
-                    @csrf @method('DELETE')
-                    <button type="submit" 
-                            class="lead-card-quick-btn lead-card-quick-btn--delete"
-                            title="Eliminar">
-                        <i class="fa-solid fa-trash"></i>
+                <form method="POST" action="{{ route('admin.leads.destroy', $lead) }}" style="display: inline-block; margin: 0;" onsubmit="event.stopPropagation(); return confirm('¿Estás seguro de eliminar este lead?\n\nNombre: {{ $lead->name }}\nEmail: {{ $lead->email }}\n\nEsta acción no se puede deshacer.');">
+                    @csrf 
+                    @method('DELETE')
+                    <button type="submit" class="svc-card-btn svc-card-btn--delete" title="Eliminar Lead" 
+                            style="flex: 0 0 38px; width: 38px; height: 38px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: none; cursor: pointer; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);">
+                        <i class="fa-solid fa-trash-can" style="font-size: 0.95rem;"></i>
                     </button>
                 </form>
             </div>
         </div>
-    </article>
+    </div>
     @empty
-    {{-- Empty State --}}
-    <div class="leads-empty-state">
-        <div class="leads-empty-state-illustration">
-            <div class="leads-empty-state-icon">
-                <i class="fa-solid fa-inbox"></i>
-            </div>
-            <div class="leads-empty-state-circle leads-empty-state-circle-1"></div>
-            <div class="leads-empty-state-circle leads-empty-state-circle-2"></div>
-            <div class="leads-empty-state-circle leads-empty-state-circle-3"></div>
-        </div>
-        <h3 class="leads-empty-state-title">No se encontraron leads</h3>
-        <p class="leads-empty-state-text">
-            @if(request('search') || request('status') || request('priority') || request('source'))
-                No hay leads que coincidan con los filtros aplicados.<br>
-                Intenta ajustar los criterios de búsqueda.
-            @else
-                Aún no has recibido ningún lead.<br>
-                Los nuevos contactos aparecerán aquí automáticamente.
-            @endif
-        </p>
-        @if(request('search') || request('status') || request('priority') || request('source'))
-            <button type="button" class="leads-empty-state-btn" data-filter-clear>
-                <i class="fa-solid fa-rotate-left"></i>
-                <span>Limpiar filtros</span>
-            </button>
-        @endif
+    <div class="svc-empty-state" style="grid-column: 1 / -1; padding: 4rem 2rem; width: 100%;">
+        <i class="fa-solid fa-inbox svc-empty-icon" style="font-size: 3.5rem; opacity: 0.3; margin-bottom: 1.5rem;"></i>
+        <h3>No se encontraron leads</h3>
+        <p>Intenta ajustar los filtros de búsqueda o limpiar las opciones seleccionadas.</p>
     </div>
     @endforelse
 </div>

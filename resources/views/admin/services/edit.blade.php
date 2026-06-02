@@ -11,33 +11,42 @@
 
     {{-- Header --}}
     <div class="svc-header">
-        <a href="{{ route('admin.services.index') }}" class="svc-header-back">
-            <i class="fa-solid fa-arrow-left"></i>
-        </a>
-        <div class="svc-header-info">
-            <h1>
-                @if($service->icon)<span class="svc-header-emoji">{{ $service->icon }}</span>@endif
-                {{ $service->title }}
-            </h1>
-            <p>
-                <i class="fa-solid fa-pen"></i> Editando servicio
-                <span class="svc-header-status {{ $service->is_active ? 'active' : 'inactive' }}">
-                    {{ $service->is_active ? 'Activo' : 'Inactivo' }}
-                </span>
-            </p>
+        <div class="svc-header-left">
+            <a href="{{ route('admin.services.index') }}" class="svc-header-back" title="Volver a la lista">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            <div class="svc-header-info">
+                <h1>
+                    @if($service->icon)
+                        <span class="svc-header-emoji" id="headerIconWrap">
+                            @if(Str::contains($service->icon, 'fa-'))
+                                <i class="{{ $service->icon }}"></i>
+                            @else
+                                {{ $service->icon }}
+                            @endif
+                        </span>
+                    @else
+                        <span class="svc-header-emoji" id="headerIconWrap" style="display: none;"></span>
+                    @endif
+                    <span id="headerTitleText">{{ $service->title }}</span>
+                    <span class="svc-header-status {{ $service->is_active ? 'active' : 'inactive' }}">
+                        {{ $service->is_active ? 'Activo' : 'Borrador' }}
+                    </span>
+                </h1>
+            </div>
         </div>
         <div class="svc-header-actions">
-            <a href="{{ route('services.show', $service->slug) }}" target="_blank" class="svc-btn svc-btn--outline">
+            <a href="{{ route('services.show', $service->slug) }}" target="_blank" class="admin-btn admin-btn-secondary">
                 <i class="fa-solid fa-eye"></i>
-                Ver en web
+                <span>Ver en Web</span>
             </a>
-            <button type="submit" name="is_active" value="0" class="svc-btn svc-btn--secondary">
+            <button type="submit" name="is_active" value="0" class="admin-btn admin-btn-secondary">
                 <i class="fa-solid fa-eye-slash"></i>
-                Guardar inactivo
+                <span>Guardar Borrador</span>
             </button>
-            <button type="submit" name="is_active" value="1" class="svc-btn svc-btn--primary">
+            <button type="submit" name="is_active" value="1" class="admin-btn admin-btn-primary">
                 <i class="fa-solid fa-check"></i>
-                Guardar cambios
+                <span>Guardar Cambios</span>
             </button>
         </div>
     </div>
@@ -297,8 +306,21 @@
 
                 <div class="svc-field svc-field--compact">
                     <label for="icon">Icono / Emoji</label>
-                    <input type="text" id="icon" name="icon" value="{{ old('icon', $service->icon) }}" placeholder="🎨" class="svc-emoji-input">
-                    <small>Un emoji o clase de Font Awesome</small>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <input type="text" id="icon" name="icon" value="{{ old('icon', $service->icon) }}" placeholder="🎨" class="svc-emoji-input" style="flex: 1;">
+                        <div id="iconPreviewBox" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 1.25rem;">
+                            @if(old('icon', $service->icon))
+                                @if(Str::contains(old('icon', $service->icon), 'fa-'))
+                                    <i class="{{ old('icon', $service->icon) }}"></i>
+                                @else
+                                    {{ old('icon', $service->icon) }}
+                                @endif
+                            @else
+                                <i class="fa-solid fa-shapes" style="color: #94a3b8;"></i>
+                            @endif
+                        </div>
+                    </div>
+                    <small>Un emoji o clase de Font Awesome (Ej: fa-solid fa-magnifying-glass-chart)</small>
                 </div>
 
                 <div class="svc-field svc-field--compact">
@@ -338,934 +360,7 @@
 @endsection
 
 @push('styles')
-<style>
-/* ═══════════════════════════════════════════════════
-   SERVICES FORM STYLES
-   ═══════════════════════════════════════════════════ */
-
-/* Header */
-.svc-header {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 1.75rem 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 20px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 15px 35px -10px rgba(102, 126, 234, 0.4);
-    position: relative;
-    overflow: hidden;
-}
-
-.svc-header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 50%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-    pointer-events: none;
-}
-
-.svc-header-back {
-    width: 44px;
-    height: 44px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-decoration: none;
-    transition: all 0.3s;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    flex-shrink: 0;
-}
-
-.svc-header-back:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateX(-3px);
-}
-
-.svc-header-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.svc-header-info h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: white;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.svc-header-emoji {
-    font-size: 1.75rem;
-}
-
-.svc-header-info p {
-    margin: 0.375rem 0 0 0;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.svc-header-status {
-    display: inline-flex;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
-.svc-header-status.active {
-    background: rgba(16, 185, 129, 0.3);
-    color: #a7f3d0;
-}
-
-.svc-header-status.inactive {
-    background: rgba(245, 158, 11, 0.3);
-    color: #fde68a;
-}
-
-.svc-header-actions {
-    display: flex;
-    gap: 0.625rem;
-    flex-shrink: 0;
-}
-
-/* Botones */
-.svc-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    border: none;
-    border-radius: 10px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.svc-btn--outline {
-    background: transparent;
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-.svc-btn--outline:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.6);
-}
-
-.svc-btn--secondary {
-    background: rgba(255, 255, 255, 0.15);
-    color: white;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.svc-btn--secondary:hover {
-    background: rgba(255, 255, 255, 0.25);
-}
-
-.svc-btn--primary {
-    background: white;
-    color: #764ba2;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-}
-
-.svc-btn--primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-}
-
-/* Alerta de errores */
-.svc-alert {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
-}
-
-.svc-alert--error {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #991b1b;
-}
-
-.svc-alert--error i {
-    color: #ef4444;
-    font-size: 1.25rem;
-    margin-top: 2px;
-}
-
-.svc-alert ul {
-    margin: 0.5rem 0 0 0;
-    padding-left: 1.25rem;
-}
-
-.svc-alert li {
-    margin: 0.25rem 0;
-}
-
-/* Layout */
-.svc-layout {
-    display: grid;
-    grid-template-columns: 1fr 380px;
-    gap: 1.5rem;
-    align-items: start;
-}
-
-.svc-main {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.svc-sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    position: sticky;
-    top: 96px;
-}
-
-/* Card */
-.svc-card {
-    background: white;
-    border-radius: 20px;
-    padding: 2rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-    border: 1px solid #f3f4f6;
-}
-
-.svc-card-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.75rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid #f3f4f6;
-}
-
-.svc-card-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.125rem;
-    color: white;
-}
-
-.svc-card-icon--purple { background: linear-gradient(135deg, #7c3aed, #a855f7); }
-.svc-card-icon--emerald { background: linear-gradient(135deg, #10b981, #34d399); }
-.svc-card-icon--amber { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
-.svc-card-icon--blue { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
-.svc-card-icon--cyan { background: linear-gradient(135deg, #06b6d4, #22d3ee); }
-
-.svc-card-header h2 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #1a1a2e;
-}
-
-.svc-card-header p {
-    margin: 0.25rem 0 0 0;
-    font-size: 0.875rem;
-    color: #6b7280;
-}
-
-/* Fields */
-.svc-field {
-    margin-bottom: 1.5rem;
-}
-
-.svc-field:last-child {
-    margin-bottom: 0;
-}
-
-.svc-field label {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #374151;
-    margin-bottom: 0.5rem;
-}
-
-.svc-field .required {
-    color: #ef4444;
-}
-
-.svc-field input[type="text"],
-.svc-field input[type="number"],
-.svc-field textarea {
-    width: 100%;
-    padding: 0.875rem 1rem;
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
-    font-size: 0.9375rem;
-    font-family: inherit;
-    transition: all 0.3s;
-    background: white;
-}
-
-.svc-field input:focus,
-.svc-field textarea:focus {
-    outline: none;
-    border-color: #7c3aed;
-    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
-}
-
-.svc-field small {
-    display: block;
-    margin-top: 0.5rem;
-    font-size: 0.75rem;
-    color: #9ca3af;
-}
-
-.svc-field-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 0.5rem;
-}
-
-.svc-counter {
-    font-size: 0.75rem;
-    color: #9ca3af;
-}
-
-.svc-counter span {
-    color: #7c3aed;
-    font-weight: 600;
-}
-
-.svc-error {
-    display: block;
-    margin-top: 0.5rem;
-    font-size: 0.8125rem;
-    color: #ef4444;
-}
-
-/* Input Group */
-.svc-input-group {
-    display: flex;
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.svc-input-prefix {
-    padding: 0.875rem 1rem;
-    background: #f9fafb;
-    color: #6b7280;
-    font-size: 0.875rem;
-    font-weight: 500;
-    border-right: 2px solid #e5e7eb;
-}
-
-.svc-input-group input {
-    flex: 1;
-    border: none !important;
-    border-radius: 0 !important;
-}
-
-/* Dynamic Lists */
-.svc-dynamic-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.svc-dynamic-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.svc-dynamic-icon {
-    width: 36px;
-    height: 36px;
-    background: linear-gradient(135deg, #10b981, #34d399);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 0.875rem;
-    flex-shrink: 0;
-}
-
-.svc-dynamic-item input {
-    flex: 1;
-    padding: 0.75rem 1rem;
-    border: 2px solid #e5e7eb;
-    border-radius: 10px;
-    font-size: 0.9375rem;
-}
-
-.svc-dynamic-item input:focus {
-    outline: none;
-    border-color: #10b981;
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-}
-
-.svc-dynamic-remove,
-.svc-benefit-remove,
-.svc-step-remove {
-    width: 36px;
-    height: 36px;
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    border-radius: 10px;
-    color: #ef4444;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
-    flex-shrink: 0;
-}
-
-.svc-dynamic-remove:hover,
-.svc-benefit-remove:hover,
-.svc-step-remove:hover {
-    background: #ef4444;
-    color: white;
-    border-color: #ef4444;
-}
-
-.svc-add-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    margin-top: 1rem;
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.05));
-    border: 2px dashed #10b981;
-    border-radius: 12px;
-    color: #10b981;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.svc-add-btn:hover {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1));
-}
-
-.svc-add-btn--amber {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.05));
-    border-color: #f59e0b;
-    color: #d97706;
-}
-
-.svc-add-btn--blue {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(96, 165, 250, 0.05));
-    border-color: #3b82f6;
-    color: #2563eb;
-}
-
-/* Benefits */
-.svc-benefits-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.svc-benefit-card {
-    display: grid;
-    grid-template-columns: 60px 1fr 1fr auto;
-    gap: 0.75rem;
-    padding: 1rem;
-    background: linear-gradient(135deg, #fffbeb, #fef3c7);
-    border: 1px solid #fde68a;
-    border-radius: 14px;
-    align-items: center;
-}
-
-.svc-benefit-emoji {
-    padding: 0.75rem;
-    text-align: center;
-    font-size: 1.5rem;
-    border: 2px solid #fcd34d !important;
-    border-radius: 10px;
-    background: white;
-}
-
-.svc-benefit-title,
-.svc-benefit-desc {
-    padding: 0.75rem 1rem;
-    border: 2px solid #fcd34d;
-    border-radius: 10px;
-    font-size: 0.9375rem;
-    background: white;
-}
-
-.svc-benefit-title:focus,
-.svc-benefit-desc:focus {
-    outline: none;
-    border-color: #f59e0b;
-    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
-}
-
-/* Steps */
-.svc-steps-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.svc-step-card {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem;
-    background: linear-gradient(135deg, #eff6ff, #dbeafe);
-    border: 1px solid #bfdbfe;
-    border-radius: 14px;
-    align-items: flex-start;
-}
-
-.svc-step-number {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, #3b82f6, #60a5fa);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1rem;
-    font-weight: 800;
-    flex-shrink: 0;
-}
-
-.svc-step-inputs {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.svc-step-inputs input {
-    padding: 0.75rem 1rem;
-    border: 2px solid #93c5fd;
-    border-radius: 10px;
-    font-size: 0.9375rem;
-    background: white;
-}
-
-.svc-step-inputs input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-/* Sidebar */
-.svc-sidebar-card {
-    background: white;
-    border-radius: 16px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-    border: 1px solid #f3f4f6;
-}
-
-.svc-sidebar-card h3 {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 0 0 1rem 0;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #1a1a2e;
-}
-
-.svc-sidebar-card h3 i {
-    color: #7c3aed;
-}
-
-.svc-sidebar-hint {
-    margin: 0 0 0.75rem 0;
-    font-size: 0.8125rem;
-    color: #6b7280;
-}
-
-/* Status Card */
-.svc-status-card {
-    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-}
-
-.svc-status-indicator {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.875rem;
-    border-radius: 8px;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
-
-.svc-status-indicator.active {
-    background: rgba(16, 185, 129, 0.15);
-    color: #059669;
-}
-
-.svc-status-indicator.inactive {
-    background: rgba(245, 158, 11, 0.15);
-    color: #d97706;
-}
-
-.svc-status-indicator i {
-    font-size: 0.5rem;
-}
-
-.svc-status-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.svc-status-item {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8125rem;
-}
-
-.svc-status-item span {
-    color: #6b7280;
-}
-
-.svc-status-item strong {
-    color: #374151;
-}
-
-/* Empty Hint */
-.svc-empty-hint {
-    padding: 1.5rem;
-    text-align: center;
-    color: #9ca3af;
-    font-size: 0.875rem;
-    background: #f9fafb;
-    border-radius: 10px;
-    border: 2px dashed #e5e7eb;
-}
-
-/* Current Image */
-.svc-current-image {
-    margin-bottom: 1rem;
-}
-
-.svc-current-image img {
-    width: 100%;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-}
-
-.svc-remove-checkbox {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.75rem;
-    font-size: 0.8125rem;
-    color: #ef4444;
-    cursor: pointer;
-}
-
-.svc-remove-checkbox input {
-    width: 16px;
-    height: 16px;
-}
-
-/* Current Gallery */
-.svc-current-gallery {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-}
-
-.svc-gallery-existing {
-    position: relative;
-}
-
-.svc-gallery-existing img {
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
-}
-
-.svc-gallery-existing label {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(239, 68, 68, 0.95);
-    color: white;
-    padding: 0.375rem;
-    font-size: 0.6875rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.25rem;
-    cursor: pointer;
-    border-radius: 0 0 10px 10px;
-}
-
-.svc-gallery-existing input {
-    width: 12px;
-    height: 12px;
-}
-
-/* Image Upload */
-.svc-image-upload {
-    width: 100%;
-    aspect-ratio: 16/10;
-    border: 2px dashed #d1d5db;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #f9fafb, #f3f4f6);
-    cursor: pointer;
-    overflow: hidden;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.svc-image-upload:hover {
-    border-color: #7c3aed;
-    background: linear-gradient(135deg, #faf5ff, #f5f3ff);
-}
-
-.svc-image-placeholder {
-    text-align: center;
-    padding: 1.5rem;
-}
-
-.svc-image-placeholder i {
-    font-size: 2rem;
-    color: #7c3aed;
-    margin-bottom: 0.5rem;
-}
-
-.svc-image-placeholder span {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #374151;
-}
-
-.svc-image-upload img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Gallery */
-.svc-gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-}
-
-.svc-gallery-add {
-    aspect-ratio: 1;
-    border: 2px dashed #d1d5db;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #f9fafb, #f3f4f6);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
-}
-
-.svc-gallery-add:hover {
-    border-color: #7c3aed;
-    background: linear-gradient(135deg, #faf5ff, #f5f3ff);
-}
-
-.svc-gallery-add i {
-    font-size: 1.5rem;
-    color: #9ca3af;
-}
-
-.svc-gallery-item {
-    position: relative;
-    aspect-ratio: 1;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.svc-gallery-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.svc-gallery-item button {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 24px;
-    height: 24px;
-    background: rgba(239, 68, 68, 0.9);
-    border: none;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    font-size: 0.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.svc-gallery-item:hover button {
-    opacity: 1;
-}
-
-/* Emoji Input */
-.svc-emoji-input {
-    text-align: center;
-    font-size: 1.5rem !important;
-}
-
-/* Color Picker */
-.svc-color-picker {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.svc-color-picker input[type="color"] {
-    width: 50px;
-    height: 40px;
-    padding: 2px;
-    border: 2px solid #e5e7eb;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.svc-color-picker span {
-    font-family: 'SF Mono', monospace;
-    font-size: 0.875rem;
-    color: #6b7280;
-}
-
-/* Compact Field */
-.svc-field--compact {
-    margin-bottom: 1rem;
-}
-
-.svc-field--compact label {
-    font-size: 0.8125rem;
-    margin-bottom: 0.375rem;
-}
-
-.svc-field--compact input {
-    padding: 0.75rem 1rem;
-}
-
-/* Danger Zone */
-.svc-danger-zone {
-    background: linear-gradient(135deg, #fef2f2, #fee2e2);
-    border-color: #fecaca;
-}
-
-.svc-danger-zone h3 {
-    color: #991b1b;
-}
-
-.svc-danger-zone h3 i {
-    color: #ef4444;
-}
-
-.svc-danger-zone p {
-    margin: 0 0 1rem 0;
-    font-size: 0.8125rem;
-    color: #b91c1c;
-}
-
-.svc-delete-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.875rem 1.5rem;
-    background: #ef4444;
-    border: none;
-    border-radius: 12px;
-    color: white;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.svc-delete-btn:hover {
-    background: #dc2626;
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-    .svc-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .svc-sidebar {
-        position: static;
-    }
-}
-
-@media (max-width: 768px) {
-    .svc-header {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .svc-header-info {
-        text-align: center;
-    }
-
-    .svc-header-actions {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .svc-btn {
-        justify-content: center;
-    }
-
-    .svc-benefit-card {
-        grid-template-columns: 1fr;
-    }
-}
-</style>
+    <link rel="stylesheet" href="{{ asset('css/admin/services.css') }}">
 @endpush
 
 @push('scripts')
@@ -1286,6 +381,42 @@ document.addEventListener('DOMContentLoaded', function() {
     if (colorInput && colorValue) {
         colorInput.addEventListener('input', function() {
             colorValue.textContent = this.value;
+        });
+    }
+
+    // Live Icon Preview
+    const iconInput = document.getElementById('icon');
+    if (iconInput) {
+        iconInput.addEventListener('input', function() {
+            const val = this.value.trim();
+            const box = document.getElementById('iconPreviewBox');
+            const headerWrap = document.getElementById('headerIconWrap');
+            
+            // Actualizar la caja del formulario
+            if (box) {
+                if (val === '') {
+                    box.innerHTML = '<i class="fa-solid fa-shapes" style="color: #94a3b8;"></i>';
+                } else if (val.includes('fa-')) {
+                    box.innerHTML = `<i class="${val}"></i>`;
+                } else {
+                    box.innerHTML = val;
+                }
+            }
+            
+            // Actualizar la cabecera
+            if (headerWrap) {
+                if (val === '') {
+                    headerWrap.style.display = 'none';
+                    headerWrap.innerHTML = '';
+                } else {
+                    headerWrap.style.display = '';
+                    if (val.includes('fa-')) {
+                        headerWrap.innerHTML = `<i class="${val}"></i>`;
+                    } else {
+                        headerWrap.innerHTML = val;
+                    }
+                }
+            }
         });
     }
 });
@@ -1326,7 +457,7 @@ function addFeature() {
 }
 
 // Benefits
-let benefitIdx = {{ count(old('benefits', $service->benefits ?? [])) }};
+var benefitIdx = {{ count(old('benefits', $service->benefits ?? [])) }};
 function addBenefit() {
     const container = document.getElementById('benefits-container');
     removeEmptyHint(container);
@@ -1347,7 +478,7 @@ function addBenefit() {
 }
 
 // Steps
-let stepIdx = {{ count(old('process_steps', $service->process_steps ?? [])) }};
+var stepIdx = {{ count(old('process_steps', $service->process_steps ?? [])) }};
 function addStep() {
     const container = document.getElementById('steps-container');
     removeEmptyHint(container);

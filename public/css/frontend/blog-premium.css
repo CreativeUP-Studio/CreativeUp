@@ -1,0 +1,537 @@
+/* ========================================
+   BLOG SECTION - ULTRA PREMIUM CON ANIMACIONES AVANZADAS
+   ======================================== */
+.cu-blog {
+    padding: clamp(5rem, 10vw, 8rem) 0;
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 1) 0%,
+        rgba(248, 250, 252, 1) 50%,
+        rgba(255, 255, 255, 1) 100%
+    );
+    position: relative;
+    overflow: hidden;
+}
+
+/* Orbes animados de fondo */
+.cu-blog::before,
+.cu-blog::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.05;
+    animation: float-blog 30s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.cu-blog::before {
+    width: 500px;
+    height: 500px;
+    background: linear-gradient(135deg, #8338ec, #00b4d8);
+    top: -10%;
+    left: -5%;
+    animation-delay: 0s;
+}
+
+.cu-blog::after {
+    width: 600px;
+    height: 600px;
+    background: linear-gradient(135deg, #ff006e, #8338ec);
+    bottom: -10%;
+    right: -5%;
+    animation-delay: 7s;
+}
+
+@keyframes float-blog {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(-40px, 40px) scale(1.1) rotate(120deg); }
+    66% { transform: translate(40px, -40px) scale(0.9) rotate(240deg); }
+}
+
+.cu-blog .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Grid responsive con animación */
+.cu-blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 350px), 1fr));
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+/* Card con efectos 3D */
+.cu-blog-card {
+    background: #ffffff;
+    border: 2px solid rgba(0, 0, 0, 0.06);
+    border-radius: 24px;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.06),
+        0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+    position: relative;
+    animation: fadeInUp 0.6s ease-out backwards;
+    transform-style: preserve-3d;
+}
+
+.cu-blog-card:nth-child(1) { animation-delay: 0.1s; }
+.cu-blog-card:nth-child(2) { animation-delay: 0.2s; }
+.cu-blog-card:nth-child(3) { animation-delay: 0.3s; }
+
+.cu-blog-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(255, 0, 110, 0.05) 0%, 
+        rgba(131, 56, 236, 0.05) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 0;
+}
+
+.cu-blog-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    border-color: rgba(255, 0, 110, 0.2);
+    box-shadow: 
+        0 40px 80px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(255, 0, 110, 0.3) inset,
+        0 0 60px rgba(255, 0, 110, 0.15);
+}
+
+.cu-blog-card:hover::before {
+    opacity: 1;
+}
+
+/* Imagen con overlay y efectos */
+.cu-blog-img {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+}
+
+.cu-blog-img img {
+    width: 100%; 
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    filter: brightness(0.95) saturate(1.1);
+}
+
+.cu-blog-card:hover .cu-blog-img img {
+    transform: scale(1.15) rotate(2deg);
+    filter: brightness(0.7) saturate(1.3);
+}
+
+/* Overlay con gradiente */
+.cu-blog-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, 
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.3) 60%,
+        rgba(0, 0, 0, 0.6) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.cu-blog-card:hover .cu-blog-img::after {
+    opacity: 1;
+}
+
+/* Badge de fecha con animación */
+.cu-blog-date {
+    position: absolute;
+    top: 1.5rem; 
+    right: 1.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 0.8rem 1rem;
+    border-radius: 16px;
+    text-align: center;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    z-index: 2;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cu-blog-card:hover .cu-blog-date {
+    transform: translateY(-5px) scale(1.05);
+    background: linear-gradient(135deg, #ff006e, #8338ec);
+    border-color: transparent;
+}
+
+.cu-blog-date strong {
+    display: block;
+    font-size: 1.8rem;
+    color: #ff006e;
+    line-height: 1;
+    font-weight: 900;
+    transition: color 0.3s ease;
+}
+
+.cu-blog-card:hover .cu-blog-date strong {
+    color: #ffffff;
+}
+
+.cu-blog-date span {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #64748b;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+}
+
+.cu-blog-card:hover .cu-blog-date span {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Badge de categoría */
+.cu-blog-category {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ff006e;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cu-blog-card:hover .cu-blog-category {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Contenido del card */
+.cu-blog-content {
+    padding: clamp(1.5rem, 3vw, 2rem);
+    position: relative;
+    z-index: 1;
+}
+
+/* Meta información con iconos */
+.cu-blog-meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    flex-wrap: wrap;
+}
+
+.cu-blog-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.3s ease;
+}
+
+.cu-blog-meta i {
+    color: #ff006e;
+    font-size: 0.9rem;
+}
+
+.cu-blog-card:hover .cu-blog-meta span {
+    color: #ff006e;
+}
+
+/* Título con animación */
+.cu-blog-title {
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-family: var(--cu-font-heading);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+    font-weight: 800;
+}
+
+.cu-blog-title a {
+    color: #1e293b;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    position: relative;
+    display: inline-block;
+}
+
+.cu-blog-title a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ff006e 0%, #8338ec 100%);
+    transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cu-blog-card:hover .cu-blog-title a {
+    background: linear-gradient(135deg, #ff006e 0%, #8338ec 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.cu-blog-card:hover .cu-blog-title a::after {
+    width: 100%;
+}
+
+/* Excerpt con fade */
+.cu-blog-excerpt {
+    color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Botón "Leer más" con efectos avanzados */
+.cu-blog-readmore {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 1.8rem;
+    background: rgba(0, 0, 0, 0.02);
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-radius: 50px;
+    color: #1e293b;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.cu-blog-readmore::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #ff006e 0%, #8338ec 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.cu-blog-readmore i {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    z-index: 1;
+}
+
+.cu-blog-readmore span {
+    position: relative;
+    z-index: 1;
+}
+
+.cu-blog-card:hover .cu-blog-readmore {
+    border-color: transparent;
+    color: #ffffff;
+    transform: translateX(5px);
+    box-shadow: 0 8px 25px rgba(255, 0, 110, 0.3);
+}
+
+.cu-blog-card:hover .cu-blog-readmore::before {
+    opacity: 1;
+}
+
+.cu-blog-card:hover .cu-blog-readmore i {
+    transform: translateX(5px);
+}
+
+/* Tags del post */
+.cu-blog-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.cu-blog-tag {
+    padding: 0.4rem 0.8rem;
+    background: rgba(255, 0, 110, 0.08);
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #ff006e;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.cu-blog-tag:hover {
+    background: linear-gradient(135deg, #ff006e, #8338ec);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Efecto de brillo en hover */
+@keyframes shine-blog {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
+.cu-blog-img::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.5) 50%,
+        transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.cu-blog-card:hover .cu-blog-img::before {
+    opacity: 1;
+    animation: shine-blog 1.5s ease-in-out;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+    .cu-blog-grid {
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    }
+
+    .cu-blog-img {
+        height: 240px;
+    }
+}
+
+/* Móviles grandes */
+@media (max-width: 768px) {
+    .cu-blog {
+        padding: clamp(3rem, 8vw, 5rem) 0;
+    }
+
+    .cu-blog-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .cu-blog-img {
+        height: 220px;
+    }
+
+    .cu-blog-date {
+        top: 1rem;
+        right: 1rem;
+        padding: 0.6rem 0.8rem;
+    }
+
+    .cu-blog-date strong {
+        font-size: 1.5rem;
+    }
+
+    .cu-blog-category {
+        bottom: 1rem;
+        left: 1rem;
+        font-size: 0.7rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .cu-blog-content {
+        padding: 1.5rem;
+    }
+
+    .cu-blog-meta {
+        font-size: 0.75rem;
+        gap: 1rem;
+    }
+
+    .cu-blog-title {
+        font-size: 1.2rem;
+    }
+
+    .cu-blog-excerpt {
+        font-size: 0.9rem;
+    }
+
+    .cu-blog-readmore {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+    .cu-blog-img {
+        height: 200px;
+    }
+
+    .cu-blog-date {
+        padding: 0.5rem 0.7rem;
+    }
+
+    .cu-blog-date strong {
+        font-size: 1.3rem;
+    }
+
+    .cu-blog-date span {
+        font-size: 0.7rem;
+    }
+
+    .cu-blog-content {
+        padding: 1.2rem;
+    }
+
+    .cu-blog-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .cu-blog-title {
+        font-size: 1.1rem;
+    }
+
+    .cu-blog-readmore {
+        width: 100%;
+        justify-content: center;
+        padding: 0.8rem 1.5rem;
+    }
+
+    .cu-blog-tags {
+        gap: 0.4rem;
+    }
+
+    .cu-blog-tag {
+        font-size: 0.65rem;
+        padding: 0.3rem 0.6rem;
+    }
+}

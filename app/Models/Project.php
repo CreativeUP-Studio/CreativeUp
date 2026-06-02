@@ -8,7 +8,7 @@ class Project extends Model
 {
     protected $fillable = [
         'title', 'slug', 'description', 'challenge', 'solution', 'results',
-        'type', 'client', 'year', 'thumbnail',
+        'type', 'client', 'year', 'thumbnail', 'thumbnail_device',
         'url', 'technologies', 'status', 'published_at'
     ];
 

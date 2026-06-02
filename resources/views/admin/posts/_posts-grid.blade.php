@@ -1,100 +1,123 @@
 {{-- Admin Posts Grid Partial - For AJAX Loading --}}
 @forelse($posts as $post)
-<article class="admin-post-card">
-    {{-- Image --}}
-    <div class="admin-post-card-image">
-        @if($post->featured_image)
-            <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}">
-        @else
-            <div class="admin-post-card-placeholder">
-                <i class="fa-solid fa-image"></i>
-            </div>
-        @endif
+<div class="svc-card-item" 
+     style="--card-color: var(--admin-primary)"
+     data-id="{{ $post->id }}"
+     data-status="{{ $post->status }}"
+     data-title="{{ e($post->title) }}"
+     data-slug="{{ e($post->slug) }}"
+     data-excerpt="{{ e(Str::limit(strip_tags($post->content), 150)) }}"
+     data-content="{{ e(strip_tags($post->content)) }}"
+     data-category="{{ e($post->category ?? '') }}"
+     data-date="{{ $post->published_at ? $post->published_at->format('d M Y') : $post->created_at->format('d M Y') }}"
+     data-published-at-raw="{{ $post->published_at ? $post->published_at->format('Y-m-d\TH:i') : '' }}"
+     data-meta-description="{{ e($post->meta_description ?? '') }}"
+     data-author="{{ $post->user->name ?? 'Admin' }}"
+     data-image="{{ $post->featured_image ? asset('storage/' . $post->featured_image) : '' }}">
+     
+     {{-- Card Top Banner --}}
+     <div class="svc-card-banner">
+         @if($post->featured_image)
+             <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" class="svc-card-img" loading="lazy">
+         @else
+              <div class="svc-card-img" style="background: linear-gradient(135deg, rgba(255, 0, 110, 0.15) 0%, rgba(131, 56, 236, 0.05) 100%); display: flex; align-items: center; justify-content: center; height: 100%;">
+                  <i class="fa-solid fa-newspaper" style="font-size: 3rem; color: var(--admin-primary); opacity: 0.25;"></i>
+              </div>
+         @endif
+         
+         <div class="svc-card-overlay"></div>
+         
+         {{-- Status Switch (iOS style) --}}
+         <div class="svc-card-switch" onclick="event.stopPropagation();">
+              <span class="svc-switch-label" id="statusLabel-{{ $post->id }}">
+                  {{ $post->status === 'published' ? 'Publicado' : 'Borrador' }}
+              </span>
+              <label class="svc-switch">
+                  <input type="checkbox" class="post-active-toggle" data-id="{{ $post->id }}" {{ $post->status === 'published' ? 'checked' : '' }}>
+                  <span class="svc-slider"></span>
+              </label>
+         </div>
+     </div>
 
-        {{-- Status badge --}}
-        <div class="admin-post-card-badges">
-            @if($post->status === 'published')
-                <span class="admin-badge admin-badge-green">
-                    <i class="fa-solid fa-check"></i>
-                    Publicado
-                </span>
-            @else
-                <span class="admin-badge admin-badge-yellow">
-                    <i class="fa-solid fa-pen"></i>
-                    Borrador
-                </span>
-            @endif
-        </div>
-    </div>
+     {{-- Overlapping Icon Badge --}}
+     <div class="svc-card-emoji-wrap">
+         @if($post->category === 'branding')
+             <i class="fa-solid fa-copyright"></i>
+         @elseif($post->category === 'diseno')
+             <i class="fa-solid fa-bezier-curve"></i>
+         @elseif($post->category === 'seo')
+             <i class="fa-solid fa-magnifying-glass-chart"></i>
+         @elseif($post->category === 'redes')
+             <i class="fa-solid fa-share-nodes"></i>
+         @elseif($post->category === 'marketing')
+             <i class="fa-solid fa-bullhorn"></i>
+         @else
+             <i class="fa-solid fa-newspaper"></i>
+         @endif
+     </div>
 
-    {{-- Content --}}
-    <div class="admin-post-card-content">
-        {{-- Meta info --}}
-        <div class="admin-post-card-meta">
-            <span class="admin-post-card-meta-item">
-                <i class="fa-regular fa-calendar"></i>
-                {{ $post->published_at?->format('d M Y') ?? $post->created_at->format('d M Y') }}
-            </span>
-            <span class="admin-post-card-meta-item">
-                <i class="fa-regular fa-user"></i>
-                {{ $post->user->name ?? 'Admin' }}
-            </span>
-            <span class="admin-post-card-meta-item">
-                <i class="fa-regular fa-clock"></i>
-                {{ $post->read_time }} min
-            </span>
-        </div>
+     {{-- Card Body --}}
+     <div class="svc-card-body">
+         <h3 class="svc-card-title">{{ $post->title }}</h3>
+         <span class="svc-card-slug">/blog/{{ $post->slug }}</span>
+         
+         <p class="svc-card-desc">{{ Str::limit(strip_tags($post->content), 100) }}</p>
 
-        {{-- Title --}}
-        <h3 class="admin-post-card-title">{{ $post->title }}</h3>
+         {{-- Metadata Badges --}}
+         <div class="svc-card-metadata">
+             <span class="svc-card-badge" title="Fecha de Publicación">
+                 <i class="fa-regular fa-calendar"></i>
+                 <span>{{ $post->published_at ? $post->published_at->format('d M Y') : $post->created_at->format('d M Y') }}</span>
+             </span>
 
-        {{-- Excerpt --}}
-        <p class="admin-post-card-excerpt">{{ Str::limit($post->excerpt, 100) }}</p>
+             <span class="svc-card-badge" title="Autor">
+                 <i class="fa-regular fa-user"></i>
+                 <span>{{ $post->user->name ?? 'Admin' }}</span>
+             </span>
 
-        {{-- Stats --}}
-        <div class="admin-post-card-stats">
-            <span class="admin-post-card-stat">
-                <i class="fa-solid fa-text-width"></i>
-                {{ str_word_count(strip_tags($post->content)) }} palabras
-            </span>
-        </div>
+             @if($post->category)
+              <span class="svc-card-badge" style="background: rgba(255, 0, 110, 0.1); color: var(--admin-primary); border-color: rgba(255, 0, 110, 0.15);" title="Categoría">
+                  <i class="fa-solid fa-tag"></i>
+                  <span>{{ ucfirst($post->category) }}</span>
+              </span>
+             @endif
+         </div>
 
-        {{-- Actions --}}
-        <div class="admin-post-card-actions">
-            <a href="{{ route('blog.show', $post->slug) }}"
-               target="_blank"
-               class="admin-btn admin-btn-secondary admin-btn-sm"
-               title="Ver en el sitio">
-                <i class="fa-solid fa-eye"></i>
-            </a>
-            <a href="{{ route('admin.posts.edit', $post) }}"
-               class="admin-btn admin-btn-secondary admin-btn-sm"
-               title="Editar">
-                <i class="fa-solid fa-pen"></i>
-            </a>
-            <form method="POST"
-                  action="{{ route('admin.posts.destroy', $post) }}"
-                  onsubmit="return confirm('¿Estás seguro de eliminar este post?')"
-                  style="display: inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit"
-                        class="admin-btn admin-btn-danger admin-btn-sm"
-                        title="Eliminar">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </form>
-        </div>
-    </div>
-</article>
+         {{-- Reading Stats --}}
+         <div style="display: flex; gap: 0.75rem; margin-bottom: 1.25rem; font-size: 0.75rem; color: #64748b;">
+             <span title="Palabras"><i class="fa-solid fa-text-width" style="margin-right: 0.25rem;"></i>{{ str_word_count(strip_tags($post->content)) }} palabras</span>
+             <span title="Tiempo de lectura"><i class="fa-regular fa-clock" style="margin-right: 0.25rem;"></i>{{ max(1, ceil(str_word_count(strip_tags($post->content)) / 200)) }} min lectura</span>
+         </div>
+
+         {{-- Actions Grid --}}
+         <div class="svc-card-actions" onclick="event.stopPropagation();">
+              <button type="button" class="svc-card-btn svc-card-btn--preview" onclick="openPostPreview({{ $post->id }})" title="Vista Previa">
+                  <i class="fa-solid fa-eye"></i>
+                  <span>Vista Previa</span>
+              </button>
+              <button type="button" class="svc-card-btn svc-card-btn--quick" onclick="openQuickEdit({{ $post->id }})" title="Edición Rápida" style="background: rgba(14, 165, 233, 0.1); color: rgb(14, 165, 233);">
+                  <i class="fa-solid fa-bolt"></i>
+                  <span>Rápido</span>
+              </button>
+              <a href="{{ route('admin.posts.edit', $post) }}" class="svc-card-btn svc-card-btn--edit" title="Editar">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                  <span>Editar</span>
+              </a>
+              <form method="POST" action="{{ route('admin.posts.destroy', $post) }}"
+                    onsubmit="return confirm('¿Seguro que deseas eliminar el post {{ $post->title }}?')" style="display: contents;">
+                   @csrf @method('DELETE')
+                   <button type="submit" class="svc-card-btn svc-card-btn--delete" title="Eliminar">
+                       <i class="fa-solid fa-trash-can"></i>
+                       <span>Eliminar</span>
+                   </button>
+              </form>
+         </div>
+     </div>
+</div>
 @empty
-<div class="ajax-no-results" style="grid-column: 1 / -1;">
-    <div class="ajax-no-results-icon">
-        <i class="fa-solid fa-newspaper"></i>
-    </div>
-    <h3 class="ajax-no-results-title">No se encontraron posts</h3>
-    <p class="ajax-no-results-text">
-        Intenta ajustar los filtros de búsqueda o crea un nuevo post.
-    </p>
+<div class="svc-empty-state" style="grid-column: 1 / -1;">
+    <i class="fa-solid fa-newspaper svc-empty-icon"></i>
+    <h3>No se encontraron artículos</h3>
+    <p>Intenta ajustar los filtros de búsqueda o crea un nuevo artículo.</p>
 </div>
 @endforelse

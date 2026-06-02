@@ -15,36 +15,51 @@
 @section('content')
 
 {{-- ═══ HERO DEL SERVICIO — SPLIT LAYOUT ═══ --}}
-<section class="svc-show-hero" aria-labelledby="svc-show-title">
+<section class="svc-show-hero" aria-labelledby="svc-show-title" style="--svc-color: {{ $service->color ?? '#ff006e' }};">
     <div class="svc-show-hero-shapes" aria-hidden="true">
         <div class="svc-show-hero-shape svc-show-hero-shape--1"></div>
         <div class="svc-show-hero-shape svc-show-hero-shape--2"></div>
+        <div class="svc-show-hero-shape svc-show-hero-shape--3"></div>
     </div>
 
     <div class="svc-show-hero-split">
         {{-- Columna texto --}}
         <div class="svc-show-hero-text">
-            <a href="{{ route('services.index') }}" class="svc-show-back anim-hidden" data-anim="fade-left">
+            <a href="{{ route('services.index') }}" class="svc-show-back" data-aos="fade-left" data-aos-once="true">
                 <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
                 <span>Todos los servicios</span>
             </a>
 
+            <div class="svc-show-badge" data-aos="fade-up" data-aos-delay="50" data-aos-once="true">
+                <span class="svc-show-badge-dot"></span>
+                <span>Servicio Especializado</span>
+            </div>
+
             @if($service->icon)
-                <div class="svc-show-icon-wrap anim-hidden" data-anim="zoom-in" aria-hidden="true">
-                    <i class="{{ $service->icon }}"></i>
+                <div class="svc-show-icon-wrap" data-aos="zoom-in" data-aos-delay="100" data-aos-once="true" aria-hidden="true">
+                    @if(Str::contains($service->icon, 'fa-'))
+                        <i class="{{ $service->icon }}"></i>
+                    @else
+                        <span class="svc-show-emoji">{{ $service->icon }}</span>
+                    @endif
                 </div>
             @endif
             
-            <h1 id="svc-show-title" class="svc-show-title anim-hidden" data-anim="fade-up">{{ $service->title }}</h1>
+            <h1 id="svc-show-title" class="svc-show-title" data-aos="fade-up" data-aos-delay="150" data-aos-once="true">
+                {{ $service->title }}
+            </h1>
             
-            <p class="svc-show-subtitle anim-hidden" data-anim="fade-up">
+            <p class="svc-show-subtitle" data-aos="fade-up" data-aos-delay="200" data-aos-once="true">
                 {{ $service->short_description ?? Str::limit($service->description, 180) }}
             </p>
 
-            <div class="svc-show-hero-actions anim-hidden" data-anim="fade-up">
-                <a href="{{ route('contact.index') }}" class="svc-hero-btn svc-hero-btn--primary">
-                    <span>Solicitar cotización</span>
-                    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            <div class="svc-show-hero-actions" data-aos="fade-up" data-aos-delay="250" data-aos-once="true">
+                <a href="{{ route('contact.index') }}" class="cu-btn cu-btn-primary" style="padding: 0.85rem 1.75rem;">
+                    <span class="cu-btn-bg"></span>
+                    <span class="cu-btn-text">Solicitar cotización</span>
+                    <span class="cu-btn-icon">
+                        <i class="fas fa-arrow-right"></i>
+                    </span>
                 </a>
                 <a href="#svcShowContent" class="svc-hero-btn svc-hero-btn--ghost">
                     <span>Saber más</span>
@@ -54,7 +69,8 @@
         </div>
 
         {{-- Columna imagen --}}
-        <div class="svc-show-hero-visual anim-hidden" data-anim="fade-left">
+        <div class="svc-show-hero-visual" data-aos="fade-left" data-aos-delay="200" data-aos-once="true">
+            <div class="svc-show-hero-glow-orb" aria-hidden="true"></div>
             <div class="svc-show-hero-img-frame">
                 @if($service->image)
                     <img 
@@ -66,7 +82,13 @@
                     >
                 @else
                     <div class="svc-show-hero-placeholder" style="--svc-accent: {{ $service->color ?? '#5e17eb' }}">
-                        <i class="{{ $service->icon ?? 'fa-solid fa-star' }}" aria-hidden="true"></i>
+                        @if($service->icon && Str::contains($service->icon, 'fa-'))
+                            <i class="{{ $service->icon }}" aria-hidden="true"></i>
+                        @elseif($service->icon)
+                            <span class="svc-show-emoji-placeholder">{{ $service->icon }}</span>
+                        @else
+                            <i class="fa-solid fa-star" aria-hidden="true"></i>
+                        @endif
                     </div>
                 @endif
                 {{-- Decoración esquina --}}
@@ -89,7 +111,7 @@
 @if($service->gallery && count($service->gallery) > 0)
 <section class="svc-show-gallery" id="svcGallery" aria-labelledby="svc-gallery-title">
     <div class="svc-show-gallery-inner">
-        <div class="svc-show-gallery-header anim-scroll" data-anim="fade-up">
+        <div class="svc-show-gallery-header" data-aos="fade-up" data-aos-once="true">
             <span class="svc-show-gallery-badge">
                 <i class="fa-solid fa-camera" aria-hidden="true"></i>
                 Nuestro trabajo
@@ -98,7 +120,7 @@
         </div>
         <div class="svc-show-gallery-grid" role="list">
             @foreach($service->gallery as $gi => $gImg)
-            <div class="svc-show-gallery-item anim-scroll" data-anim="fade-up" style="animation-delay: {{ $gi * 0.1 }}s" role="listitem">
+            <div class="svc-show-gallery-item" data-aos="fade-up" data-aos-delay="{{ $gi * 80 }}" data-aos-once="true" role="listitem">
                 <img 
                     src="{{ Storage::url($gImg) }}" 
                     alt="{{ $service->title }} - Imagen {{ $gi + 1 }}" 
@@ -142,7 +164,7 @@
         {{-- Columna principal --}}
         <div class="svc-show-main">
             {{-- Descripción --}}
-            <article class="svc-show-block anim-scroll" data-anim="fade-up">
+            <article class="svc-show-block" data-aos="fade-up" data-aos-once="true">
                 <div class="svc-show-block-header">
                     <span class="svc-show-block-icon" aria-hidden="true"><i class="fa-solid fa-layer-group"></i></span>
                     <h2 class="svc-show-section-title">Sobre este servicio</h2>
@@ -154,7 +176,7 @@
 
             {{-- Imagen destacada inline --}}
             @if($service->image)
-            <figure class="svc-show-featured-img anim-scroll" data-anim="fade-up">
+            <figure class="svc-show-featured-img" data-aos="fade-up" data-aos-once="true">
                 <img 
                     src="{{ Storage::url($service->image) }}" 
                     alt="{{ $service->title }}" 
@@ -164,7 +186,13 @@
                     height="500"
                 >
                 <figcaption class="svc-show-featured-img-caption">
-                    <i class="{{ $service->icon ?? 'fa-solid fa-star' }}" aria-hidden="true"></i>
+                    @if($service->icon && Str::contains($service->icon, 'fa-'))
+                        <i class="{{ $service->icon }}" aria-hidden="true"></i>
+                    @elseif($service->icon)
+                        <span class="svc-show-emoji-inline">{{ $service->icon }}</span>
+                    @else
+                        <i class="fa-solid fa-star" aria-hidden="true"></i>
+                    @endif
                     <span>{{ $service->title }}</span>
                 </figcaption>
             </figure>
@@ -172,14 +200,14 @@
 
             {{-- Features como grid de cards --}}
             @if($service->features && count($service->features) > 0)
-            <article class="svc-show-block anim-scroll" data-anim="fade-up">
+            <article class="svc-show-block" data-aos="fade-up" data-aos-once="true">
                 <div class="svc-show-block-header">
                     <span class="svc-show-block-icon" aria-hidden="true"><i class="fa-solid fa-check-double"></i></span>
                     <h2 class="svc-show-section-title">Lo que incluye</h2>
                 </div>
                 <div class="svc-show-features-grid" role="list">
                     @foreach($service->features as $i => $feat)
-                    <div class="svc-show-feature-card" style="animation-delay: {{ $i * 0.08 }}s" role="listitem">
+                    <div class="svc-show-feature-card" data-aos="zoom-in" data-aos-delay="{{ $i * 50 }}" data-aos-once="true" role="listitem">
                         <div class="svc-show-feature-number" aria-hidden="true">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</div>
                         <p class="svc-show-feature-text">{{ $feat }}</p>
                         <div class="svc-show-feature-glow" aria-hidden="true"></div>
@@ -191,14 +219,14 @@
 
             {{-- Beneficios --}}
             @if($service->benefits && count($service->benefits) > 0)
-            <article class="svc-show-block anim-scroll" data-anim="fade-up">
+            <article class="svc-show-block" data-aos="fade-up" data-aos-once="true">
                 <div class="svc-show-block-header">
                     <span class="svc-show-block-icon" aria-hidden="true"><i class="fa-solid fa-gem"></i></span>
                     <h2 class="svc-show-section-title">Beneficios</h2>
                 </div>
                 <div class="svc-show-benefits-grid">
                     @foreach($service->benefits as $bi => $benefit)
-                    <div class="svc-show-benefit-card anim-scroll" data-anim="fade-up" style="animation-delay: {{ $bi * 0.1 }}s">
+                    <div class="svc-show-benefit-card" data-aos="fade-up" data-aos-delay="{{ $bi * 80 }}" data-aos-once="true">
                         <div class="svc-show-benefit-icon" aria-hidden="true">
                             <i class="{{ $benefit['icon'] ?? 'fa-solid fa-star' }}"></i>
                         </div>
@@ -212,14 +240,14 @@
 
             {{-- Proceso del servicio --}}
             @if($service->process_steps && count($service->process_steps) > 0)
-            <article class="svc-show-block anim-scroll" data-anim="fade-up">
+            <article class="svc-show-block" data-aos="fade-up" data-aos-once="true">
                 <div class="svc-show-block-header">
                     <span class="svc-show-block-icon" aria-hidden="true"><i class="fa-solid fa-shoe-prints"></i></span>
                     <h2 class="svc-show-section-title">Proceso de trabajo</h2>
                 </div>
                 <div class="svc-show-process-list" role="list">
                     @foreach($service->process_steps as $si => $step)
-                    <div class="svc-show-process-item anim-scroll" data-anim="fade-left" style="animation-delay: {{ $si * 0.12 }}s" role="listitem">
+                    <div class="svc-show-process-item" data-aos="fade-left" data-aos-delay="{{ $si * 100 }}" data-aos-once="true" role="listitem">
                         <div class="svc-show-process-number" aria-hidden="true">{{ str_pad($si + 1, 2, '0', STR_PAD_LEFT) }}</div>
                         <div class="svc-show-process-line-v" aria-hidden="true"></div>
                         <div class="svc-show-process-content">
@@ -246,7 +274,12 @@
                     <div class="svc-show-sidebar-row">
                         <span class="svc-show-sidebar-label">Servicio</span>
                         <span class="svc-show-sidebar-value">
-                            <i class="{{ $service->icon }}" aria-hidden="true"></i> {{ $service->title }}
+                            @if(Str::contains($service->icon, 'fa-'))
+                                <i class="{{ $service->icon }}" aria-hidden="true"></i>
+                            @else
+                                <span class="svc-show-sidebar-emoji">{{ $service->icon }}</span>
+                            @endif
+                            {{ $service->title }}
                         </span>
                     </div>
                     @endif
@@ -291,7 +324,7 @@
 
             {{-- Mini galería en sidebar --}}
             @if($service->gallery && count($service->gallery) >= 2)
-            <div class="svc-show-sidebar-gallery anim-scroll" data-anim="fade-up">
+            <div class="svc-show-sidebar-gallery" data-aos="fade-up" data-aos-once="true">
                 @foreach(array_slice($service->gallery, 0, 3) as $sgImg)
                 <img 
                     src="{{ Storage::url($sgImg) }}" 
@@ -314,12 +347,14 @@
 </section>
 
 {{-- ═══ CTA ═══ --}}
-<section class="svc-cta" aria-labelledby="svc-show-cta-title">
+<section class="svc-cta" aria-labelledby="svc-show-cta-title" style="--service-color: {{ $service->color ?? '#ff006e' }}; --svc-color: {{ $service->color ?? '#ff006e' }};">
     <div class="svc-cta-shapes" aria-hidden="true">
         <div class="svc-cta-shape svc-cta-shape--1"></div>
         <div class="svc-cta-shape svc-cta-shape--2"></div>
+        <div class="svc-cta-shape svc-cta-shape--3"></div>
     </div>
-    <div class="svc-cta-content anim-scroll" data-anim="fade-up">
+    <div class="svc-cta-content" data-aos="fade-up" data-aos-once="true">
+        <div class="svc-cta-glow-orb" aria-hidden="true"></div>
         <div class="svc-cta-badge">
             <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
             ¿Listo para empezar?

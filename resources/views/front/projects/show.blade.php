@@ -101,12 +101,24 @@
 
         {{-- Columna imagen --}}
         <div class="pshow-hero-visual anim-hidden" data-anim="fade-left">
-            <figure class="pshow-hero-img-frame">
-                <img src="{{ $project->thumbnail ? Storage::url($project->thumbnail) : ($project->images->first() ? Storage::url($project->images->first()->image_path) : asset('images/hero-1.jpg')) }}"
-                     alt="{{ $project->title }}"
-                     itemprop="image"
-                     width="800"
-                     height="600">
+            <figure class="pshow-hero-img-frame" style="overflow: visible; box-shadow: none; background: transparent;">
+                @php
+                    $mainImage = $project->thumbnail ? Storage::url($project->thumbnail) : ($project->images->first() ? Storage::url($project->images->first()->image_path) : asset('images/hero-1.jpg'));
+                    $device = $project->thumbnail_device ?? 'macbook';
+                    $displayUrl = 'localhost';
+                    if ($project->url) {
+                        $parsed = parse_url($project->url);
+                        $displayUrl = ($parsed['host'] ?? '') . ($parsed['path'] ?? '');
+                    }
+                @endphp
+                <div class="apple-device-wrapper" id="heroDeviceWrapper" data-device-type="{{ $device }}">
+                    @include('front.projects._device-mockup', [
+                        'device' => $device,
+                        'image' => $mainImage,
+                        'title' => $project->title,
+                        'displayUrl' => $displayUrl
+                    ])
+                </div>
                 {{-- Esquinas decorativas --}}
                 <div class="pshow-hero-corner pshow-hero-corner--tl" aria-hidden="true"></div>
                 <div class="pshow-hero-corner pshow-hero-corner--br" aria-hidden="true"></div>
@@ -136,32 +148,72 @@
         <section class="pshow-step {{ $isEven ? 'pshow-step--reverse' : '' }}">
             <div class="pshow-step-inner">
                 {{-- Texto --}}
+                @php
+                    $stepImagesCount = 0;
+                    if($step->image1) $stepImagesCount++;
+                    if($step->image2) $stepImagesCount++;
+                    if($step->image3) $stepImagesCount++;
+                    
+                    $finalCount = $stepImagesCount > 0 ? $stepImagesCount : min(3, $project->images->count() - ($index * 3));
+                    if ($finalCount <= 0) $finalCount = 0;
+                @endphp
                 <div class="pshow-step-text anim-scroll" data-anim="fade-up">
                     <div class="pshow-step-num">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</div>
                     <h2 class="pshow-step-title">{{ $step->title }}</h2>
                     <p class="pshow-step-desc">{{ $step->description }}</p>
                 </div>
                 {{-- Collage de imágenes --}}
-                <div class="pshow-step-collage anim-scroll" data-anim="fade-up">
-                    @if($step->image1)
-                        <div class="pshow-collage-img pshow-collage-img--1">
-                            <img src="{{ Storage::url($step->image1) }}" alt="{{ $step->title }}" loading="lazy">
-                        </div>
-                    @endif
-                    @if($step->image2)
-                        <div class="pshow-collage-img pshow-collage-img--2">
-                            <img src="{{ Storage::url($step->image2) }}" alt="{{ $step->title }}" loading="lazy">
-                        </div>
-                    @endif
-                    @if($step->image3)
-                        <div class="pshow-collage-img pshow-collage-img--3">
-                            <img src="{{ Storage::url($step->image3) }}" alt="{{ $step->title }}" loading="lazy">
-                        </div>
-                    @endif
-                    @if(!$step->image1 && !$step->image2 && !$step->image3 && $project->images->count() > 0)
+                <div class="pshow-step-collage anim-scroll pshow-step-collage--count-{{ $finalCount }}" data-anim="fade-up">
+                    {{-- Usaremos un contador de imágenes activas para determinar la clase de grid si es necesario --}}
+                    @php
+                        $activeImages = 0;
+                        if($step->image1) $activeImages++;
+                        if($step->image2) $activeImages++;
+                        if($step->image3) $activeImages++;
+                        
+                        $imgIndex = 1;
+                    @endphp
+
+                    @if($activeImages > 0)
+                        @if($step->image1)
+                            <div class="pshow-collage-img pshow-collage-img--{{ $imgIndex++ }}">
+                                @include('front.projects._device-mockup', [
+                                    'device' => $step->image1_device ?? 'safari',
+                                    'image' => Storage::url($step->image1),
+                                    'title' => $step->title,
+                                    'displayUrl' => $displayUrl
+                                ])
+                            </div>
+                        @endif
+                        @if($step->image2)
+                            <div class="pshow-collage-img pshow-collage-img--{{ $imgIndex++ }}">
+                                @include('front.projects._device-mockup', [
+                                    'device' => $step->image2_device ?? 'iphone',
+                                    'image' => Storage::url($step->image2),
+                                    'title' => $step->title,
+                                    'displayUrl' => $displayUrl
+                                ])
+                            </div>
+                        @endif
+                        @if($step->image3)
+                            <div class="pshow-collage-img pshow-collage-img--{{ $imgIndex++ }}">
+                                @include('front.projects._device-mockup', [
+                                    'device' => $step->image3_device ?? 'ipad',
+                                    'image' => Storage::url($step->image3),
+                                    'title' => $step->title,
+                                    'displayUrl' => $displayUrl
+                                ])
+                            </div>
+                        @endif
+                    @elseif($project->images->count() > 0)
                         @foreach($project->images->slice($index * 3, 3) as $fallbackImg)
                             <div class="pshow-collage-img pshow-collage-img--{{ $loop->iteration }}">
-                                <img src="{{ Storage::url($fallbackImg->image_path) }}" alt="{{ $step->title }}" loading="lazy">
+                                @include('front.projects._device-mockup', [
+                                    'device' => 'safari',
+                                    'image' => Storage::url($fallbackImg->image_path),
+                                    'title' => $step->title,
+                                    'displayUrl' => $displayUrl
+                                ])
                             </div>
                         @endforeach
                     @endif
@@ -182,7 +234,9 @@
             <div class="pshow-step-collage anim-scroll" data-anim="fade-up">
                 @foreach($project->images->slice(0, 3) as $img)
                     <div class="pshow-collage-img pshow-collage-img--{{ $loop->iteration }}">
-                        <img src="{{ Storage::url($img->image_path) }}" alt="{{ $project->title }}" loading="lazy">
+                        <div class="pshow-mockup pshow-mockup--safari">
+                            <img src="{{ Storage::url($img->image_path) }}" alt="{{ $project->title }}" loading="lazy">
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -201,7 +255,9 @@
             <div class="pshow-step-collage anim-scroll" data-anim="fade-up">
                 @foreach($project->images->slice(3, 3) as $img)
                     <div class="pshow-collage-img pshow-collage-img--{{ $loop->iteration }}">
-                        <img src="{{ Storage::url($img->image_path) }}" alt="{{ $project->title }}" loading="lazy">
+                        <div class="pshow-mockup pshow-mockup--safari">
+                            <img src="{{ Storage::url($img->image_path) }}" alt="{{ $project->title }}" loading="lazy">
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -220,7 +276,9 @@
             <div class="pshow-step-collage anim-scroll" data-anim="fade-up">
                 @foreach($project->images->slice(6, 3) as $img)
                     <div class="pshow-collage-img pshow-collage-img--{{ $loop->iteration }}">
-                        <img src="{{ Storage::url($img->image_path) }}" alt="{{ $project->title }}" loading="lazy">
+                        <div class="pshow-mockup pshow-mockup--safari">
+                            <img src="{{ Storage::url($img->image_path) }}" alt="{{ $project->title }}" loading="lazy">
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -242,17 +300,39 @@
         </div>
         <div class="pshow-gallery-grid" role="list">
             @foreach($project->images as $gi => $gImg)
+                @php
+                $imgUrl = Storage::url($gImg->image_path);
+                $deviceType = $gImg->device_type;
+                $isConfigured = !empty($deviceType) && $deviceType !== 'none';
+                $isNone = $deviceType === 'none';
+                $displayUrl = 'localhost';
+                if ($project->url) {
+                    $parsed = parse_url($project->url);
+                    $displayUrl = ($parsed['host'] ?? '') . ($parsed['path'] ?? '');
+                }
+            @endphp
             <figure class="pshow-gallery-item anim-scroll" 
                     data-anim="fade-up" 
-                    style="animation-delay: {{ $gi * 0.08 }}s"
+                    style="animation-delay: {{ $gi * 0.08 }}s; cursor: pointer;"
                     role="listitem"
-                    data-lightbox="{{ Storage::url($gImg->image_path) }}">
-                <img src="{{ Storage::url($gImg->image_path) }}" 
-                     alt="{{ $project->title }} - Imagen {{ $gi + 1 }}" 
-                     loading="lazy" 
-                     decoding="async"
-                     width="400"
-                     height="300">
+                    data-lightbox="{{ $imgUrl }}"
+                    data-device-configured="{{ ($isConfigured || $isNone) ? 'true' : 'false' }}">
+                @if($isConfigured)
+                    @include('front.projects._device-mockup', [
+                        'device' => $deviceType,
+                        'image' => $imgUrl,
+                        'title' => $project->title . ' - Imagen ' . ($gi + 1),
+                        'displayUrl' => $displayUrl
+                    ])
+                @else
+                    {{-- Default raw image (will be wrapped by JS dynamic aspect ratio script) --}}
+                    <img src="{{ $imgUrl }}" 
+                         alt="{{ $project->title }} - Imagen {{ $gi + 1 }}" 
+                         loading="lazy" 
+                         decoding="async"
+                         width="400"
+                         height="300">
+                @endif
                 <div class="pshow-gallery-item-overlay" aria-hidden="true">
                     <i class="fa-solid fa-expand"></i>
                 </div>
@@ -317,48 +397,159 @@
 
 @push('scripts')
 <script>
-window.addEventListener('scroll', function() {
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (winScroll / height) * 100;
-    const bar = document.getElementById('pshowProgress');
-    if (bar) bar.style.width = scrolled + '%';
-}, { passive: true });
+(function() {
+    // Dynamic Mockup Wrapping based on image aspect ratio
+    function wrapImageInDevice(img, container, isHero = false) {
+        const src = img.src;
+        const alt = img.alt;
+        
+        // Use a temporary image to make sure naturalWidth/naturalHeight are available
+        const tempImg = new Image();
+        tempImg.onload = function() {
+            const aspect = tempImg.naturalWidth / tempImg.naturalHeight;
+            
+            // Clear container
+            container.innerHTML = '';
+            
+            if (aspect > 1.2) {
+                // Landscape -> MacBook / Browser Mockup
+                if (isHero) {
+                    container.innerHTML = `
+                        <div class="apple-macbook-front">
+                            <div class="mac-lid">
+                                <div class="mac-notch"><div class="mac-camera"></div></div>
+                                <div class="mac-screen">
+                                    <div class="mac-browser">
+                                        <div class="mac-browser-dots"></div>
+                                        <div class="mac-browser-url">
+                                            <i class="fa-solid fa-lock" style="font-size:8px; margin-right:5px; color:#888;"></i>
+                                            ${window.location.hostname}
+                                        </div>
+                                        <div style="width:40px;"></div>
+                                    </div>
+                                    <img src="${src}" alt="${alt}" style="width:100%; height:100%; object-fit:cover; display:block;">
+                                </div>
+                            </div>
+                            <div class="mac-keyboard-base">
+                                <div class="mac-foot mac-foot--left"></div>
+                                <div class="mac-foot mac-foot--right"></div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="apple-macbook-front">
+                            <div class="mac-lid">
+                                <div class="mac-notch"><div class="mac-camera"></div></div>
+                                <div class="mac-screen">
+                                    <div class="mac-browser">
+                                        <div class="mac-browser-dots"></div>
+                                        <div class="mac-browser-url">
+                                            <i class="fa-solid fa-lock" style="font-size:8px; margin-right:5px; color:#888;"></i>
+                                            ${window.location.hostname}
+                                        </div>
+                                        <div style="width:40px;"></div>
+                                    </div>
+                                    <img src="${src}" alt="${alt}" style="width:100%; height:calc(100% - 30px); object-fit:cover; display:block;">
+                                </div>
+                            </div>
+                            <div class="mac-keyboard-base">
+                                <div class="mac-foot mac-foot--left"></div>
+                                <div class="mac-foot mac-foot--right"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+            } else if (aspect < 0.8) {
+                // Portrait -> iPhone mockup
+                const deviceWidth = isHero ? '300px' : '230px';
+                container.innerHTML = `
+                    <div class="project-mockup-wrapper mockup-iphone">
+                        <div class="iphone-device" style="width: ${deviceWidth};">
+                            <div class="iphone-bezel">
+                                <div class="iphone-screen">
+                                    <div class="iphone-island"></div>
+                                    <div class="iphone-screen-img">
+                                        <img src="${src}" alt="${alt}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="iphone-button volume-up"></div>
+                            <div class="iphone-button volume-down"></div>
+                            <div class="iphone-button power"></div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Square/Tablet -> iPad mockup
+                const deviceWidth = isHero ? '480px' : '320px';
+                container.innerHTML = `
+                    <div class="project-mockup-wrapper mockup-ipad">
+                        <div class="ipad-device" style="width: ${deviceWidth};">
+                            <div class="ipad-bezel">
+                                <div class="ipad-screen">
+                                    <div class="ipad-screen-img">
+                                        <img src="${src}" alt="${alt}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ipad-button power"></div>
+                        </div>
+                    </div>
+                `;
+            }
+        };
+        tempImg.src = src;
+    }
 
-// Lightbox functionality for gallery
-document.querySelectorAll('[data-lightbox]').forEach(item => {
-    item.addEventListener('click', function() {
-        const src = this.dataset.lightbox;
-        const lightbox = document.createElement('div');
-        lightbox.className = 'proj-lightbox is-active';
-        lightbox.setAttribute('role', 'dialog');
-        lightbox.setAttribute('aria-modal', 'true');
-        lightbox.innerHTML = `
-            <div class="proj-lightbox-content">
-                <img src="${src}" alt="Imagen ampliada">
-                <button class="proj-lightbox-close" aria-label="Cerrar">
-                    <i class="fa-solid fa-times"></i>
-                </button>
-            </div>
-        `;
-        document.body.appendChild(lightbox);
-        document.body.style.overflow = 'hidden';
-        
-        lightbox.addEventListener('click', function(e) {
-            if (e.target === lightbox || e.target.closest('.proj-lightbox-close')) {
-                lightbox.remove();
-                document.body.style.overflow = '';
-            }
-        });
-        
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && document.querySelector('.proj-lightbox')) {
-                lightbox.remove();
-                document.body.style.overflow = '';
-            }
-        }, { once: true });
+    // Run for gallery images (only those that are NOT already configured by the admin)
+    document.querySelectorAll('.pshow-gallery-item[data-device-configured="false"] img').forEach(img => {
+        const parent = img.closest('.pshow-gallery-item');
+        if (img.complete) {
+            wrapImageInDevice(img, parent, false);
+        } else {
+            img.addEventListener('load', function() {
+                wrapImageInDevice(img, parent, false);
+            });
+        }
     });
-});
+
+    // Lightbox functionality for gallery
+    document.addEventListener('click', function(e) {
+        const galleryItem = e.target.closest('[data-lightbox]');
+        if (galleryItem) {
+            const src = galleryItem.dataset.lightbox;
+            const lightbox = document.createElement('div');
+            lightbox.className = 'proj-lightbox is-active';
+            lightbox.setAttribute('role', 'dialog');
+            lightbox.setAttribute('aria-modal', 'true');
+            lightbox.innerHTML = `
+                <div class="proj-lightbox-content">
+                    <img src="${src}" alt="Imagen ampliada">
+                    <button class="proj-lightbox-close" aria-label="Cerrar">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(lightbox);
+            document.body.style.overflow = 'hidden';
+            
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox || e.target.closest('.proj-lightbox-close')) {
+                    lightbox.remove();
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            document.addEventListener('keydown', function(ev) {
+                if (ev.key === 'Escape' && document.querySelector('.proj-lightbox')) {
+                    lightbox.remove();
+                    document.body.style.overflow = '';
+                }
+            }, { once: true });
+        }
+    });
+})();
 </script>
 @endpush
 

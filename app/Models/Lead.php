@@ -15,6 +15,19 @@ class Lead extends Model
         'read_at' => 'datetime',
     ];
 
+    /**
+     * Boot method to handle model events
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Eliminar respuestas asociadas al eliminar un lead
+        static::deleting(function ($lead) {
+            $lead->replies()->delete();
+        });
+    }
+
     public function service()
     {
         return $this->belongsTo(Service::class);

@@ -6,43 +6,41 @@
 @section('content')
 
 {{-- Header con acciones rápidas --}}
-<div class="ap-show-header">
-    <div class="ap-show-header-left">
-        <a href="{{ route('admin.projects.index') }}" class="ap-show-back">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-            Volver
+<div class="admin-compact-header">
+    <div class="admin-compact-header-left">
+        <a href="{{ route('admin.projects.index') }}" class="admin-compact-header-back" title="Volver a la lista">
+            <i class="fa-solid fa-arrow-left"></i>
         </a>
-        <div class="ap-show-title-group">
-            <h1 class="ap-show-title">{{ $project->title }}</h1>
-            <div class="ap-show-title-meta">
-                @if($project->status === 'published')
-                    <span class="admin-badge admin-badge-green">Publicado</span>
-                @else
-                    <span class="admin-badge admin-badge-yellow">Borrador</span>
-                @endif
+        <div class="admin-compact-header-info">
+            <h1>
+                {{ $project->title }}
+                <span class="admin-compact-header-status {{ $project->status }}">
+                    {{ $project->status === 'published' ? 'Publicado' : 'Borrador' }}
+                </span>
                 @if(!empty($project->type))
-                    <span class="ap-show-type-badge">{{ $project->type }}</span>
+                    <span class="admin-badge admin-badge-blue" style="margin-left: 0.5rem; font-size: 0.7rem; display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 12px; font-weight: 600;">
+                        <i class="fa-solid fa-tag" style="font-size: 0.65rem;"></i> {{ $project->type }}
+                    </span>
                 @endif
-                <span class="ap-show-date">Creado {{ $project->created_at->diffForHumans() }}</span>
-            </div>
+            </h1>
         </div>
     </div>
-    <div class="ap-show-header-actions">
+    <div class="admin-compact-header-actions">
         @if($project->status === 'published')
-            <a href="{{ route('projects.show', $project->slug) }}" target="_blank" class="admin-btn admin-btn-secondary admin-btn-sm">
-                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                Ver en sitio
+            <a href="{{ route('projects.show', $project->slug) }}" target="_blank" class="admin-btn admin-btn-secondary" style="margin: 0; padding: 0.5rem 1rem; font-size: 0.8rem; border-radius: 8px;">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                <span>Ver en Sitio</span>
             </a>
         @endif
-        <a href="{{ route('admin.projects.edit', $project) }}" class="admin-btn admin-btn-primary admin-btn-sm">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-            Editar
+        <a href="{{ route('admin.projects.edit', $project) }}" class="admin-btn admin-btn-primary" style="margin: 0; padding: 0.5rem 1rem; font-size: 0.8rem; border-radius: 8px;">
+            <i class="fa-solid fa-pen"></i>
+            <span>Editar</span>
         </a>
         <form method="POST" action="{{ route('admin.projects.destroy', $project) }}" onsubmit="return confirm('¿Eliminar este proyecto y todas sus imágenes?')" style="display:inline">
             @csrf @method('DELETE')
-            <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm">
-                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                Eliminar
+            <button type="submit" class="admin-btn admin-btn-danger" style="margin: 0; padding: 0.5rem 1rem; font-size: 0.8rem; border-radius: 8px;">
+                <i class="fa-solid fa-trash"></i>
+                <span>Eliminar</span>
             </button>
         </form>
     </div>

@@ -3,6 +3,10 @@
 @section('title', 'Blog - Ideas y Estrategias Digitales | CreativeUP')
 @section('description', 'Descubre las últimas tendencias en diseño, marketing digital, branding y estrategias de crecimiento. Artículos escritos por expertos en creatividad digital.')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/frontend/blog.css') }}?v={{ time() }}">
+@endpush
+
 @push('meta')
 {{-- Open Graph --}}
 <meta property="og:title" content="Blog - Ideas y Estrategias Digitales | CreativeUP">
@@ -36,10 +40,12 @@
 @section('content')
 <main class="bidx-page">
 
-    {{-- ═══════════════════════════════════════════════════════════════════════════
-         HERO SECTION
-         ═══════════════════════════════════════════════════════════════════════════ --}}
     <section class="bidx-hero" aria-labelledby="blog-hero-title">
+        <div class="bidx-hero-shapes" aria-hidden="true">
+            <div class="bidx-hero-shape bidx-hero-shape--1"></div>
+            <div class="bidx-hero-shape bidx-hero-shape--2"></div>
+            <div class="bidx-hero-shape bidx-hero-shape--3"></div>
+        </div>
         <div class="bidx-hero-container">
             {{-- Hero Content --}}
             <div class="bidx-hero-content">
@@ -195,163 +201,136 @@
     <div data-ajax-results class="bidx-results-container">
     @if($posts->count() > 0)
         {{-- ═══════════════════════════════════════════════════════════════════════════
-             FEATURED POST
+             POSTS GRID - ULTRA PREMIUM REDESIGN
              ═══════════════════════════════════════════════════════════════════════════ --}}
-        @php $featuredPost = $posts->first(); @endphp
-        <section class="bidx-featured" aria-labelledby="featured-post-title">
-            <div class="bidx-featured-container">
-                <header class="bidx-section-header">
-                    <h2 class="bidx-section-title">
-                        <i class="fa-solid fa-star" aria-hidden="true"></i>
-                        Artículo Destacado
-                    </h2>
-                </header>
-
-                <article class="bidx-featured-card">
-                    <a href="{{ route('blog.show', $featuredPost->slug) }}" class="bidx-featured-image" aria-hidden="true">
-                        @if($featuredPost->featured_image)
-                            <img src="{{ asset('storage/' . $featuredPost->featured_image) }}"
-                                 alt="{{ $featuredPost->title }}"
-                                 loading="eager"
-                                 decoding="async"
-                                 width="700"
-                                 height="420">
-                        @else
-                            <div class="bidx-featured-image-placeholder">
-                                <i class="fa-solid fa-newspaper"></i>
-                            </div>
-                        @endif
-                        <span class="bidx-featured-badge">
-                            <i class="fa-solid fa-fire" aria-hidden="true"></i>
-                            Destacado
-                        </span>
-                    </a>
-
-                    <div class="bidx-featured-content">
-                        <div class="bidx-featured-meta">
-                            <span class="bidx-post-category cat-{{ strtolower(str_replace(' ', '', $featuredPost->category_label)) }}">
-                                {{ $featuredPost->category_label }}
-                            </span>
-                            <span class="bidx-post-date">
-                                <i class="fa-regular fa-calendar" aria-hidden="true"></i>
-                                <time datetime="{{ $featuredPost->published_at?->format('Y-m-d') }}">
-                                    {{ $featuredPost->published_at?->format('d M Y') ?? 'Sin fecha' }}
-                                </time>
-                            </span>
-                            <span class="bidx-post-read-time">
-                                <i class="fa-regular fa-clock" aria-hidden="true"></i>
-                                {{ $featuredPost->read_time }} min lectura
-                            </span>
-                        </div>
-
-                        <h3 id="featured-post-title" class="bidx-featured-title">
-                            <a href="{{ route('blog.show', $featuredPost->slug) }}">{{ $featuredPost->title }}</a>
-                        </h3>
-
-                        <p class="bidx-featured-excerpt">
-                            {{ Str::limit(strip_tags($featuredPost->content), 200) }}
-                        </p>
-
-                        @if($featuredPost->user)
-                        <div class="bidx-featured-author">
-                            <div class="bidx-author-avatar">
-                                {{ strtoupper(substr($featuredPost->user->name, 0, 1)) }}
-                            </div>
-                            <div class="bidx-author-info">
-                                <strong>{{ $featuredPost->user->name }}</strong>
-                                <span>Autor</span>
-                            </div>
-                        </div>
-                        @endif
-
-                        <a href="{{ route('blog.show', $featuredPost->slug) }}" class="bidx-featured-link">
-                            Leer artículo completo
-                            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                </article>
-            </div>
-        </section>
-
-        {{-- ═══════════════════════════════════════════════════════════════════════════
-             POSTS GRID
-             ═══════════════════════════════════════════════════════════════════════════ --}}
-        @if($posts->count() > 1)
-        <section class="bidx-posts" aria-labelledby="posts-section-title">
+        @if($posts->count() > 0)
+        <section class="bidx-posts-premium" aria-labelledby="posts-section-title">
             <div class="bidx-posts-container">
-                <header class="bidx-section-header">
-                    <h2 id="posts-section-title" class="bidx-section-title">
-                        <i class="fa-solid fa-newspaper" aria-hidden="true"></i>
-                        Últimos Artículos
-                    </h2>
+                <header class="bidx-section-header-premium">
+                    <div class="bidx-header-content">
+                        <span class="bidx-header-badge">
+                            <span class="bidx-badge-dot"></span>
+                            Contenido Destacado
+                        </span>
+                        <h2 id="posts-section-title" class="bidx-section-title-premium">
+                            Explora Nuestros <span class="text-gradient">Artículos</span>
+                        </h2>
+                        <p class="bidx-section-subtitle">
+                            Conocimiento experto en diseño, desarrollo y estrategia digital
+                        </p>
+                    </div>
+                    <div class="bidx-header-stats">
+                        <div class="bidx-stat-item">
+                            <span class="bidx-stat-number">{{ $posts->total() }}</span>
+                            <span class="bidx-stat-label">Artículos</span>
+                        </div>
+                        <div class="bidx-stat-divider"></div>
+                        <div class="bidx-stat-item">
+                            <span class="bidx-stat-number">{{ $posts->count() }}</span>
+                            <span class="bidx-stat-label">Mostrando</span>
+                        </div>
+                    </div>
                 </header>
 
-                <div class="bidx-grid">
-                    @foreach($posts->skip(1) as $post)
-                    <article class="bidx-post-card">
-                        <a href="{{ route('blog.show', $post->slug) }}" class="bidx-post-image">
-                            @if($post->featured_image)
-                                <img src="{{ asset('storage/' . $post->featured_image) }}"
-                                     alt="{{ $post->title }}"
-                                     loading="lazy"
-                                     decoding="async"
-                                     width="400"
-                                     height="250">
-                            @else
-                                <div class="bidx-post-image-placeholder">
-                                    <i class="fa-solid fa-feather-pointed"></i>
+                <div class="bidx-grid-premium">
+                    @foreach($posts as $index => $post)
+                    <article class="bidx-card-premium" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
+                        <a href="{{ route('blog.show', $post->slug) }}" class="bidx-card-link">
+                            {{-- Image Container --}}
+                            <div class="bidx-card-image-wrapper">
+                                @if($post->featured_image)
+                                    <img src="{{ asset('storage/' . $post->featured_image) }}"
+                                         alt="{{ $post->title }}"
+                                         loading="lazy"
+                                         decoding="async"
+                                         class="bidx-card-image">
+                                @else
+                                    <div class="bidx-card-image-placeholder">
+                                        <i class="fa-solid fa-feather-pointed"></i>
+                                    </div>
+                                @endif
+                                
+                                {{-- Gradient Overlay --}}
+                                <div class="bidx-card-overlay"></div>
+                                
+                                {{-- Category Badge --}}
+                                <span class="bidx-card-category cat-{{ strtolower(str_replace(' ', '', $post->category_label)) }}">
+                                    {{ $post->category_label }}
+                                </span>
+                                
+                                {{-- Hover Icon --}}
+                                <div class="bidx-card-hover-icon">
+                                    <i class="fa-solid fa-arrow-right"></i>
                                 </div>
-                            @endif
-                            <span class="bidx-post-category-badge cat-{{ strtolower(str_replace(' ', '', $post->category_label)) }}">
-                                {{ $post->category_label }}
-                            </span>
-                            <div class="bidx-post-image-overlay"></div>
-                        </a>
-
-                        <div class="bidx-post-content">
-                            <div class="bidx-post-meta">
-                                <span>
-                                    <i class="fa-regular fa-calendar" aria-hidden="true"></i>
-                                    <time datetime="{{ $post->published_at?->format('Y-m-d') }}">
-                                        {{ $post->published_at?->format('d M Y') ?? 'Sin fecha' }}
-                                    </time>
-                                </span>
-                                <span>
-                                    <i class="fa-regular fa-clock" aria-hidden="true"></i>
-                                    {{ $post->read_time }} min
-                                </span>
                             </div>
 
-                            <h3 class="bidx-post-title">
-                                <a href="{{ route('blog.show', $post->slug) }}">{{ $post->title }}</a>
-                            </h3>
-
-                            <p class="bidx-post-excerpt">
-                                {{ Str::limit(strip_tags($post->content), 120) }}
-                            </p>
-
-                            <footer class="bidx-post-footer">
-                                @if($post->user)
-                                <div class="bidx-post-author-small">
-                                    <div class="bidx-post-author-avatar">
-                                        {{ strtoupper(substr($post->user->name, 0, 1)) }}
-                                    </div>
-                                    <span class="bidx-post-author-name">{{ $post->user->name }}</span>
+                            {{-- Content Container --}}
+                            <div class="bidx-card-body">
+                                {{-- Meta Info --}}
+                                <div class="bidx-card-meta">
+                                    <span class="bidx-meta-item">
+                                        <i class="fa-regular fa-calendar"></i>
+                                        <time datetime="{{ $post->published_at?->format('Y-m-d') }}">
+                                            {{ $post->published_at?->format('d M Y') ?? 'Sin fecha' }}
+                                        </time>
+                                    </span>
+                                    <span class="bidx-meta-separator">•</span>
+                                    <span class="bidx-meta-item">
+                                        <i class="fa-regular fa-clock"></i>
+                                        {{ $post->read_time }} min
+                                    </span>
                                 </div>
-                                @endif
-                                <a href="{{ route('blog.show', $post->slug) }}" class="bidx-post-link">
-                                    Leer más
-                                    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                                </a>
-                            </footer>
-                        </div>
+
+                                {{-- Title --}}
+                                <h3 class="bidx-card-title">
+                                    {{ $post->title }}
+                                </h3>
+
+                                {{-- Excerpt --}}
+                                <p class="bidx-card-excerpt">
+                                    {{ Str::limit(strip_tags($post->content), 140) }}
+                                </p>
+
+                                {{-- Footer with Author --}}
+                                <footer class="bidx-card-footer">
+                                    @if($post->user)
+                                    <div class="bidx-card-author">
+                                        <div class="bidx-author-avatar-premium">
+                                            @if($post->user->avatar)
+                                                <img src="{{ asset('storage/' . $post->user->avatar) }}" alt="{{ $post->user->name }}">
+                                            @else
+                                                <span class="bidx-avatar-initial">{{ strtoupper(substr($post->user->name, 0, 1)) }}</span>
+                                            @endif
+                                        </div>
+                                        <div class="bidx-author-details">
+                                            <span class="bidx-author-name">
+                                                @php
+                                                    $nameParts = explode(' ', $post->user->name);
+                                                    $shortName = $nameParts[0] . (isset($nameParts[1]) ? ' ' . $nameParts[1] : '');
+                                                @endphp
+                                                {{ $shortName }}
+                                                @if($post->user->position)
+                                                    | {{ $post->user->position }}
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    
+                                    <div class="bidx-card-cta">
+                                        <span class="bidx-cta-text">Leer más</span>
+                                        <i class="fa-solid fa-arrow-right bidx-cta-arrow"></i>
+                                    </div>
+                                </footer>
+                            </div>
+                        </a>
                     </article>
                     @endforeach
                 </div>
 
-                {{-- Pagination --}}
+                {{-- Pagination Premium --}}
                 @if($posts->hasPages())
-                <nav class="bidx-pagination" aria-label="Paginación de artículos" data-ajax-pagination>
+                <nav class="bidx-pagination-premium" aria-label="Paginación de artículos" data-ajax-pagination>
                     {{ $posts->links() }}
                 </nav>
                 @endif
@@ -394,7 +373,7 @@
                 Recibe las últimas tendencias, consejos y estrategias directamente en tu bandeja de entrada.
             </p>
 
-            <form class="bidx-newsletter-form" action="#" method="POST">
+            <form class="bidx-newsletter-form" action="{{ route('newsletter.subscribe') }}" method="POST">
                 @csrf
                 <input type="email"
                        name="email"

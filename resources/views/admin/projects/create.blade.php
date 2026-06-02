@@ -9,7 +9,7 @@
 
 /* Header glow effect */
 .pf-header {
-    box-shadow: 0 15px 40px rgba(94, 23, 235, 0.3);
+    box-shadow: 0 15px 40px rgba(255, 0, 110, 0.3);
     position: relative;
     overflow: hidden;
 }
@@ -54,30 +54,27 @@
     {{-- ═══════════════════════════════════════════════════
          HEADER
          ═══════════════════════════════════════════════════ --}}
-    <header class="pf-header">
-        <div class="pf-header-left">
-            <a href="{{ route('admin.projects.index') }}" class="pf-back" aria-label="Volver a proyectos">
-                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+    {{-- Header --}}
+    <div class="admin-compact-header">
+        <div class="admin-compact-header-left">
+            <a href="{{ route('admin.projects.index') }}" class="admin-compact-header-back" title="Volver a la lista">
+                <i class="fa-solid fa-arrow-left"></i>
             </a>
-            <div class="pf-header-info">
-                <h1>
-                    <i class="fa-solid fa-sparkles" style="color: #fbbf24;" aria-hidden="true"></i>
-                    Nuevo Proyecto
-                </h1>
-                <p>Crea un proyecto increíble para tu portafolio</p>
+            <div class="admin-compact-header-info">
+                <h1>Nuevo Proyecto</h1>
             </div>
         </div>
-        <div class="pf-header-actions">
-            <button type="submit" name="status" value="draft" class="pf-btn-draft">
+        <div class="admin-compact-header-actions">
+            <button type="submit" class="admin-btn admin-btn-secondary" onclick="document.getElementById('status').value='draft'">
                 <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
-                Guardar borrador
+                <span>Guardar Borrador</span>
             </button>
-            <button type="submit" name="status" value="published" class="pf-btn-publish">
+            <button type="submit" class="admin-btn admin-btn-primary" onclick="document.getElementById('status').value='published'">
                 <i class="fa-solid fa-rocket" aria-hidden="true"></i>
-                Publicar Proyecto
+                <span>Publicar Proyecto</span>
             </button>
         </div>
-    </header>
+    </div>
 
     {{-- ═══════════════════════════════════════════════════
          MAIN LAYOUT
@@ -277,20 +274,47 @@
                                 </div>
                             </div>
                             <div class="pf-step-images">
-                                <div class="pf-step-img-upload">
-                                    <input type="file" name="steps[0][image1]" accept="image/*" onchange="previewStepImg(this, 0, 1)">
-                                    <i class="fa-solid fa-image" aria-hidden="true"></i>
-                                    <span>Imagen 1</span>
+                                <div class="pf-step-image-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                                    <div class="pf-step-img-upload">
+                                        <input type="file" name="steps[0][image1]" accept="image/*" onchange="previewStepImg(this, 0, 1)">
+                                        <i class="fa-solid fa-image" aria-hidden="true"></i>
+                                        <span>Imagen 1</span>
+                                    </div>
+                                    <select name="steps[0][image1_device]" class="pf-select pf-select--sm" style="font-size: 11px; padding: 4px 6px; border-radius: 6px; border: 1px solid #d1d5db; background: #fff; color: #374151; height: auto; cursor: pointer;">
+                                        <option value="macbook">💻 MacBook</option>
+                                        <option value="iphone">📱 iPhone 17</option>
+                                        <option value="ipad">平板 iPad</option>
+                                        <option value="safari" selected>🌐 Safari</option>
+                                        <option value="none">🚫 Normal</option>
+                                    </select>
                                 </div>
-                                <div class="pf-step-img-upload">
-                                    <input type="file" name="steps[0][image2]" accept="image/*" onchange="previewStepImg(this, 0, 2)">
-                                    <i class="fa-solid fa-image" aria-hidden="true"></i>
-                                    <span>Imagen 2</span>
+                                <div class="pf-step-image-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                                    <div class="pf-step-img-upload">
+                                        <input type="file" name="steps[0][image2]" accept="image/*" onchange="previewStepImg(this, 0, 2)">
+                                        <i class="fa-solid fa-image" aria-hidden="true"></i>
+                                        <span>Imagen 2</span>
+                                    </div>
+                                    <select name="steps[0][image2_device]" class="pf-select pf-select--sm" style="font-size: 11px; padding: 4px 6px; border-radius: 6px; border: 1px solid #d1d5db; background: #fff; color: #374151; height: auto; cursor: pointer;">
+                                        <option value="macbook">💻 MacBook</option>
+                                        <option value="iphone" selected>📱 iPhone 17</option>
+                                        <option value="ipad">平板 iPad</option>
+                                        <option value="safari">🌐 Safari</option>
+                                        <option value="none">🚫 Normal</option>
+                                    </select>
                                 </div>
-                                <div class="pf-step-img-upload">
-                                    <input type="file" name="steps[0][image3]" accept="image/*" onchange="previewStepImg(this, 0, 3)">
-                                    <i class="fa-solid fa-image" aria-hidden="true"></i>
-                                    <span>Imagen 3</span>
+                                <div class="pf-step-image-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                                    <div class="pf-step-img-upload">
+                                        <input type="file" name="steps[0][image3]" accept="image/*" onchange="previewStepImg(this, 0, 3)">
+                                        <i class="fa-solid fa-image" aria-hidden="true"></i>
+                                        <span>Imagen 3</span>
+                                    </div>
+                                    <select name="steps[0][image3_device]" class="pf-select pf-select--sm" style="font-size: 11px; padding: 4px 6px; border-radius: 6px; border: 1px solid #d1d5db; background: #fff; color: #374151; height: auto; cursor: pointer;">
+                                        <option value="macbook">💻 MacBook</option>
+                                        <option value="iphone">📱 iPhone 17</option>
+                                        <option value="ipad" selected>平板 iPad</option>
+                                        <option value="safari">🌐 Safari</option>
+                                        <option value="none">🚫 Normal</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -329,6 +353,19 @@
                             <p class="pf-upload-text">Click para subir</p>
                             <span class="pf-upload-hint">JPG, PNG, WebP (Max 2MB)</span>
                         </div>
+                    </div>
+                    <div class="pf-group" style="margin-top: 1rem; margin-bottom: 0;">
+                        <label for="thumbnail_device" class="pf-label pf-label--sm" style="margin-bottom: 0.25rem;">
+                            <i class="fa-solid fa-laptop" aria-hidden="true"></i>
+                            Dispositivo de Portada
+                        </label>
+                        <select id="thumbnail_device" name="thumbnail_device" class="pf-select" style="width: 100%; padding: 0.5rem; border-radius: 8px; border: 1px solid #d1d5db; background: #fff; color: #374151;">
+                            <option value="macbook" {{ old('thumbnail_device', 'macbook') === 'macbook' ? 'selected' : '' }}>💻 MacBook Pro Plata</option>
+                            <option value="iphone" {{ old('thumbnail_device') === 'iphone' ? 'selected' : '' }}>📱 iPhone 17 Pro</option>
+                            <option value="ipad" {{ old('thumbnail_device') === 'ipad' ? 'selected' : '' }}>平板 iPad Pro</option>
+                            <option value="safari" {{ old('thumbnail_device') === 'safari' ? 'selected' : '' }}>🌐 Safari Browser</option>
+                            <option value="none" {{ old('thumbnail_device') === 'none' ? 'selected' : '' }}>🚫 Ninguno (Plano)</option>
+                        </select>
                     </div>
                     @error('thumbnail')<span class="pf-error">{{ $message }}</span>@enderror
                 </div>
@@ -414,7 +451,7 @@
                             <i class="fa-solid fa-circle-dot" aria-hidden="true"></i>
                             Estado
                         </label>
-                        <select id="status" name="status_select" class="pf-select">
+                        <select id="status" name="status" class="pf-select">
                             <option value="draft" {{ old('status') === 'draft' ? 'selected' : '' }}>📝 Borrador</option>
                             <option value="published" {{ old('status') === 'published' ? 'selected' : '' }}>✅ Publicado</option>
                         </select>
@@ -609,20 +646,47 @@ function addStep() {
                 </div>
             </div>
             <div class="pf-step-images">
-                <div class="pf-step-img-upload">
-                    <input type="file" name="steps[${index}][image1]" accept="image/*" onchange="previewStepImg(this, ${index}, 1)">
-                    <i class="fa-solid fa-image" aria-hidden="true"></i>
-                    <span>Imagen 1</span>
+                <div class="pf-step-image-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <div class="pf-step-img-upload">
+                        <input type="file" name="steps[${index}][image1]" accept="image/*" onchange="previewStepImg(this, ${index}, 1)">
+                        <i class="fa-solid fa-image" aria-hidden="true"></i>
+                        <span>Imagen 1</span>
+                    </div>
+                    <select name="steps[${index}][image1_device]" class="pf-select pf-select--sm" style="font-size: 11px; padding: 4px 6px; border-radius: 6px; border: 1px solid #d1d5db; background: #fff; color: #374151; height: auto; cursor: pointer;">
+                        <option value="macbook">💻 MacBook</option>
+                        <option value="iphone">📱 iPhone 17</option>
+                        <option value="ipad">平板 iPad</option>
+                        <option value="safari" selected>🌐 Safari</option>
+                        <option value="none">🚫 Normal</option>
+                    </select>
                 </div>
-                <div class="pf-step-img-upload">
-                    <input type="file" name="steps[${index}][image2]" accept="image/*" onchange="previewStepImg(this, ${index}, 2)">
-                    <i class="fa-solid fa-image" aria-hidden="true"></i>
-                    <span>Imagen 2</span>
+                <div class="pf-step-image-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <div class="pf-step-img-upload">
+                        <input type="file" name="steps[${index}][image2]" accept="image/*" onchange="previewStepImg(this, ${index}, 2)">
+                        <i class="fa-solid fa-image" aria-hidden="true"></i>
+                        <span>Imagen 2</span>
+                    </div>
+                    <select name="steps[${index}][image2_device]" class="pf-select pf-select--sm" style="font-size: 11px; padding: 4px 6px; border-radius: 6px; border: 1px solid #d1d5db; background: #fff; color: #374151; height: auto; cursor: pointer;">
+                        <option value="macbook">💻 MacBook</option>
+                        <option value="iphone" selected>📱 iPhone 17</option>
+                        <option value="ipad">平板 iPad</option>
+                        <option value="safari">🌐 Safari</option>
+                        <option value="none">🚫 Normal</option>
+                    </select>
                 </div>
-                <div class="pf-step-img-upload">
-                    <input type="file" name="steps[${index}][image3]" accept="image/*" onchange="previewStepImg(this, ${index}, 3)">
-                    <i class="fa-solid fa-image" aria-hidden="true"></i>
-                    <span>Imagen 3</span>
+                <div class="pf-step-image-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <div class="pf-step-img-upload">
+                        <input type="file" name="steps[${index}][image3]" accept="image/*" onchange="previewStepImg(this, ${index}, 3)">
+                        <i class="fa-solid fa-image" aria-hidden="true"></i>
+                        <span>Imagen 3</span>
+                    </div>
+                    <select name="steps[${index}][image3_device]" class="pf-select pf-select--sm" style="font-size: 11px; padding: 4px 6px; border-radius: 6px; border: 1px solid #d1d5db; background: #fff; color: #374151; height: auto; cursor: pointer;">
+                        <option value="macbook">💻 MacBook</option>
+                        <option value="iphone">📱 iPhone 17</option>
+                        <option value="ipad" selected>平板 iPad</option>
+                        <option value="safari">🌐 Safari</option>
+                        <option value="none">🚫 Normal</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -667,11 +731,21 @@ function previewStepImg(input, stepIndex, imgNum) {
         const reader = new FileReader();
         reader.onload = function(e) {
             const container = input.parentElement;
-            container.innerHTML = `
-                <img src="${e.target.result}" class="pf-step-img-preview" alt="Step image">
-                <input type="file" name="steps[${stepIndex}][image${imgNum}]" accept="image/*" 
-                       onchange="previewStepImg(this, ${stepIndex}, ${imgNum})">
-            `;
+            
+            // Remove existing static elements (icon, text)
+            const icon = container.querySelector('i');
+            if (icon) icon.remove();
+            const span = container.querySelector('span');
+            if (span) span.remove();
+            
+            // Render or update the new preview image inside the container
+            let preview = container.querySelector('.pf-step-img-preview');
+            if (!preview) {
+                preview = document.createElement('img');
+                preview.className = 'pf-step-img-preview';
+                container.appendChild(preview);
+            }
+            preview.src = e.target.result;
         };
         reader.readAsDataURL(file);
     }

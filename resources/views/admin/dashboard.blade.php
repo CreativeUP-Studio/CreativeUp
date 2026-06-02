@@ -257,7 +257,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--admin-gradient);
     border-radius: 20px;
     padding: 28px 32px;
     margin-bottom: 28px;
@@ -614,7 +614,7 @@
     width: 40px;
     height: 40px;
     border-radius: 10px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--admin-gradient);
     color: white;
     display: flex;
     align-items: center;

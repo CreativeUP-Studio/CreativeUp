@@ -10,7 +10,8 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Post::where('status', 'published');
+        $query = Post::where('status', 'published')
+            ->with(['user:id,name,email,avatar,position']);
 
         // Search filter
         if ($request->filled('search')) {
@@ -64,6 +65,7 @@ class PostController extends Controller
     {
         $post = Post::where('slug', $slug)
             ->where('status', 'published')
+            ->with(['user:id,name,email,avatar,position'])
             ->firstOrFail();
 
         return view('front.blog.show', compact('post'));

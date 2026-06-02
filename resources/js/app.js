@@ -1,7 +1,12 @@
 import "./bootstrap";
 
-// Animaciones de entrada estilo AOS - todas al mismo tiempo
-document.addEventListener("DOMContentLoaded", () => {
+let appLastUrl = null;
+
+function initApp() {
+    const currentUrl = window.location.href;
+    if (appLastUrl === currentUrl) return;
+    appLastUrl = currentUrl;
+
     const topbar = document.querySelector(".topbar");
 
     // Activar animaciones iniciales (solo las que no son de scroll)
@@ -34,25 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Topbar scroll animation
-    if (!topbar) return;
-
-    const threshold = 80;
-
-    window.addEventListener(
-        "scroll",
-        () => {
-            const currentScroll = window.scrollY;
-
-            if (currentScroll > threshold) {
-                topbar.classList.add("scrolled");
-            } else {
-                topbar.classList.remove("scrolled");
-            }
-        },
-        { passive: true },
-    );
-
     // Animaciones activadas por scroll (IntersectionObserver)
     const scrollElements = document.querySelectorAll(".anim-scroll");
     if (scrollElements.length) {
@@ -76,16 +62,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const menuCloseBtn = document.getElementById("menuCloseBtn");
 
     function closeMenu() {
-        fullMenu.classList.remove("active");
-        dotsBtn.classList.remove("menu-open");
-        topbar.classList.remove("menu-open");
+        if (fullMenu) fullMenu.classList.remove("active");
+        if (dotsBtn) dotsBtn.classList.remove("menu-open");
+        const currentTopbar = document.querySelector(".topbar");
+        if (currentTopbar) currentTopbar.classList.remove("menu-open");
         document.body.style.overflow = "";
     }
 
     function openMenu() {
-        fullMenu.classList.add("active");
-        dotsBtn.classList.add("menu-open");
-        topbar.classList.add("menu-open");
+        if (fullMenu) fullMenu.classList.add("active");
+        if (dotsBtn) dotsBtn.classList.add("menu-open");
+        const currentTopbar = document.querySelector(".topbar");
+        if (currentTopbar) currentTopbar.classList.add("menu-open");
         document.body.style.overflow = "hidden";
 
         // Marcar página activa
@@ -243,13 +231,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             });
 
-        lightboxClose.addEventListener("click", closeLightbox);
-        lightboxPrev.addEventListener("click", () => {
-            showImage((currentIdx - 1 + images.length) % images.length);
-        });
-        lightboxNext.addEventListener("click", () => {
-            showImage((currentIdx + 1) % images.length);
-        });
+        if (lightboxClose) lightboxClose.addEventListener("click", closeLightbox);
+        if (lightboxPrev) {
+            lightboxPrev.addEventListener("click", () => {
+                showImage((currentIdx - 1 + images.length) % images.length);
+            });
+        }
+        if (lightboxNext) {
+            lightboxNext.addEventListener("click", () => {
+                showImage((currentIdx + 1) % images.length);
+            });
+        }
 
         lightbox.addEventListener("click", (e) => {
             if (e.target === lightbox) closeLightbox();
@@ -275,7 +267,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
-});
+}
+
+document.addEventListener("DOMContentLoaded", initApp);
+document.addEventListener("turbo:load", initApp);
 
 // Import AJAX Filters
 import './ajax-filters.js';

@@ -23,6 +23,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Compartir las configuraciones del sitio con todas las vistas
+        view()->share('siteSettings', Cache::rememberForever('site_settings', function() {
+            return \App\Models\SiteSetting::getSettings();
+        }));
+
         // Limpiar caché del home cuando se modifica contenido
         $this->registerCacheClearingEvents();
     }

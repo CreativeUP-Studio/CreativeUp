@@ -38,14 +38,14 @@ class ServiceController extends Controller
             'gallery'           => 'nullable|array|max:8',
             'gallery.*'         => 'image|max:2048',
             'features'          => 'nullable|array|max:10',
-            'features.*'        => 'string|max:255',
+            'features.*'        => 'nullable|string|max:255',
             'benefits'          => 'nullable|array|max:6',
-            'benefits.*.title'  => 'string|max:100',
-            'benefits.*.desc'   => 'string|max:300',
+            'benefits.*.title'  => 'nullable|string|max:100',
+            'benefits.*.desc'   => 'nullable|string|max:300',
             'benefits.*.icon'   => 'nullable|string|max:50',
             'process_steps'           => 'nullable|array|max:6',
-            'process_steps.*.title'   => 'string|max:100',
-            'process_steps.*.desc'    => 'string|max:300',
+            'process_steps.*.title'   => 'nullable|string|max:100',
+            'process_steps.*.desc'    => 'nullable|string|max:300',
             'cta_text'          => 'nullable|string|max:255',
             'meta_title'        => 'nullable|string|max:200',
             'meta_description'  => 'nullable|string|max:500',
@@ -73,7 +73,7 @@ class ServiceController extends Controller
 
         // Filter empty features
         if (isset($validated['features'])) {
-            $validated['features'] = array_values(array_filter($validated['features'], fn($f) => trim($f) !== ''));
+            $validated['features'] = array_values(array_filter($validated['features'], fn($f) => !is_null($f) && trim($f) !== ''));
         }
 
         // Filter empty benefits
@@ -86,7 +86,11 @@ class ServiceController extends Controller
             $validated['process_steps'] = array_values(array_filter($validated['process_steps'], fn($s) => !empty(trim($s['title'] ?? ''))));
         }
 
-        Service::create($validated);
+        $service = Service::create($validated);
+
+        if ($service->is_active) {
+            \App\Services\NewsletterNotificationService::notifyNewService($service);
+        }
 
         return redirect()->route('admin.services.index')->with('success', 'Servicio creado exitosamente.');
     }
@@ -116,14 +120,14 @@ class ServiceController extends Controller
             'gallery'           => 'nullable|array|max:8',
             'gallery.*'         => 'image|max:2048',
             'features'          => 'nullable|array|max:10',
-            'features.*'        => 'string|max:255',
+            'features.*'        => 'nullable|string|max:255',
             'benefits'          => 'nullable|array|max:6',
-            'benefits.*.title'  => 'string|max:100',
-            'benefits.*.desc'   => 'string|max:300',
+            'benefits.*.title'  => 'nullable|string|max:100',
+            'benefits.*.desc'   => 'nullable|string|max:300',
             'benefits.*.icon'   => 'nullable|string|max:50',
             'process_steps'           => 'nullable|array|max:6',
-            'process_steps.*.title'   => 'string|max:100',
-            'process_steps.*.desc'    => 'string|max:300',
+            'process_steps.*.title'   => 'nullable|string|max:100',
+            'process_steps.*.desc'    => 'nullable|string|max:300',
             'cta_text'          => 'nullable|string|max:255',
             'meta_title'        => 'nullable|string|max:200',
             'meta_description'  => 'nullable|string|max:500',
@@ -160,7 +164,7 @@ class ServiceController extends Controller
         $validated['gallery'] = array_values($existingGallery);
 
         if (isset($validated['features'])) {
-            $validated['features'] = array_values(array_filter($validated['features'], fn($f) => trim($f) !== ''));
+            $validated['features'] = array_values(array_filter($validated['features'], fn($f) => !is_null($f) && trim($f) !== ''));
         }
 
         if (isset($validated['benefits'])) {
@@ -178,7 +182,13 @@ class ServiceController extends Controller
             $validated['image'] = null;
         }
 
+        $wasActive = $service->is_active;
+
         $service->update($validated);
+
+        if ($service->is_active && !$wasActive) {
+            \App\Services\NewsletterNotificationService::notifyNewService($service);
+        }
 
         return redirect()->route('admin.services.index')->with('success', 'Servicio actualizado exitosamente.');
     }
@@ -197,5 +207,22 @@ class ServiceController extends Controller
         $service->delete();
 
         return redirect()->route('admin.services.index')->with('success', 'Servicio eliminado exitosamente.');
+    }
+
+    public function toggleActive(Service $service)
+    {
+        $newActive = !$service->is_active;
+        $service->update([
+            'is_active' => $newActive
+        ]);
+
+        if ($newActive) {
+            \App\Services\NewsletterNotificationService::notifyNewService($service);
+        }
+
+        return response()->json([
+            'success' => true,
+            'is_active' => $service->is_active
+        ]);
     }
 }

@@ -1,0 +1,861 @@
+/* ================================
+   CreativeUp - Layout Responsive Premium
+   Logo, Menú y Footer completamente responsive
+   
+   Fecha: 2026-04-05
+   Version: 1.0.0
+================================ */
+
+/* ================================
+   FLOATING LOGO - RESPONSIVE
+================================ */
+
+/* Ultra Small Mobile (320px - 479px) */
+@media (max-width: 479px) {
+    .floating-logo {
+        top: 1rem !important;
+        left: 1rem !important;
+        padding: 0.625rem 1rem !important;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+    }
+    
+    .brand-logo {
+        font-size: 1.25rem !important;
+    }
+    
+    .brand-creative {
+        max-width: 80px !important;
+        font-size: 1.25rem !important;
+    }
+    
+    .brand-up {
+        font-size: 1.25rem !important;
+    }
+    
+    .floating-logo.scrolled .brand-up {
+        font-size: 1.5rem !important;
+    }
+    
+    /* Simplificar en móvil muy pequeño */
+    .floating-logo.scrolled .brand-creative {
+        max-width: 0 !important;
+        opacity: 0 !important;
+    }
+}
+
+/* Small Mobile (480px - 639px) */
+@media (min-width: 480px) and (max-width: 639px) {
+    .floating-logo {
+        top: 1.125rem !important;
+        left: 1.125rem !important;
+        padding: 0.75rem 1.25rem !important;
+    }
+    
+    .brand-logo {
+        font-size: 1.5rem !important;
+    }
+    
+    .floating-logo.scrolled .brand-up {
+        font-size: 1.875rem !important;
+    }
+}
+
+/* Mobile Large (640px - 767px) */
+@media (min-width: 640px) and (max-width: 767px) {
+    .floating-logo {
+        top: 1.25rem !important;
+        left: 1.25rem !important;
+    }
+    
+    .brand-logo {
+        font-size: 1.625rem !important;
+    }
+    
+    .floating-logo.scrolled .brand-up {
+        font-size: 2rem !important;
+    }
+}
+
+/* Tablet (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .floating-logo {
+        top: 1.5rem !important;
+        left: 1.5rem !important;
+    }
+    
+    .brand-logo {
+        font-size: 1.75rem !important;
+    }
+    
+    .floating-logo.scrolled .brand-up {
+        font-size: 2.25rem !important;
+    }
+}
+
+/* Desktop Small (1024px - 1279px) */
+@media (min-width: 1024px) and (max-width: 1279px) {
+    .floating-logo {
+        top: 1.75rem !important;
+        left: 1.75rem !important;
+    }
+}
+
+/* iOS Safe Areas - Logo */
+@media (max-width: 767px) {
+    .floating-logo {
+        top: max(1rem, env(safe-area-inset-top, 1rem)) !important;
+        left: max(1rem, env(safe-area-inset-left, 1rem)) !important;
+    }
+}
+
+/* ================================
+   FLOATING MENU BUTTON - RESPONSIVE
+================================ */
+
+/* Ultra Small Mobile (320px - 479px) */
+@media (max-width: 479px) {
+    .floating-menu-btn {
+        top: 1rem !important;
+        right: 1rem !important;
+        width: 50px !important;
+        height: 50px !important;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+    }
+    
+    .menu-dots {
+        padding: 12px !important;
+        gap: 3px !important;
+    }
+    
+    .menu-dots .dot {
+        width: 5px !important;
+        height: 5px !important;
+    }
+    
+    .close-line {
+        width: 22px !important;
+        height: 2.5px !important;
+    }
+}
+
+/* Small Mobile (480px - 639px) */
+@media (min-width: 480px) and (max-width: 639px) {
+    .floating-menu-btn {
+        top: 1.125rem !important;
+        right: 1.125rem !important;
+        width: 52px !important;
+        height: 52px !important;
+    }
+    
+    .menu-dots {
+        padding: 14px !important;
+        gap: 3.5px !important;
+    }
+    
+    .menu-dots .dot {
+        width: 5.5px !important;
+        height: 5.5px !important;
+    }
+}
+
+/* Mobile Large (640px - 767px) */
+@media (min-width: 640px) and (max-width: 767px) {
+    .floating-menu-btn {
+        top: 1.25rem !important;
+        right: 1.25rem !important;
+        width: 55px !important;
+        height: 55px !important;
+    }
+    
+    .menu-dots {
+        padding: 16px !important;
+        gap: 4px !important;
+    }
+    
+    .menu-dots .dot {
+        width: 6px !important;
+        height: 6px !important;
+    }
+}
+
+/* Tablet (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .floating-menu-btn {
+        top: 1.5rem !important;
+        right: 1.5rem !important;
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    .menu-dots {
+        padding: 18px !important;
+    }
+}
+
+/* Desktop Small (1024px - 1279px) */
+@media (min-width: 1024px) and (max-width: 1279px) {
+    .floating-menu-btn {
+        top: 1.75rem !important;
+        right: 1.75rem !important;
+        width: 65px !important;
+        height: 65px !important;
+    }
+}
+
+/* iOS Safe Areas - Menu Button */
+@media (max-width: 767px) {
+    .floating-menu-btn {
+        top: max(1rem, env(safe-area-inset-top, 1rem)) !important;
+        right: max(1rem, env(safe-area-inset-right, 1rem)) !important;
+    }
+}
+
+/* ================================
+   FULLSCREEN MENU - RESPONSIVE
+================================ */
+
+/* Menu Wrapper Padding */
+@media (max-width: 767px) {
+    .menu-wrapper {
+        padding: 1.5rem 1rem !important;
+    }
+    
+    .fullscreen-menu {
+        padding-top: env(safe-area-inset-top, 0) !important;
+        padding-bottom: env(safe-area-inset-bottom, 0) !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .menu-wrapper {
+        padding: 2rem 2rem !important;
+    }
+}
+
+/* Menu Container Grid */
+@media (max-width: 767px) {
+    .menu-container {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+    
+    .menu-secondary {
+        order: 2 !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .menu-container {
+        grid-template-columns: 1.2fr 1fr !important;
+        gap: 2.5rem !important;
+    }
+}
+
+/* Navigation Links */
+@media (max-width: 479px) {
+    .nav-link {
+        gap: 0.75rem !important;
+        padding: 0.875rem 0 !important;
+    }
+    
+    .nav-number {
+        font-size: 0.625rem !important;
+        min-width: 28px !important;
+    }
+    
+    .nav-text {
+        font-size: 1.375rem !important;
+    }
+    
+    .nav-icon {
+        width: 20px !important;
+        height: 20px !important;
+    }
+    
+    .nav-icon svg {
+        width: 20px !important;
+        height: 20px !important;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 639px) {
+    .nav-link {
+        gap: 1rem !important;
+        padding: 1rem 0 !important;
+    }
+    
+    .nav-number {
+        font-size: 0.6875rem !important;
+    }
+    
+    .nav-text {
+        font-size: 1.5rem !important;
+    }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+    .nav-link {
+        gap: 1rem !important;
+    }
+    
+    .nav-text {
+        font-size: 1.75rem !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .nav-text {
+        font-size: 2rem !important;
+    }
+}
+
+/* Menu CTA Card */
+@media (max-width: 767px) {
+    .menu-cta {
+        padding: 1.5rem !important;
+    }
+    
+    .cta-title {
+        font-size: 1.125rem !important;
+    }
+    
+    .cta-desc {
+        font-size: 0.875rem !important;
+    }
+    
+    .cta-button {
+        padding: 0.875rem 1.5rem !important;
+        font-size: 0.9375rem !important;
+    }
+}
+
+/* Menu Stats */
+@media (max-width: 767px) {
+    .menu-stats {
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+        align-items: stretch !important;
+    }
+    
+    .stat-item {
+        text-align: center !important;
+        padding: 1rem !important;
+        background: rgba(94, 23, 235, 0.03) !important;
+        border-radius: 12px !important;
+    }
+    
+    .stat-divider {
+        display: none !important;
+    }
+    
+    .stat-value {
+        font-size: 2rem !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .menu-stats {
+        flex-wrap: wrap !important;
+        gap: 1.25rem !important;
+    }
+    
+    .stat-item {
+        flex: 1 1 calc(50% - 0.625rem) !important;
+    }
+}
+
+/* Menu Footer */
+@media (max-width: 767px) {
+    .menu-footer {
+        flex-direction: column !important;
+        gap: 2rem !important;
+        text-align: center !important;
+    }
+    
+    .menu-contact {
+        gap: 0.75rem !important;
+    }
+    
+    .contact-link {
+        font-size: 0.9375rem !important;
+    }
+    
+    .menu-social {
+        flex-direction: column !important;
+        gap: 1rem !important;
+        align-items: center !important;
+    }
+    
+    .social-label {
+        font-size: 0.75rem !important;
+    }
+    
+    .social-links {
+        justify-content: center !important;
+    }
+}
+
+/* ================================
+   SITE FOOTER - RESPONSIVE
+================================ */
+
+/* Footer CTA Banner */
+@media (max-width: 479px) {
+    .footer-cta-banner {
+        padding: 2.5rem 0 !important;
+    }
+    
+    .cta-banner-label {
+        font-size: 0.75rem !important;
+    }
+    
+    .cta-banner-title {
+        font-size: clamp(1.375rem, 5vw, 2rem) !important;
+        line-height: 1.25 !important;
+    }
+    
+    .cta-banner-desc {
+        font-size: 0.9375rem !important;
+        line-height: 1.6 !important;
+    }
+    
+    .cta-banner-action .btn {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 0.875rem 1.5rem !important;
+        font-size: 0.9375rem !important;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 639px) {
+    .footer-cta-banner {
+        padding: 3rem 0 !important;
+    }
+    
+    .cta-banner-title {
+        font-size: clamp(1.75rem, 5vw, 2.5rem) !important;
+    }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+    .footer-cta-banner {
+        padding: 3.5rem 0 !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .cta-banner-content {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+        text-align: center !important;
+    }
+    
+    .cta-banner-desc {
+        max-width: 100% !important;
+        margin: 0 auto !important;
+    }
+    
+    .cta-banner-action {
+        justify-content: center !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .cta-banner-content {
+        grid-template-columns: 1fr !important;
+        gap: 2.5rem !important;
+    }
+}
+
+/* Footer Content Grid */
+@media (max-width: 479px) {
+    .footer-content {
+        padding: 3rem 0 2rem !important;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+    
+    .footer-brand,
+    .footer-column {
+        text-align: center !important;
+        align-items: center !important;
+    }
+    
+    .footer-logo-link {
+        font-size: 1.5rem !important;
+    }
+    
+    .footer-tagline {
+        max-width: 100% !important;
+        text-align: center !important;
+    }
+    
+    .footer-social-links {
+        justify-content: center !important;
+    }
+    
+    .footer-title {
+        font-size: 0.9375rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .footer-list {
+        gap: 0.5rem !important;
+        align-items: center !important;
+    }
+    
+    .footer-link {
+        font-size: 0.875rem !important;
+    }
+    
+    .footer-contact-link {
+        font-size: 0.875rem !important;
+        justify-content: center !important;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 639px) {
+    .footer-content {
+        padding: 3.5rem 0 2.5rem !important;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2.25rem !important;
+    }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 2.5rem !important;
+    }
+    
+    .footer-brand {
+        grid-column: 1 / -1 !important;
+        text-align: center !important;
+        align-items: center !important;
+    }
+    
+    .footer-social-links {
+        justify-content: center !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 3rem !important;
+    }
+    
+    .footer-brand {
+        grid-column: 1 / -1 !important;
+        align-items: flex-start !important;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+    .footer-grid {
+        grid-template-columns: 1.2fr 1fr 1fr !important;
+        gap: 3rem !important;
+    }
+    
+    .footer-column:last-child {
+        grid-column: 1 / -1 !important;
+    }
+}
+
+/* Footer Bottom */
+@media (max-width: 479px) {
+    .footer-bottom {
+        padding: 1.5rem 0 !important;
+    }
+    
+    .footer-bottom-content {
+        flex-direction: column !important;
+        gap: 1rem !important;
+        text-align: center !important;
+    }
+    
+    .footer-copyright {
+        font-size: 0.8125rem !important;
+    }
+    
+    .footer-legal {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+    
+    .footer-legal-link {
+        font-size: 0.8125rem !important;
+    }
+    
+    .footer-separator {
+        display: none !important;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+    .footer-bottom-content {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+        text-align: center !important;
+    }
+}
+
+/* Social Icons Responsive */
+@media (max-width: 479px) {
+    .social-icon {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    
+    .social-icon i {
+        font-size: 1rem !important;
+    }
+}
+
+/* ================================
+   LANDSCAPE MODE - MENU & FOOTER
+================================ */
+
+/* Mobile Landscape (max 500px height) */
+@media (max-height: 500px) and (orientation: landscape) {
+    .menu-wrapper {
+        padding: 1rem !important;
+        overflow-y: auto !important;
+    }
+    
+    .nav-text {
+        font-size: 1.25rem !important;
+    }
+    
+    .nav-link {
+        padding: 0.5rem 0 !important;
+    }
+    
+    .menu-cta {
+        padding: 1rem !important;
+    }
+    
+    .menu-stats {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+    }
+    
+    .stat-item {
+        flex: 1 1 calc(33.333% - 1rem) !important;
+        padding: 0.75rem !important;
+    }
+    
+    .menu-secondary {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 1rem !important;
+    }
+    
+    .menu-footer {
+        grid-column: 1 / -1 !important;
+    }
+}
+
+/* ================================
+   TOUCH DEVICES OPTIMIZATIONS
+================================ */
+@media (hover: none) and (pointer: coarse) {
+    /* Touch targets mínimo 44px */
+    .floating-logo,
+    .floating-menu-btn {
+        min-width: 44px !important;
+        min-height: 44px !important;
+    }
+    
+    .nav-link {
+        min-height: 48px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    
+    .footer-link,
+    .footer-contact-link,
+    .social-icon {
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    
+    /* Eliminar hover effects en touch */
+    .floating-logo:hover,
+    .floating-menu-btn:hover {
+        transform: none !important;
+    }
+    
+    /* Tap feedback más visible */
+    .floating-logo:active,
+    .floating-menu-btn:active {
+        transform: scale(0.95) !important;
+        opacity: 0.8 !important;
+    }
+    
+    .nav-link:active {
+        background: rgba(94, 23, 235, 0.05) !important;
+        border-radius: 8px !important;
+    }
+}
+
+/* ================================
+   PRINT STYLES
+================================ */
+@media print {
+    .floating-logo,
+    .floating-menu-btn,
+    .fullscreen-menu {
+        display: none !important;
+    }
+    
+    .site-footer {
+        page-break-before: always !important;
+    }
+    
+    .footer-cta-banner {
+        background: #5e17eb !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}
+
+/* ================================
+   ACCESSIBILITY - REDUCED MOTION
+================================ */
+@media (prefers-reduced-motion: reduce) {
+    .floating-logo,
+    .floating-menu-btn,
+    .nav-link,
+    .menu-dots,
+    .menu-close,
+    .footer-link {
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    .floating-logo.scrolled .brand-creative,
+    .floating-logo.scrolled .brand-up {
+        transition: none !important;
+    }
+}
+
+/* ================================
+   HIGH CONTRAST MODE
+================================ */
+@media (prefers-contrast: high) {
+    .floating-logo,
+    .floating-menu-btn {
+        border: 2px solid currentColor !important;
+    }
+    
+    .menu-dots .dot {
+        background: currentColor !important;
+    }
+    
+    .nav-link {
+        border-bottom: 2px solid transparent !important;
+    }
+    
+    .nav-link:hover,
+    .nav-link:focus {
+        border-bottom-color: currentColor !important;
+    }
+}
+
+/* ================================
+   SAFE AREAS - iOS NOTCH
+================================ */
+@media (max-width: 767px) {
+    /* Logo y menú ya tienen safe areas definidos arriba */
+    
+    .site-footer {
+        padding-bottom: env(safe-area-inset-bottom, 0) !important;
+    }
+    
+    .footer-bottom {
+        padding-bottom: max(2rem, calc(2rem + env(safe-area-inset-bottom, 0))) !important;
+    }
+}
+
+/* ================================
+   OVERFLOW PREVENTION
+================================ */
+@media (max-width: 767px) {
+    .menu-wrapper,
+    .footer-content {
+        overflow-x: hidden !important;
+    }
+    
+    .nav-text,
+    .cta-banner-title,
+    .footer-logo-link {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+}
+
+/* ================================
+   PERFORMANCE OPTIMIZATIONS
+================================ */
+@media (max-width: 767px) {
+    /* Reducir complejidad en móvil */
+    .menu-backdrop {
+        backdrop-filter: blur(8px) !important;
+    }
+    
+    .nav-text::before {
+        opacity: 0.5 !important;
+    }
+}
+
+/* ================================
+   SCROLLBAR - MENU
+================================ */
+.menu-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.menu-wrapper::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.menu-wrapper::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #5e17eb 0%, #e870c2 100%);
+    border-radius: 4px;
+}
+
+.menu-wrapper::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-dark, #4a12ba);
+}
+
+/* ================================
+   NOTAS DE IMPLEMENTACIÓN
+   
+   Este archivo hace responsive:
+   - Logo flotante (todas las resoluciones)
+   - Botón de menú (todas las resoluciones)
+   - Menú fullscreen (layout, navegación, stats)
+   - Footer (CTA banner, grid, bottom bar)
+   - Safe areas para iOS
+   - Touch optimizations
+   - Landscape mode
+   - Print styles
+   - Accessibility (reduced motion, high contrast)
+   
+   Breakpoints:
+   - 320-479px: Ultra small mobile
+   - 480-639px: Small mobile
+   - 640-767px: Mobile large
+   - 768-1023px: Tablet
+   - 1024-1279px: Desktop small
+   - 1280px+: Desktop large
+   
+================================ */

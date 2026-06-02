@@ -45,25 +45,26 @@
 
             {{-- Métodos de contacto --}}
             <div class="ch-contact-methods anim-hidden" data-anim="fade-up">
-                <a href="mailto:hola@creativeup.com" class="ch-method">
+                <a href="mailto:{{ $siteSettings->email }}" class="ch-method">
                     <span class="ch-method-icon">
                         <i class="fa-solid fa-envelope"></i>
                     </span>
                     <span class="ch-method-info">
                         <span class="ch-method-label">Email</span>
-                        <span class="ch-method-value">hola@creativeup.com</span>
+                        <span class="ch-method-value">{{ $siteSettings->email }}</span>
                     </span>
                 </a>
-                <a href="tel:+1234567890" class="ch-method">
+                <a href="tel:{{ $siteSettings->phone }}" class="ch-method">
                     <span class="ch-method-icon">
                         <i class="fa-solid fa-phone"></i>
                     </span>
                     <span class="ch-method-info">
                         <span class="ch-method-label">Teléfono</span>
-                        <span class="ch-method-value">+1 (234) 567-890</span>
+                        <span class="ch-method-value">{{ $siteSettings->phone }}</span>
                     </span>
                 </a>
-                <a href="#" class="ch-method">
+                @if($siteSettings->whatsapp_url && $siteSettings->whatsapp_url !== '#')
+                <a href="{{ $siteSettings->whatsapp_url }}" target="_blank" class="ch-method">
                     <span class="ch-method-icon">
                         <i class="fa-brands fa-whatsapp"></i>
                     </span>
@@ -72,6 +73,7 @@
                         <span class="ch-method-value">Escríbenos</span>
                     </span>
                 </a>
+                @endif
             </div>
 
             {{-- Stats --}}
@@ -149,73 +151,71 @@
 
         {{-- Panel izquierdo: info --}}
         <div class="cf-info anim-hidden" data-anim="fade-up">
-            <h2 class="cf-info-title">¿Por qué elegirnos?</h2>
+            <div class="cf-info-header">
+                <span class="cf-info-badge">
+                    <i class="fa-solid fa-sparkles"></i>
+                    Nuestro compromiso
+                </span>
+                <h2 class="cf-info-title">¿Por qué trabajar con nosotros?</h2>
+                <p class="cf-info-subtitle">Más que una agencia, somos tu aliado estratégico en el mundo digital</p>
+            </div>
 
             <div class="cf-info-cards">
                 <div class="cf-info-card">
                     <div class="cf-info-card-icon">
-                        <i class="fa-solid fa-bolt"></i>
+                        <i class="fa-solid fa-rocket"></i>
                     </div>
-                    <div>
-                        <h3 class="cf-info-card-title">Respuesta rápida</h3>
-                        <p class="cf-info-card-text">Te respondemos en menos de 24 horas con una propuesta personalizada.</p>
+                    <div class="cf-info-card-content">
+                        <h3 class="cf-info-card-title">Respuesta inmediata</h3>
+                        <p class="cf-info-card-text">Contestamos en menos de 24 horas con una propuesta detallada y personalizada para tu proyecto.</p>
                     </div>
                 </div>
                 <div class="cf-info-card">
                     <div class="cf-info-card-icon">
-                        <i class="fa-solid fa-palette"></i>
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
                     </div>
-                    <div>
-                        <h3 class="cf-info-card-title">Diseño único</h3>
-                        <p class="cf-info-card-text">Cada proyecto es diseñado desde cero, sin plantillas genéricas.</p>
+                    <div class="cf-info-card-content">
+                        <h3 class="cf-info-card-title">Diseño exclusivo</h3>
+                        <p class="cf-info-card-text">Creamos experiencias únicas desde cero. Nada de plantillas, todo hecho a la medida de tu marca.</p>
                     </div>
                 </div>
                 <div class="cf-info-card">
                     <div class="cf-info-card-icon">
                         <i class="fa-solid fa-code"></i>
                     </div>
-                    <div>
-                        <h3 class="cf-info-card-title">Desarrollo a medida</h3>
-                        <p class="cf-info-card-text">Código limpio, optimizado y escalable para tu negocio.</p>
+                    <div class="cf-info-card-content">
+                        <h3 class="cf-info-card-title">Tecnología de punta</h3>
+                        <p class="cf-info-card-text">Código limpio, optimizado y escalable. Construimos soluciones que crecen con tu negocio.</p>
                     </div>
                 </div>
                 <div class="cf-info-card">
                     <div class="cf-info-card-icon">
                         <i class="fa-solid fa-headset"></i>
                     </div>
-                    <div>
-                        <h3 class="cf-info-card-title">Soporte continuo</h3>
-                        <p class="cf-info-card-text">Acompañamiento después del lanzamiento para que todo funcione perfecto.</p>
+                    <div class="cf-info-card-content">
+                        <h3 class="cf-info-card-title">Soporte dedicado</h3>
+                        <p class="cf-info-card-text">Te acompañamos antes, durante y después del lanzamiento. Tu éxito es nuestro éxito.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="cf-info-contact">
-                <h3 class="cf-info-contact-title">Información de contacto</h3>
-                <a href="mailto:hola@creativeup.co" class="cf-info-contact-item">
-                    <i class="fa-solid fa-envelope"></i>
-                    <span>hola@creativeup.co</span>
-                </a>
-                <a href="https://wa.me/573000000000" target="_blank" rel="noopener" class="cf-info-contact-item">
-                    <i class="fa-brands fa-whatsapp"></i>
-                    <span>+57 300 000 0000</span>
-                </a>
-                <div class="cf-info-contact-item">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span>Colombia</span>
+            {{-- Testimonial destacado --}}
+            <div class="cf-testimonial">
+                <div class="cf-testimonial-quote">
+                    <i class="fa-solid fa-quote-left"></i>
                 </div>
-            </div>
-
-            <div class="cf-info-socials">
-                <a href="#" target="_blank" rel="noopener" class="cf-info-social" aria-label="Facebook">
-                    <i class="fa-brands fa-facebook-f"></i>
-                </a>
-                <a href="#" target="_blank" rel="noopener" class="cf-info-social" aria-label="Instagram">
-                    <i class="fa-brands fa-instagram"></i>
-                </a>
-                <a href="#" target="_blank" rel="noopener" class="cf-info-social" aria-label="TikTok">
-                    <i class="fa-brands fa-tiktok"></i>
-                </a>
+                <p class="cf-testimonial-text">
+                    "Trabajar con CreativeUP fue una experiencia increíble. Entendieron nuestra visión y la llevaron más allá de lo que imaginamos."
+                </p>
+                <div class="cf-testimonial-author">
+                    <div class="cf-testimonial-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div>
+                        <div class="cf-testimonial-name">María González</div>
+                        <div class="cf-testimonial-role">CEO, TechStart</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -231,6 +231,22 @@
                 <div class="cf-alert-body">
                     <strong>¡Mensaje enviado!</strong>
                     <p>{{ session('success') }}</p>
+                </div>
+                <button type="button" class="cf-alert-close" onclick="this.parentElement.remove()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            @endif
+
+            {{-- Alerta de información --}}
+            @if(session('info'))
+            <div class="cf-alert cf-alert--info" id="cfAlertInfo">
+                <div class="cf-alert-icon">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div class="cf-alert-body">
+                    <strong>Información</strong>
+                    <p>{{ session('info') }}</p>
                 </div>
                 <button type="button" class="cf-alert-close" onclick="this.parentElement.remove()">
                     <i class="fa-solid fa-xmark"></i>
@@ -290,7 +306,6 @@
                             <label for="cf-name" class="cf-label">
                                 <i class="fa-regular fa-user"></i> Nombre completo <span class="cf-required">*</span>
                             </label>
-                            <div class="cf-input-border"></div>
                         </div>
                         <span class="cf-error-msg" id="cf-name-error"></span>
                     </div>
@@ -302,7 +317,6 @@
                             <label for="cf-email" class="cf-label">
                                 <i class="fa-regular fa-envelope"></i> Correo electrónico <span class="cf-required">*</span>
                             </label>
-                            <div class="cf-input-border"></div>
                         </div>
                         <span class="cf-error-msg" id="cf-email-error"></span>
                     </div>
@@ -314,7 +328,6 @@
                             <label for="cf-phone" class="cf-label">
                                 <i class="fa-solid fa-phone"></i> Teléfono <span class="cf-optional">(opcional)</span>
                             </label>
-                            <div class="cf-input-border"></div>
                         </div>
                         <span class="cf-error-msg" id="cf-phone-error"></span>
                     </div>
@@ -436,7 +449,6 @@
                             <label for="cf-message" class="cf-label">
                                 <i class="fa-regular fa-message"></i> Cuéntanos sobre tu proyecto <span class="cf-required">*</span>
                             </label>
-                            <div class="cf-input-border"></div>
                         </div>
                         <div class="cf-textarea-footer">
                             <span class="cf-error-msg" id="cf-message-error"></span>
@@ -464,57 +476,196 @@
                 <i class="fa-solid fa-shield-halved"></i>
                 Tu información está segura. No compartimos tus datos con terceros.
             </div>
+
+            {{-- Contacto directo debajo del formulario --}}
+            <div class="cf-form-contact">
+                <h3 class="cf-form-contact-title">
+                    <i class="fas fa-phone-volume"></i>
+                    O contáctanos directamente
+                </h3>
+                <div class="cf-form-contact-grid">
+                    <a href="mailto:{{ $siteSettings->email }}" class="cf-form-contact-item">
+                        <div class="cf-form-contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="cf-form-contact-info">
+                            <span class="cf-form-contact-label">Email</span>
+                            <span class="cf-form-contact-value">{{ $siteSettings->email }}</span>
+                        </div>
+                    </a>
+                    <a href="tel:{{ $siteSettings->phone }}" class="cf-form-contact-item">
+                        <div class="cf-form-contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="cf-form-contact-info">
+                            <span class="cf-form-contact-label">Teléfono</span>
+                            <span class="cf-form-contact-value">{{ $siteSettings->phone }}</span>
+                        </div>
+                    </a>
+                    @if($siteSettings->whatsapp_url && $siteSettings->whatsapp_url !== '#')
+                    <a href="{{ $siteSettings->whatsapp_url }}" target="_blank" rel="noopener" class="cf-form-contact-item">
+                        <div class="cf-form-contact-icon cf-form-contact-icon--whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="cf-form-contact-info">
+                            <span class="cf-form-contact-label">WhatsApp</span>
+                            <span class="cf-form-contact-value">Chat directo</span>
+                        </div>
+                    </a>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Redes sociales debajo del formulario --}}
+            <div class="cf-form-socials">
+                <span class="cf-form-socials-label">Síguenos en:</span>
+                <div class="cf-form-socials-links">
+                    @if($siteSettings->facebook_url && $siteSettings->facebook_url !== '#')
+                        <a href="{{ $siteSettings->facebook_url }}" target="_blank" rel="noopener" class="cf-form-social" aria-label="Facebook" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    @endif
+                    @if($siteSettings->instagram_url && $siteSettings->instagram_url !== '#')
+                        <a href="{{ $siteSettings->instagram_url }}" target="_blank" rel="noopener" class="cf-form-social" aria-label="Instagram" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    @endif
+                    @if($siteSettings->linkedin_url && $siteSettings->linkedin_url !== '#')
+                        <a href="{{ $siteSettings->linkedin_url }}" target="_blank" rel="noopener" class="cf-form-social" aria-label="LinkedIn" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    @endif
+                    @if($siteSettings->twitter_url && $siteSettings->twitter_url !== '#')
+                        <a href="{{ $siteSettings->twitter_url }}" target="_blank" rel="noopener" class="cf-form-social" aria-label="Twitter" title="Twitter">
+                            <i class="fab fa-x-twitter"></i>
+                        </a>
+                    @endif
+                    @if($siteSettings->github_url && $siteSettings->github_url !== '#')
+                        <a href="{{ $siteSettings->github_url }}" target="_blank" rel="noopener" class="cf-form-social" aria-label="GitHub" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 {{-- ── FAQ rápido ── --}}
 <section class="cf-faq anim-hidden" data-anim="fade-up">
-    <h2 class="cf-faq-title">Preguntas frecuentes</h2>
+    <div class="cf-faq-header">
+        <span class="cf-faq-badge">
+            <i class="fa-solid fa-circle-question"></i>
+            FAQ
+        </span>
+        <h2 class="cf-faq-title">Preguntas frecuentes</h2>
+        <p class="cf-faq-subtitle">Resolvemos tus dudas más comunes sobre nuestros servicios</p>
+    </div>
+    
     <div class="cf-faq-grid">
         <div class="cf-faq-item">
             <button class="cf-faq-question" aria-expanded="false">
-                <span>¿Cuánto tiempo tarda un proyecto?</span>
-                <i class="fa-solid fa-plus cf-faq-icon"></i>
+                <div class="cf-faq-q-content">
+                    <span class="cf-faq-number">01</span>
+                    <span class="cf-faq-text">¿Cuánto tiempo tarda un proyecto?</span>
+                </div>
+                <div class="cf-faq-icon-wrapper">
+                    <i class="fa-solid fa-plus cf-faq-icon"></i>
+                </div>
             </button>
             <div class="cf-faq-answer">
-                <p>Depende de la complejidad. Un sitio web puede estar listo en 2-4 semanas, mientras que un proyecto completo de branding puede tomar 4-8 semanas.</p>
+                <p>El tiempo varía según la complejidad y alcance del proyecto. Un sitio web corporativo puede estar listo en 2-4 semanas, mientras que un proyecto completo de branding con múltiples entregables puede tomar 4-8 semanas. Te proporcionamos un cronograma detallado desde el inicio.</p>
             </div>
         </div>
         <div class="cf-faq-item">
             <button class="cf-faq-question" aria-expanded="false">
-                <span>¿Ofrecen planes de pago?</span>
-                <i class="fa-solid fa-plus cf-faq-icon"></i>
+                <div class="cf-faq-q-content">
+                    <span class="cf-faq-number">02</span>
+                    <span class="cf-faq-text">¿Ofrecen planes de pago flexibles?</span>
+                </div>
+                <div class="cf-faq-icon-wrapper">
+                    <i class="fa-solid fa-plus cf-faq-icon"></i>
+                </div>
             </button>
             <div class="cf-faq-answer">
-                <p>Sí, ofrecemos opciones de pago flexibles. Generalmente 50% al iniciar y 50% al entregar, pero podemos adaptarnos a tus necesidades.</p>
+                <p>Sí, entendemos que cada negocio tiene necesidades diferentes. Generalmente trabajamos con un esquema de 50% al iniciar y 50% al entregar, pero podemos adaptarnos a tu flujo de caja con planes de pago personalizados.</p>
             </div>
         </div>
         <div class="cf-faq-item">
             <button class="cf-faq-question" aria-expanded="false">
-                <span>¿Qué incluye el soporte post-lanzamiento?</span>
-                <i class="fa-solid fa-plus cf-faq-icon"></i>
+                <div class="cf-faq-q-content">
+                    <span class="cf-faq-number">03</span>
+                    <span class="cf-faq-text">¿Qué incluye el soporte post-lanzamiento?</span>
+                </div>
+                <div class="cf-faq-icon-wrapper">
+                    <i class="fa-solid fa-plus cf-faq-icon"></i>
+                </div>
             </button>
             <div class="cf-faq-answer">
-                <p>Incluimos 30 días de soporte gratuito para correcciones y ajustes menores. Después ofrecemos planes de mantenimiento mensual.</p>
+                <p>Todos nuestros proyectos incluyen 30 días de soporte gratuito para correcciones de bugs y ajustes menores. Después, ofrecemos planes de mantenimiento mensual que incluyen actualizaciones, monitoreo de seguridad y soporte técnico continuo.</p>
             </div>
         </div>
         <div class="cf-faq-item">
             <button class="cf-faq-question" aria-expanded="false">
-                <span>¿Puedo ver avances durante el desarrollo?</span>
-                <i class="fa-solid fa-plus cf-faq-icon"></i>
+                <div class="cf-faq-q-content">
+                    <span class="cf-faq-number">04</span>
+                    <span class="cf-faq-text">¿Puedo ver avances durante el desarrollo?</span>
+                </div>
+                <div class="cf-faq-icon-wrapper">
+                    <i class="fa-solid fa-plus cf-faq-icon"></i>
+                </div>
             </button>
             <div class="cf-faq-answer">
-                <p>¡Por supuesto! Trabajamos con revisiones semanales donde puedes ver el avance y dar feedback en tiempo real.</p>
+                <p>¡Por supuesto! La transparencia es clave para nosotros. Trabajamos con revisiones semanales donde puedes ver el progreso en tiempo real, dar feedback y solicitar ajustes. Usamos herramientas colaborativas para que estés siempre al tanto del avance.</p>
             </div>
         </div>
+        <div class="cf-faq-item">
+            <button class="cf-faq-question" aria-expanded="false">
+                <div class="cf-faq-q-content">
+                    <span class="cf-faq-number">05</span>
+                    <span class="cf-faq-text">¿Trabajan con empresas de cualquier tamaño?</span>
+                </div>
+                <div class="cf-faq-icon-wrapper">
+                    <i class="fa-solid fa-plus cf-faq-icon"></i>
+                </div>
+            </button>
+            <div class="cf-faq-answer">
+                <p>Sí, trabajamos con startups, pequeñas empresas y corporaciones. Cada proyecto recibe la misma atención al detalle y profesionalismo, independientemente del tamaño. Adaptamos nuestros servicios a tu presupuesto y necesidades específicas.</p>
+            </div>
+        </div>
+        <div class="cf-faq-item">
+            <button class="cf-faq-question" aria-expanded="false">
+                <div class="cf-faq-q-content">
+                    <span class="cf-faq-number">06</span>
+                    <span class="cf-faq-text">¿Qué pasa si no estoy satisfecho con el resultado?</span>
+                </div>
+                <div class="cf-faq-icon-wrapper">
+                    <i class="fa-solid fa-plus cf-faq-icon"></i>
+                </div>
+            </button>
+            <div class="cf-faq-answer">
+                <p>Tu satisfacción es nuestra prioridad. Incluimos rondas de revisión en cada fase del proyecto para asegurarnos de que el resultado final supere tus expectativas. Si algo no te convence, trabajamos contigo hasta que estés 100% satisfecho.</p>
+            </div>
+        </div>
+    </div>
+
+    {{-- CTA adicional --}}
+    <div class="cf-faq-cta">
+        <div class="cf-faq-cta-content">
+            <h3 class="cf-faq-cta-title">¿Aún tienes dudas?</h3>
+            <p class="cf-faq-cta-text">Estamos aquí para ayudarte. Contáctanos y resolveremos todas tus preguntas.</p>
+        </div>
+        <a href="#contactForm" class="cf-faq-cta-btn" onclick="document.getElementById('contactForm').scrollIntoView({behavior: 'smooth', block: 'center'});">
+            <span>Enviar mensaje</span>
+            <i class="fa-solid fa-arrow-up"></i>
+        </a>
     </div>
 </section>
 @endsection
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+(function () {
     const form = document.getElementById('contactForm');
     if (!form) return;
 
@@ -745,7 +896,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-});
+})();
 
 // Intersection Observer for scroll animations
 const observer = new IntersectionObserver((entries) => {

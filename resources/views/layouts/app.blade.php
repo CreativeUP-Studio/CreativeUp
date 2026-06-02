@@ -2,811 +2,886 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>@yield('title') | CreativeUP</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>@yield('title', $siteSettings->meta_title)</title>
+    
+    {{-- Meta Tags --}}
+    <meta name="description" content="@yield('description', $siteSettings->meta_description)">
+    <meta name="keywords" content="diseño web, desarrollo web, marketing digital, branding, UX/UI">
+    
+    {{-- Open Graph --}}
+    <meta property="og:title" content="@yield('title', $siteSettings->meta_title)">
+    <meta property="og:description" content="@yield('description', $siteSettings->meta_description)">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    
+    {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    {{-- Font Awesome --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    {{-- AOS Animation Library --}}
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    
+    {{-- Hotwire Turbo --}}
+    <script src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.12/dist/turbo.es2017-umd.js" defer></script>
+
+    {{-- Main JavaScript --}}
+    <script src="{{ asset('js/redesign.js') }}?v={{ file_exists(public_path('js/redesign.js')) ? filemtime(public_path('js/redesign.js')) : '1.0' }}" defer></script>
+    
+    {{-- Chat Widget JavaScript --}}
+    <script src="{{ asset('js/chat-widget.js') }}?v={{ file_exists(public_path('js/chat-widget.js')) ? filemtime(public_path('js/chat-widget.js')) : '1.0' }}" defer></script>
+
+    {{-- Vite Assets --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @stack('head')
+    
+    {{-- Custom Styles --}}
+    <link rel="stylesheet" href="{{ asset('css/frontend/redesign.css') }}?v={{ file_exists(public_path('css/frontend/redesign.css')) ? filemtime(public_path('css/frontend/redesign.css')) : '1.0' }}">
+    <link rel="stylesheet" href="{{ asset('css/frontend/redesign-components.css') }}?v={{ file_exists(public_path('css/frontend/redesign-components.css')) ? filemtime(public_path('css/frontend/redesign-components.css')) : '1.0' }}">
+    <link rel="stylesheet" href="{{ asset('css/frontend/navbar-premium.css') }}?v={{ file_exists(public_path('css/frontend/navbar-premium.css')) ? filemtime(public_path('css/frontend/navbar-premium.css')) : '1.0' }}">
+    <link rel="stylesheet" href="{{ asset('css/frontend/fullscreen-menu-premium.css') }}?v={{ file_exists(public_path('css/frontend/fullscreen-menu-premium.css')) ? filemtime(public_path('css/frontend/fullscreen-menu-premium.css')) : '1.0' }}">
+    <link rel="stylesheet" href="{{ asset('css/frontend/portfolio-premium.css') }}?v={{ file_exists(public_path('css/frontend/portfolio-premium.css')) ? filemtime(public_path('css/frontend/portfolio-premium.css')) : '1.0' }}">
+    <link rel="stylesheet" href="{{ asset('css/frontend/blog-premium.css') }}?v={{ file_exists(public_path('css/frontend/blog-premium.css')) ? filemtime(public_path('css/frontend/blog-premium.css')) : '1.0' }}">
+    <link rel="stylesheet" href="{{ asset('css/chat-widget.css') }}?v={{ file_exists(public_path('css/chat-widget.css')) ? filemtime(public_path('css/chat-widget.css')) : '1.0' }}">
+    
+    @stack('styles')
+    
+    <style>
+        /* Barra de progreso de Turbo estilo premium */
+        .turbo-progress-bar {
+            height: 4px;
+            background: linear-gradient(90deg, #ff006e, #8338ec, #ff006e);
+            background-size: 200% 100%;
+            animation: turboProgressGradient 2s linear infinite;
+            box-shadow: 0 0 10px rgba(255, 0, 110, 0.6), 0 0 5px rgba(131, 56, 236, 0.4);
+            border-radius: 0 100px 100px 0;
+            z-index: 9999;
+        }
+
+        @keyframes turboProgressGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Transición de contenido suavizada */
+        .main-content {
+            transition: opacity 0.22s cubic-bezier(0.25, 1, 0.5, 1), transform 0.22s cubic-bezier(0.25, 1, 0.5, 1);
+            opacity: 1;
+            transform: translateY(0);
+            will-change: opacity, transform;
+        }
+
+        .turbo-loading .main-content {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        
+        /* Desvanecimiento de entrada cuando está listo */
+        .main-content.fade-in {
+            animation: mainFadeIn 0.35s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes mainFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• 
+           NAVBAR ULTRA PREMIUM - Minimalista con Animaciones Suaves
+           â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â•  */
+        
+        /* Remove any top spacing from main content */
+        .main-content {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+        }
+        
+        /* Navbar transparent and dynamic logo */
+        .navbar-ultra,
+        .navbar-container {
+            background-color: transparent !important;
+            border-bottom: none !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        .navbar-ultra::before,
+        .navbar-ultra::after,
+        .navbar-container::before,
+        .navbar-container::after {
+            display: none !important;
+        }
+
+        .navbar-ultra {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .navbar-container {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: clamp(80px, 10vw, 120px) !important;
+            background: transparent !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            margin: 0 !important;
+        }
+
+        /* Logo wrapper with smooth positioning */
+        .navbar-logo-wrap {
+            position: absolute;
+            left: clamp(20px, 5vw, 50px);
+            top: clamp(20px, 4vw, 40px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Dots wrapper with smooth positioning */
+        .navbar-dots-wrap {
+            position: absolute;
+            right: clamp(20px, 5vw, 50px);
+            top: clamp(20px, 4vw, 40px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .navbar-logo {
+            font-size: clamp(1.6rem, 3.5vw, 2.2rem) !important;
+            display: flex;
+            align-items: center;
+            gap: 0;
+            line-height: 1.1 !important;
+            margin: 0 !important;
+            padding: 12px 24px !important;
+            position: relative;
+            background: white;
+            border-radius: 100px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .navbar-logo:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .navbar-logo .logo-text {
+            color: #404040 !important;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            display: inline-block;
+            white-space: nowrap;
+            max-width: 250px;
+            font-weight: 700;
+        }
+
+        .navbar-logo .logo-gradient {
+            background: linear-gradient(135deg, #ff006e, #8338ec) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            font-weight: 700;
+        }
+
+        /* Logo dot with pulsing animation */
+        .navbar-logo .logo-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff006e;
+            border-radius: 50%;
+            margin-left: 4px;
+            animation: logoPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            box-shadow: 0 0 0 0 rgba(255, 0, 110, 0.7);
+        }
+
+        @keyframes logoPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 0, 110, 0.7);
+            }
+            50% {
+                transform: scale(1.2);
+                box-shadow: 0 0 0 8px rgba(255, 0, 110, 0);
+            }
+        }
+
+        /* Scrolled state with smooth transitions */
+        .navbar-ultra.scrolled {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border-bottom: none !important;
+            box-shadow: none !important;
+            padding: 0;
+        }
+
+        .navbar-ultra.scrolled .navbar-container {
+            padding: 25px 50px !important;
+        }
+
+        .navbar-ultra.scrolled .logo-text {
+            max-width: 0;
+            opacity: 0;
+            margin: 0;
+        }
+
+        .navbar-ultra.scrolled .logo-dot {
+            opacity: 0;
+            transform: scale(0);
+        }
+        
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+           9 DOTS TRIGGER - Con Animaciones Mejoradas
+           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+        .nav-trigger-9dots {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: clamp(32px, 4vw, 40px);
+            height: clamp(32px, 4vw, 40px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            position: relative;
+            padding: 0 !important;
+            margin: 0 !important;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-trigger-9dots:hover {
+            transform: scale(1.1);
+        }
+
+        .dots-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(4px, 0.6vw, 6px);
+            width: clamp(32px, 4vw, 40px);
+            height: clamp(32px, 4vw, 40px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .dots-grid span {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff006e, #8338ec) !important;
+            border-radius: 50%;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 2px 8px rgba(255, 0, 110, 0.3);
+        }
+
+        .nav-trigger-9dots:hover .dots-grid span {
+            box-shadow: 0 4px 12px rgba(255, 0, 110, 0.5);
+        }
+
+        /* Active state - Morph into X with smooth animation */
+        .nav-trigger-9dots.is-active .dots-grid {
+            transform: rotate(45deg);
+            gap: 0;
+        }
+        
+        .nav-trigger-9dots.is-active .dots-grid span:nth-child(2),
+        .nav-trigger-9dots.is-active .dots-grid span:nth-child(4),
+        .nav-trigger-9dots.is-active .dots-grid span:nth-child(6),
+        .nav-trigger-9dots.is-active .dots-grid span:nth-child(8) {
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .nav-trigger-9dots.is-active .dots-grid span:nth-child(1),
+        .nav-trigger-9dots.is-active .dots-grid span:nth-child(3),
+        .nav-trigger-9dots.is-active .dots-grid span:nth-child(7),
+        .nav-trigger-9dots.is-active .dots-grid span:nth-child(9) {
+            border-radius: 3px;
+            transform: scale(1.6);
+            background: linear-gradient(135deg, #ff006e, #ff006e) !important;
+        }
+
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+           FULLSCREEN NAVIGATION styles are in:
+           public/css/frontend/fullscreen-menu-premium.css
+           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    </style>
+
 </head>
-<body class="@yield('body-class')">
+<body class="@yield('body-class', '')">
 
-    {{-- Logo flotante --}}
-    <div class="floating-logo" id="floatingLogo">
-        <a href="/" class="brand-logo">
-            <span class="brand-creative">creative</span><span class="brand-up">up</span>
-        </a>
-    </div>
+    {{-- ============================================
+         NAVBAR ULTRA MODERNO - Glass Morphism
+         ============================================ --}}
+    <nav class="navbar-ultra" id="mainNavbar">
+        <div class="navbar-container">
+            {{-- Logo --}}
+            <div class="navbar-logo-wrap">
+                <a href="{{ route('home') }}" class="navbar-logo">
+                    <span class="logo-text">{{ $siteSettings->logo_text }}</span>
+                    <span class="logo-gradient">{{ $siteSettings->logo_gradient_text }}</span>
+                    <div class="logo-dot"></div>
+                </a>
+            </div>
 
-    {{-- Botón de menú flotante --}}
-    <button class="floating-menu-btn" id="menuTrigger" aria-label="Abrir menú">
-        <span class="menu-dots">
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-        </span>
-        <span class="menu-close">
-            <span class="close-line"></span>
-            <span class="close-line"></span>
-        </span>
-    </button>
+            {{-- Fullscreen Nav Trigger (9 Dots) --}}
+            <div class="navbar-dots-wrap">
+                <button class="nav-trigger-9dots" id="fsNavTrigger" aria-label="Abrir Menú">
+                    <div class="dots-grid">
+                        <span></span><span></span><span></span>
+                        <span></span><span></span><span></span>
+                        <span></span><span></span><span></span>
+                    </div>
+                </button>
+            </div>
+        </div>
 
-    {{-- Menú Fullscreen Premium --}}
-    <div class="fullscreen-menu" id="fullscreenMenu">
-        <div class="menu-backdrop"></div>
-        
-        {{-- SVG Gradients Definition --}}
-        <svg width="0" height="0" style="position: absolute;">
-            <defs>
-                <linearGradient id="nav-arrow-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#5e17eb;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#e870c2;stop-opacity:1" />
-                </linearGradient>
-            </defs>
-        </svg>
-        
-        <div class="menu-wrapper">
-            <div class="menu-container">
-                {{-- Navegación Principal --}}
-                <nav class="menu-nav">
-                    <ul class="nav-list">
-                        <li class="nav-item" style="--delay: 0">
-                            <a href="{{ route('home') }}" class="nav-link">
-                                <span class="nav-number">01</span>
-                                <span class="nav-text" data-text="Inicio">Inicio</span>
-                                <span class="nav-icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    <svg class="arrow-gradient" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="url(#nav-arrow-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </span>
-                            </a>
-                        </li>
-                        <li class="nav-item" style="--delay: 1">
-                            <a href="{{ route('services.index') }}" class="nav-link">
-                                <span class="nav-number">02</span>
-                                <span class="nav-text" data-text="Servicios">Servicios</span>
-                                <span class="nav-icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    <svg class="arrow-gradient" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="url(#nav-arrow-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </span>
-                            </a>
-                        </li>
-                        <li class="nav-item" style="--delay: 2">
-                            <a href="{{ route('projects.index') }}" class="nav-link">
-                                <span class="nav-number">03</span>
-                                <span class="nav-text" data-text="Proyectos">Proyectos</span>
-                                <span class="nav-icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    <svg class="arrow-gradient" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="url(#nav-arrow-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </span>
-                            </a>
-                        </li>
-                        <li class="nav-item" style="--delay: 3">
-                            <a href="{{ route('blog.index') }}" class="nav-link">
-                                <span class="nav-number">04</span>
-                                <span class="nav-text" data-text="Blog">Blog</span>
-                                <span class="nav-icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    <svg class="arrow-gradient" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="url(#nav-arrow-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </span>
-                            </a>
-                        </li>
-                        <li class="nav-item" style="--delay: 4">
-                            <a href="{{ route('contact.index') }}" class="nav-link">
-                                <span class="nav-number">05</span>
-                                <span class="nav-text" data-text="Contacto">Contacto</span>
-                                <span class="nav-icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    <svg class="arrow-gradient" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M5 12h14m0 0l-7-7m7 7l-7 7" stroke="url(#nav-arrow-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+        {{-- Mobile Menu Overlay --}}
+        <div class="navbar-mobile-overlay" id="mobileOverlay">
+            <div class="mobile-menu">
+                <div class="mobile-menu-header">
+                    <a href="{{ route('home') }}" class="mobile-logo">
+                        <span class="logo-text">{{ $siteSettings->logo_text }}</span>
+                        <span class="logo-gradient">{{ $siteSettings->logo_gradient_text }}</span>
+                    </a>
+                    <button class="mobile-close" id="mobileClose">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 6L6 18M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
                 
-                {{-- Sección Secundaria --}}
-                <div class="menu-secondary">
-                    {{-- CTA Card --}}
-                    <div class="menu-cta" style="--delay: 5">
-                        <div class="cta-badge">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M8 1L10 5.5L14.5 6L10.5 9.5L11.5 14L8 11.5L4.5 14L5.5 9.5L1.5 6L6 5.5L8 1Z" fill="currentColor"/>
-                            </svg>
-                            Consultoría Gratuita
-                        </div>
-                        <h3 class="cta-title">¿Listo para Crecer?</h3>
-                        <p class="cta-desc">Conversemos sobre tu proyecto y descubre cómo podemos ayudarte</p>
-                        <a href="{{ route('contact.index') }}" class="cta-button">
-                            Iniciar Proyecto
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M4 10h12m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                <nav class="mobile-nav">
+                    <a href="{{ route('home') }}" class="mobile-link {{ request()->routeIs('home') ? 'active' : '' }}">
+                        <span class="link-number">01</span>
+                        <span class="link-text">Inicio</span>
+                        <span class="link-arrow">â†’</span>
+                    </a>
+                    <a href="{{ route('services.index') }}" class="mobile-link {{ request()->routeIs('services.*') ? 'active' : '' }}">
+                        <span class="link-number">02</span>
+                        <span class="link-text">Servicios</span>
+                        <span class="link-arrow">â†’</span>
+                    </a>
+                    <a href="{{ route('projects.index') }}" class="mobile-link {{ request()->routeIs('projects.*') ? 'active' : '' }}">
+                        <span class="link-number">03</span>
+                        <span class="link-text">Portafolio</span>
+                        <span class="link-arrow">â†’</span>
+                    </a>
+                    <a href="{{ route('blog.index') }}" class="mobile-link {{ request()->routeIs('blog.*') ? 'active' : '' }}">
+                        <span class="link-number">04</span>
+                        <span class="link-text">Blog</span>
+                        <span class="link-arrow">â†’</span>
+                    </a>
+                    <a href="{{ route('contact.index') }}" class="mobile-link {{ request()->routeIs('contact.*') ? 'active' : '' }}">
+                        <span class="link-number">05</span>
+                        <span class="link-text">Contacto</span>
+                        <span class="link-arrow">â†’</span>
+                    </a>
+                </nav>
+
+                <div class="mobile-footer">
+                    <div class="mobile-contact">
+                        <a href="mailto:{{ $siteSettings->email }}" class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>{{ $siteSettings->email }}</span>
+                        </a>
+                        <a href="tel:{{ $siteSettings->phone }}" class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>{{ $siteSettings->phone }}</span>
                         </a>
                     </div>
-                    
-                    {{-- Stats --}}
-                    <div class="menu-stats" style="--delay: 6">
-                        <div class="stat-item">
-                            <div class="stat-value">150+</div>
-                            <div class="stat-label">Proyectos</div>
-                        </div>
-                        <div class="stat-divider"></div>
-                        <div class="stat-item">
-                            <div class="stat-value">95%</div>
-                            <div class="stat-label">Satisfacción</div>
-                        </div>
-                        <div class="stat-divider"></div>
-                        <div class="stat-item">
-                            <div class="stat-value">10+</div>
-                            <div class="stat-label">Años</div>
+                    <div class="footer-social" style="margin-top: 1rem;">
+                        @if($siteSettings->facebook_url && $siteSettings->facebook_url !== '#')
+                            <a href="{{ $siteSettings->facebook_url }}" target="_blank" class="social-btn social-facebook" aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        @endif
+                        @if($siteSettings->instagram_url && $siteSettings->instagram_url !== '#')
+                            <a href="{{ $siteSettings->instagram_url }}" target="_blank" class="social-btn social-instagram" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        @endif
+                        @if($siteSettings->linkedin_url && $siteSettings->linkedin_url !== '#')
+                            <a href="{{ $siteSettings->linkedin_url }}" target="_blank" class="social-btn social-linkedin" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        @endif
+                        @if($siteSettings->twitter_url && $siteSettings->twitter_url !== '#')
+                            <a href="{{ $siteSettings->twitter_url }}" target="_blank" class="social-btn social-twitter" aria-label="Twitter">
+                                <i class="fab fa-x-twitter"></i>
+                            </a>
+                        @endif
+                        @if($siteSettings->github_url && $siteSettings->github_url !== '#')
+                            <a href="{{ $siteSettings->github_url }}" target="_blank" class="social-btn social-github" aria-label="GitHub">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    {{-- ============================================
+         FULLSCREEN NAVIGATION - ULTRA PREMIUM WITH ICONS
+         ============================================ --}}
+    <div class="fs-navigation" id="fsNavigation">
+        
+        {{-- Botón Cerrar --}}
+        <button class="fs-close-btn" id="fsCloseBtn" aria-label="Cerrar Menú">
+            <span class="close-line"></span>
+            <span class="close-line"></span>
+        </button>
+
+        <div class="fs-nav-container">
+            {{-- Columna Izquierda: Navegación con Iconos e Interactividad --}}
+            <nav class="main-navigation">
+                <a href="{{ route('home') }}" class="nav-link" 
+                   data-preview-img="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop"
+                   data-preview-title="CreativeUp Studio"
+                   data-preview-desc="Donde las ideas se convierten en experiencias digitales premium y software a medida.">
+                    <span class="nav-number">01</span>
+                    <span class="nav-icon"><i class="fas fa-home"></i></span>
+                    <span class="nav-text">Inicio</span>
+                    <span class="nav-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </a>
+                <a href="{{ route('services.index') }}" class="nav-link" 
+                   data-preview-img="https://images.unsplash.com/photo-1542744094-3a31f103e35f?q=80&w=800&auto=format&fit=crop"
+                   data-preview-title="Nuestras Soluciones"
+                   data-preview-desc="Diseño web a medida, desarrollo de software premium, e-commerce y marketing digital.">
+                    <span class="nav-number">02</span>
+                    <span class="nav-icon"><i class="fas fa-layer-group"></i></span>
+                    <span class="nav-text">Servicios</span>
+                    <span class="nav-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </a>
+                <a href="{{ route('projects.index') }}" class="nav-link" 
+                   data-preview-img="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=800&auto=format&fit=crop"
+                   data-preview-title="Casos de Éxito"
+                   data-preview-desc="Explora nuestra galería de proyectos premium desarrollados para impulsar marcas a nivel global.">
+                    <span class="nav-number">03</span>
+                    <span class="nav-icon"><i class="fas fa-briefcase"></i></span>
+                    <span class="nav-text">Portafolio</span>
+                    <span class="nav-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </a>
+                <a href="{{ route('blog.index') }}" class="nav-link" 
+                   data-preview-img="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=800&auto=format&fit=crop"
+                   data-preview-title="Ideas y Tendencias"
+                   data-preview-desc="Artículos, tutoriales e insights sobre tecnología, diseño UI/UX y el futuro del desarrollo web.">
+                    <span class="nav-number">04</span>
+                    <span class="nav-icon"><i class="fas fa-newspaper"></i></span>
+                    <span class="nav-text">Blog</span>
+                    <span class="nav-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </a>
+                <a href="{{ route('contact.index') }}" class="nav-link" 
+                   data-preview-img="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop"
+                   data-preview-title="Inicia tu Proyecto"
+                   data-preview-desc="Hablemos sobre tu visión. Nuestro equipo de expertos está listo para darle vida a tus ideas digitales.">
+                    <span class="nav-number">05</span>
+                    <span class="nav-icon"><i class="fas fa-paper-plane"></i></span>
+                    <span class="nav-text">Contacto</span>
+                    <span class="nav-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </a>
+            </nav>
+
+            {{-- Columna Derecha: Tarjeta de Visualización Interactiva e Información --}}
+            <div class="fs-nav-right">
+                {{-- Tarjeta de Previsualización Interactiva (Hidden on Mobile/Tablet) --}}
+                <div class="fs-nav-preview-card">
+                    <div class="fs-nav-preview-img-wrap">
+                        <div class="fs-nav-preview-img" id="fsNavPreviewImg" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop');"></div>
+                    </div>
+                    <div class="fs-nav-preview-content">
+                        <span class="fs-nav-preview-badge" id="fsNavPreviewBadge">CreativeUp</span>
+                        <h4 class="fs-nav-preview-title" id="fsNavPreviewTitle">CreativeUp Studio</h4>
+                        <p class="fs-nav-preview-desc" id="fsNavPreviewDesc">Donde las ideas se convierten en experiencias digitales premium y software a medida.</p>
+                    </div>
+                </div>
+
+                {{-- Grid de Información de Contacto (Modern Cards) --}}
+                <div class="fs-nav-info-grid">
+                    {{-- Tarjeta Hablemos --}}
+                    <div class="info-card">
+                        <span class="info-card-title"><i class="fas fa-comments"></i> Hablemos</span>
+                        <div class="info-card-links">
+                            <a href="mailto:{{ $siteSettings->email }}">
+                                <i class="fas fa-envelope"></i>
+                                <span>{{ $siteSettings->email }}</span>
+                            </a>
+                            <a href="tel:{{ $siteSettings->phone }}">
+                                <i class="fas fa-phone-alt"></i>
+                                <span>{{ $siteSettings->phone }}</span>
+                            </a>
+                            <a href="{{ $siteSettings->whatsapp_url }}" target="_blank" class="whatsapp-badge">
+                                <i class="fab fa-whatsapp"></i>
+                                <span>WhatsApp Directo</span>
+                            </a>
                         </div>
                     </div>
-                    
-                    {{-- Contacto y Social --}}
-                    <div class="menu-footer" style="--delay: 7">
-                        <div class="menu-contact">
-                            <a href="mailto:hola@creativeup.com" class="contact-link">
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                    <path d="M3 4h14a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V5a1 1 0 011-1z" stroke="currentColor" stroke-width="1.5"/>
-                                    <path d="M18 5l-8 6-8-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                hola@creativeup.com
-                            </a>
-                            <a href="tel:+1234567890" class="contact-link">
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" stroke="currentColor" stroke-width="1.5"/>
-                                </svg>
-                                +1 (234) 567-890
+
+                    {{-- Tarjeta Visítanos --}}
+                    <div class="info-card">
+                        <span class="info-card-title"><i class="fas fa-map-marker-alt"></i> Visítanos</span>
+                        <div class="info-card-content">
+                            <p class="address-text">
+                                {!! nl2br(e($siteSettings->address)) !!}
+                            </p>
+                            <a href="{{ $siteSettings->maps_url }}" target="_blank" class="direction-btn">
+                                <span>Cómo llegar</span>
+                                <i class="fas fa-arrow-right"></i>
                             </a>
                         </div>
-                        
-                        <div class="menu-social">
-                            <span class="social-label">Síguenos</span>
-                            <div class="social-links">
-                                <a href="#" class="social-link" aria-label="Facebook">
-                                    <i class="fa-brands fa-facebook-f"></i>
-                                </a>
-                                <a href="#" class="social-link" aria-label="Instagram">
-                                    <i class="fa-brands fa-instagram"></i>
-                                </a>
-                                <a href="#" class="social-link" aria-label="LinkedIn">
-                                    <i class="fa-brands fa-linkedin-in"></i>
-                                </a>
-                                <a href="#" class="social-link" aria-label="Twitter">
-                                    <i class="fa-brands fa-twitter"></i>
-                                </a>
-                            </div>
-                        </div>
+                    </div>
+                </div>
+
+                {{-- Redes Sociales Sincronizadas (Idénticas al footer) --}}
+                <div class="fs-nav-social-section">
+                    <span class="social-section-title">Síguenos</span>
+                    <div class="footer-social">
+                        @if($siteSettings->facebook_url && $siteSettings->facebook_url !== '#')
+                            <a href="{{ $siteSettings->facebook_url }}" target="_blank" class="social-btn social-facebook" aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        @endif
+                        @if($siteSettings->instagram_url && $siteSettings->instagram_url !== '#')
+                            <a href="{{ $siteSettings->instagram_url }}" target="_blank" class="social-btn social-instagram" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        @endif
+                        @if($siteSettings->linkedin_url && $siteSettings->linkedin_url !== '#')
+                            <a href="{{ $siteSettings->linkedin_url }}" target="_blank" class="social-btn social-linkedin" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        @endif
+                        @if($siteSettings->twitter_url && $siteSettings->twitter_url !== '#')
+                            <a href="{{ $siteSettings->twitter_url }}" target="_blank" class="social-btn social-twitter" aria-label="Twitter">
+                                <i class="fab fa-x-twitter"></i>
+                            </a>
+                        @endif
+                        @if($siteSettings->github_url && $siteSettings->github_url !== '#')
+                            <a href="{{ $siteSettings->github_url }}" target="_blank" class="social-btn social-github" aria-label="GitHub">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <main class="main-content min-h-screen">
+    {{-- Main Content --}}
+    <main class="main-content">
         @yield('content')
     </main>
 
-    <!-- Chat Popup -->
-    <div id="msgChat" class="chat-popup">
-        {{-- Header del Chat --}}
-        <div class="chat-popup-header">
-            <div class="chat-header-content">
-                <div class="chat-header-avatar">
-                    <span class="chat-avatar-gradient">UP</span>
-                    <span class="chat-status-indicator"></span>
+    {{-- ============================================
+         FOOTER ULTRA MODERNO - Gradient Background
+         ============================================ --}}
+    <footer class="footer-ultra footer-light-theme">
+        <div class="footer-bg">
+            <div class="footer-gradient-orb orb-1"></div>
+            <div class="footer-gradient-orb orb-2"></div>
+            <div class="footer-grid-pattern"></div>
+        </div>
+
+        <div class="container">
+            {{-- Footer CTA Banner (Tarjeta flotante premium) --}}
+            <div class="footer-cta-card" data-aos="fade-up" data-aos-once="true">
+                <div class="footer-cta-content">
+                    <span class="footer-cta-subtitle">¿Tienes una gran idea en mente?</span>
+                    <h3 class="footer-cta-title">Hagámosla realidad juntos</h3>
                 </div>
-                <div class="chat-header-info">
-                    <h4 class="chat-header-title">CreativeUP</h4>
-                    <p class="chat-header-status">
-                        <span class="status-dot"></span>
-                        En línea · Respuesta inmediata
-                    </p>
+                <div class="footer-cta-action">
+                    <a href="{{ route('contact.index') }}" class="footer-cta-btn">
+                        <span>Iniciar Proyecto</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
-            <button id="closeMsgChat" class="chat-header-close" aria-label="Cerrar chat">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 6L6 18M6 6l12 12"/>
+
+            {{-- Footer Top --}}
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="{{ route('home') }}" class="footer-logo">
+                        <span class="logo-text">{{ $siteSettings->logo_text }}</span>
+                        <span class="logo-gradient">{{ $siteSettings->logo_gradient_text }}</span>
+                    </a>
+                    <p class="footer-tagline">
+                        {{ $siteSettings->footer_tagline }}
+                    </p>
+                    
+                    {{-- Status Badge & Reloj Corporativo --}}
+                    <div class="footer-meta-widgets">
+                        <div class="footer-status-badge">
+                            <span class="status-dot"></span>
+                            <span class="status-text">{{ $siteSettings->status_text }}</span>
+                        </div>
+                        <div class="footer-clock" id="footerClockWidget" title="Hora local de nuestra oficina principal">
+                            <i class="fa-regular fa-clock"></i>
+                            <span id="footerClockTime">Cargando hora...</span>
+                        </div>
+                    </div>
+
+                    <div class="footer-social">
+                        @if($siteSettings->facebook_url && $siteSettings->facebook_url !== '#')
+                            <a href="{{ $siteSettings->facebook_url }}" target="_blank" class="social-btn social-facebook" aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        @endif
+                        @if($siteSettings->instagram_url && $siteSettings->instagram_url !== '#')
+                            <a href="{{ $siteSettings->instagram_url }}" target="_blank" class="social-btn social-instagram" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        @endif
+                        @if($siteSettings->linkedin_url && $siteSettings->linkedin_url !== '#')
+                            <a href="{{ $siteSettings->linkedin_url }}" target="_blank" class="social-btn social-linkedin" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        @endif
+                        @if($siteSettings->twitter_url && $siteSettings->twitter_url !== '#')
+                            <a href="{{ $siteSettings->twitter_url }}" target="_blank" class="social-btn social-twitter" aria-label="Twitter">
+                                <i class="fab fa-x-twitter"></i>
+                            </a>
+                        @endif
+                        @if($siteSettings->github_url && $siteSettings->github_url !== '#')
+                            <a href="{{ $siteSettings->github_url }}" target="_blank" class="social-btn social-github" aria-label="GitHub">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="footer-links-grid">
+                    <div class="footer-column">
+                        <h4 class="column-title">Servicios</h4>
+                        <ul class="column-list">
+                            <li><a href="{{ route('services.index') }}">Diseño Web Premium</a></li>
+                            <li><a href="{{ route('services.index') }}">Desarrollo de Software</a></li>
+                            <li><a href="{{ route('services.index') }}">Branding Corporativo</a></li>
+                            <li><a href="{{ route('services.index') }}">Marketing Digital</a></li>
+                            <li><a href="{{ route('services.index') }}">SEO y Optimización</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4 class="column-title">Empresa</h4>
+                        <ul class="column-list">
+                            <li><a href="{{ route('home') }}">Sobre Nosotros</a></li>
+                            <li><a href="{{ route('projects.index') }}">Portafolio</a></li>
+                            <li><a href="{{ route('blog.index') }}">Blog y Noticias</a></li>
+                            <li><a href="{{ route('contact.index') }}">Contacto Directo</a></li>
+                            <li><a href="#">Carreras</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4 class="column-title">Contacto</h4>
+                        <ul class="column-contact-list">
+                            <li>
+                                <i class="fa-solid fa-envelope"></i>
+                                <a href="mailto:{{ $siteSettings->email }}">{{ $siteSettings->email }}</a>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-phone"></i>
+                                <a href="tel:{{ $siteSettings->phone }}">{{ $siteSettings->phone }}</a>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>{{ $siteSettings->address }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Footer Newsletter Showcase --}}
+            @if($siteSettings->show_newsletter)
+            <div class="footer-newsletter-showcase" data-aos="fade-up" data-aos-once="true">
+                <div class="newsletter-showcase-info">
+                    <span class="newsletter-showcase-badge">Boletín Mensual</span>
+                    <h3 class="newsletter-showcase-title">Suscríbete a nuestro boletín</h3>
+                    <p class="newsletter-showcase-desc">Recibe ideas frescas sobre diseño, código y tendencias digitales directamente en tu bandeja.</p>
+                </div>
+                <div class="newsletter-showcase-action">
+                    <form class="newsletter-form-minimal-modern" id="newsletterForm" action="{{ route('newsletter.subscribe') }}" method="POST">
+                        @csrf
+                        <div class="form-group-modern">
+                            <input type="email" name="email" placeholder="Escribe tu correo electrónico..." class="newsletter-input-modern" required aria-label="Tu correo electrónico">
+                            <button type="submit" class="newsletter-btn-modern" aria-label="Suscribirse">
+                                <span>Suscribirse</span>
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M4 10h12m0 0l-5-5m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            @endif
+
+            {{-- Footer Bottom --}}
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <p>&copy; {{ date('Y') }} CreativeUp. Todos los derechos reservados. Creatividad y Tecnología para tu negocio.</p>
+                </div>
+                <div class="footer-legal">
+                    <a href="#">Privacidad</a>
+                    <span class="separator">•</span>
+                    <a href="#">Términos</a>
+                    <span class="separator">•</span>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+        
+        {{-- Reloj Corporativo Live Script --}}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                function updateFooterClock() {
+                    const timeEl = document.getElementById('footerClockTime');
+                    if (!timeEl) return;
+                    
+                    const options = {
+                        timeZone: '{{ $siteSettings->timezone }}',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: true
+                    };
+                    
+                    const formatter = new Intl.DateTimeFormat('en-US', options);
+                    const parts = formatter.formatToParts(new Date());
+                    
+                    let hour = '', minute = '', second = '', dayPeriod = '';
+                    for (const part of parts) {
+                        if (part.type === 'hour') hour = part.value;
+                        else if (part.type === 'minute') minute = part.value;
+                        else if (part.type === 'second') second = part.value;
+                        else if (part.type === 'dayPeriod') dayPeriod = part.value;
+                    }
+                    
+                    const tzName = '{{ $siteSettings->timezone }}'.split('/').pop().replace('_', ' ');
+                    timeEl.textContent = `${hour}:${minute}:${second} ${dayPeriod.toUpperCase()} (${tzName})`;
+                }
+                
+                updateFooterClock();
+                setInterval(updateFooterClock, 1000);
+            });
+        </script>
+    </footer>
+
+    {{-- ============================================
+         CHAT WIDGET FLOTANTE - Rediseñado v2.0
+         ============================================ --}}
+    @if($siteSettings->show_chat_widget)
+    <div class="chat-widget" id="chatWidget" data-turbo-permanent>
+        {{-- Header --}}
+        <div class="chat-header">
+            <div class="chat-avatar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 5C13.66 5 15 6.34 15 8C15 9.66 13.66 11 12 11C10.34 11 9 9.66 9 8C9 6.34 10.34 5 12 5ZM12 19.2C9.5 19.2 7.29 17.92 6 15.98C6.03 13.99 10 12.9 12 12.9C13.99 12.9 17.97 13.99 18 15.98C16.71 17.92 14.5 19.2 12 19.2Z" fill="white"/>
+                </svg>
+            </div>
+            <div class="chat-info">
+                <h4 class="chat-title">CreativeUp</h4>
+                <p class="chat-status">
+                    <svg width="8" height="8" viewBox="0 0 8 8" style="margin-right: 6px;">
+                        <circle cx="4" cy="4" r="4" fill="#10b981"/>
+                    </svg>
+                    En línea ahora
+                </p>
+            </div>
+            <button class="chat-close" id="chatClose">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
             </button>
         </div>
 
-        {{-- Cuerpo del Chat --}}
-        <div class="chat-popup-body" id="chatBody">
-            <div class="chat-welcome-card">
-                <div class="welcome-icon">👋</div>
-                <h3 class="welcome-title">¡Hola! Bienvenido</h3>
-                <p class="welcome-text">Soy el asistente de CreativeUP. Estoy aquí para ayudarte con cualquier consulta sobre nuestros servicios.</p>
+        {{-- Body --}}
+        <div class="chat-body" id="chatBody">
+            <div class="chat-welcome">
+                <div class="welcome-icon">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <path d="M20 3.33334C10.8 3.33334 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6667 20 36.6667C29.2 36.6667 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33334 20 3.33334ZM20 8.33334C22.7667 8.33334 25 10.5667 25 13.3333C25 16.1 22.7667 18.3333 20 18.3333C17.2334 18.3333 15 16.1 15 13.3333C15 10.5667 17.2334 8.33334 20 8.33334ZM20 32C15.8334 32 12.15 29.9 10 26.6333C10.05 23.3 16.6667 21.5 20 21.5C23.3167 21.5 29.95 23.3 30 26.6333C27.85 29.9 24.1667 32 20 32Z" fill="white"/>
+                    </svg>
+                </div>
+                <h3>¡Hola! Bienvenido</h3>
+                <p>¿En qué podemos ayudarte hoy?</p>
             </div>
             
-            <div class="chat-message chat-message-bot">
-                <div class="chat-message-avatar">UP</div>
-                <div class="chat-message-content">
-                    <div class="chat-bubble chat-bubble-bot">
-                        ¿En qué puedo ayudarte hoy? 😊
+            <div class="chat-message bot">
+                <div class="message-avatar">UP</div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        Hola! Soy el asistente de CreativeUp. Estoy aquí para ayudarte con cualquier consulta.
                     </div>
-                    <span class="chat-message-time">Ahora</span>
                 </div>
             </div>
         </div>
 
-        {{-- Área de Formularios --}}
-        <div class="chat-popup-footer" id="chatFormArea">
-            {{-- Paso 1: Nombre --}}
-            <div class="chat-input-wrapper" id="chatStep1">
-                <div class="chat-step-indicator">
-                    <span class="step-number">1/3</span>
-                    <span class="step-label">¿Cómo te llamas?</span>
-                </div>
-                <form class="chat-input-form" id="chatFormName">
-                    <input 
-                        type="text" 
-                        id="chatName" 
-                        placeholder="Escribe tu nombre aquí..." 
-                        class="chat-input" 
-                        required 
-                        autocomplete="off"
-                    >
-                    <button type="submit" class="chat-send-btn" aria-label="Enviar">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </form>
-            </div>
-
-            {{-- Paso 2: Email --}}
-            <div class="chat-input-wrapper" id="chatStep2" style="display:none">
-                <div class="chat-step-indicator">
-                    <span class="step-number">2/3</span>
-                    <span class="step-label">¿Cuál es tu email?</span>
-                </div>
-                <form class="chat-input-form" id="chatFormEmail">
-                    <input 
-                        type="email" 
-                        id="chatEmail" 
-                        placeholder="tu@email.com" 
-                        class="chat-input" 
-                        required 
-                        autocomplete="off"
-                    >
-                    <button type="submit" class="chat-send-btn" aria-label="Enviar">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </form>
-            </div>
-
-            {{-- Paso 3: Mensaje --}}
-            <div class="chat-input-wrapper" id="chatStep3" style="display:none">
-                <div class="chat-step-indicator">
-                    <span class="step-number">3/3</span>
-                    <span class="step-label">¿En qué podemos ayudarte?</span>
-                </div>
-                <form class="chat-input-form" id="chatFormMsg">
-                    <input 
-                        type="text" 
-                        id="chatMsg" 
-                        placeholder="Describe tu proyecto o consulta..." 
-                        class="chat-input" 
-                        required 
-                        autocomplete="off"
-                    >
-                    <button type="submit" class="chat-send-btn" aria-label="Enviar">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </form>
-            </div>
-
-            {{-- Paso Final: Confirmación --}}
-            <div class="chat-success-state" id="chatStepDone" style="display:none">
-                <div class="success-icon">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                        <path d="M8 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        {{-- Footer --}}
+        <div class="chat-footer">
+            <form class="chat-form" id="chatForm">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Escribe tu mensaje..." autocomplete="off">
+                <button type="submit" class="chat-send">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M18 2L9 11M18 2L12 18L9 11L2 8L18 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                </div>
-                <h4 class="success-title">¡Mensaje Enviado!</h4>
-                <p class="success-text">Nos pondremos en contacto contigo pronto.</p>
-            </div>
-
-            {{-- Disclaimer --}}
-            <div class="chat-disclaimer">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                </button>
+            </form>
+            <p class="chat-disclaimer">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" style="margin-right: 6px;">
+                    <path d="M6 0.5C3.1 0.5 0.75 2.85 0.75 5.75C0.75 8.65 3.1 11 6 11C8.9 11 11.25 8.65 11.25 5.75C11.25 2.85 8.9 0.5 6 0.5ZM6 2C6.69 2 7.25 2.56 7.25 3.25C7.25 3.94 6.69 4.5 6 4.5C5.31 4.5 4.75 3.94 4.75 3.25C4.75 2.56 5.31 2 6 2ZM7.5 8.5H4.5V7.75H5.25V5.75H4.75V5H6.75V7.75H7.5V8.5Z"/>
                 </svg>
-                <span>Conversación segura y privada</span>
-            </div>
+                Conversación segura y privada
+            </p>
         </div>
     </div>
 
-    <!-- Botón Flotante del Chat -->
-    <button id="floatingMsgBtn" class="chat-floating-btn" aria-label="Abrir chat">
-        <span class="chat-btn-icon chat-btn-open">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    {{-- Botón Flotante --}}
+    <button class="chat-trigger" id="chatTrigger" data-turbo-permanent>
+        <span class="trigger-icon trigger-icon-open">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M24.5 14C24.5 19.799 19.799 24.5 14 24.5C12.0326 24.5 10.1968 23.9635 8.63245 23.0368L3.5 24.5L4.96325 19.3675C4.03654 17.8032 3.5 15.9674 3.5 14C3.5 8.20101 8.20101 3.5 14 3.5C19.799 3.5 24.5 8.20101 24.5 14Z" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="10" cy="14" r="1.5" fill="white"/>
+                <circle cx="14" cy="14" r="1.5" fill="white"/>
+                <circle cx="18" cy="14" r="1.5" fill="white"/>
             </svg>
         </span>
-        <span class="chat-btn-icon chat-btn-close">
+        <span class="trigger-icon trigger-icon-close">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
             </svg>
         </span>
-        <span class="chat-notification-badge" id="chatBadge">1</span>
+        <span class="trigger-badge" style="display: none;">1</span>
+    </button>
+    @endif
+
+    {{-- Scroll to Top Button --}}
+    <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 15V5m0 0l-5 5m5-5l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
     </button>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const msgChat = document.getElementById('msgChat');
-        const closeMsgChat = document.getElementById('closeMsgChat');
-        const floatingMsgBtn = document.getElementById('floatingMsgBtn');
-        const chatBody = document.getElementById('chatBody');
-        const chatBadge = document.getElementById('chatBadge');
+    {{-- AOS Animation Library --}}
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-        let chatUserName = '';
-        let chatUserEmail = '';
-        let chatOpen = false;
-
-        const STORAGE_KEY = 'creativeup_chat';
-
-        // ── Persistencia ──
-        function saveChatState() {
-            const state = {
-                name: chatUserName,
-                email: chatUserEmail,
-                step: getCurrentStep(),
-                messages: getChatMessages(),
-                completed: document.getElementById('chatStepDone').style.display !== 'none',
-                badgeHidden: chatBadge.style.display === 'none',
-                timestamp: Date.now()
-            };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        }
-
-        function loadChatState() {
-            try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (!raw) return null;
-                const state = JSON.parse(raw);
-                // Expirar después de 24 horas
-                if (Date.now() - state.timestamp > 24 * 60 * 60 * 1000) {
-                    localStorage.removeItem(STORAGE_KEY);
-                    return null;
-                }
-                return state;
-            } catch(e) {
-                return null;
-            }
-        }
-
-        function getCurrentStep() {
-            if (document.getElementById('chatStepDone').style.display !== 'none') return 'done';
-            if (document.getElementById('chatStep3').style.display !== 'none') return 3;
-            if (document.getElementById('chatStep2').style.display !== 'none') return 2;
-            return 1;
-        }
-
-        function getChatMessages() {
-            const msgs = [];
-            chatBody.querySelectorAll('.chat-message').forEach(function(el) {
-                if (el.classList.contains('chat-typing-wrapper')) return;
-                const type = el.classList.contains('chat-message-user') ? 'user' : 'bot';
-                const bubble = el.querySelector('.chat-bubble');
-                if (bubble) msgs.push({ type: type, html: bubble.innerHTML });
-            });
-            return msgs;
-        }
-
-        // Scroll al fondo del chat
-        function scrollChat() {
-            setTimeout(function() { chatBody.scrollTop = chatBody.scrollHeight; }, 100);
-        }
-
-        // Agregar burbuja al chat
-        function addBubble(text, type, skipSave) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'chat-message chat-message-' + type;
-            if (type === 'bot') {
-                wrapper.innerHTML = '<div class="chat-message-avatar">UP</div><div class="chat-message-content"><div class="chat-bubble chat-bubble-bot">' + text + '</div><span class="chat-message-time">Ahora</span></div>';
-            } else {
-                wrapper.innerHTML = '<div class="chat-message-content"><div class="chat-bubble chat-bubble-user">' + text + '</div><span class="chat-message-time">Ahora</span></div>';
-            }
-            chatBody.appendChild(wrapper);
-            scrollChat();
-            if (!skipSave) saveChatState();
-        }
-
-        // Mostrar typing indicator
-        function showTyping() {
-            const typing = document.createElement('div');
-            typing.className = 'chat-message chat-message-bot chat-typing-indicator';
-            typing.innerHTML = '<div class="chat-message-avatar">UP</div><div class="chat-message-content"><div class="chat-bubble chat-bubble-bot chat-typing-dots"><span></span><span></span><span></span></div></div>';
-            chatBody.appendChild(typing);
-            scrollChat();
-            return typing;
-        }
-
-        // Bot responde con delay
-        function botReply(text, delay) {
-            delay = delay || 1200;
-            var typing = showTyping();
-            return new Promise(function(resolve) {
-                setTimeout(function() {
-                    typing.remove();
-                    addBubble(text, 'bot');
-                    resolve();
-                }, delay);
-            });
-        }
-
-        // Abrir chat
-        function openChat() {
-            msgChat.classList.add('chat-popup-active');
-            floatingMsgBtn.classList.add('btn-active');
-            chatBadge.style.display = 'none';
-            chatOpen = true;
-            scrollChat();
-            saveChatState();
-        }
-
-        // Cerrar chat
-        function closeChat() {
-            msgChat.classList.remove('chat-popup-active');
-            floatingMsgBtn.classList.remove('btn-active');
-            chatOpen = false;
-        }
-
-        // Toggle chat
-        floatingMsgBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (chatOpen) { closeChat(); } else { openChat(); }
-        });
-
-        closeMsgChat.addEventListener('click', function(e) {
-            e.preventDefault();
-            closeChat();
-        });
-
-        // Cerrar con Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && chatOpen) closeChat();
-        });
-
-        // Paso 1: Nombre
-        document.getElementById('chatFormName').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var name = document.getElementById('chatName').value.trim();
-            if (!name) return;
-            chatUserName = name;
-            addBubble(name, 'user');
-            document.getElementById('chatStep1').style.display = 'none';
-            botReply('¡Encantados, ' + name + '! 😊 ¿Cuál es tu email para poder contactarte?').then(function() {
-                document.getElementById('chatStep2').style.display = 'block';
-                document.getElementById('chatEmail').focus();
-                scrollChat();
-                saveChatState();
-            });
-        });
-
-        // Paso 2: Email
-        document.getElementById('chatFormEmail').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var email = document.getElementById('chatEmail').value.trim();
-            if (!email) return;
-            chatUserEmail = email;
-            addBubble(email, 'user');
-            document.getElementById('chatStep2').style.display = 'none';
-            botReply('Perfecto. Cuéntanos, ¿en qué podemos ayudarte? 💡').then(function() {
-                document.getElementById('chatStep3').style.display = 'block';
-                document.getElementById('chatMsg').focus();
-                scrollChat();
-                saveChatState();
-            });
-        });
-
-        // Paso 3: Mensaje (envío AJAX)
-        document.getElementById('chatFormMsg').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var msg = document.getElementById('chatMsg').value.trim();
-            if (!msg) return;
-            addBubble(msg, 'user');
-            document.getElementById('chatStep3').style.display = 'none';
-
-            var typing = showTyping();
-
-            fetch('{{ route("chat.store") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: chatUserName,
-                    email: chatUserEmail,
-                    message: msg
-                })
-            })
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                typing.remove();
-                addBubble('¡Gracias, ' + chatUserName + '! 🎉 Hemos recibido tu mensaje. Nuestro equipo te contactará pronto a <strong>' + chatUserEmail + '</strong>.', 'bot');
-                document.getElementById('chatStepDone').style.display = 'flex';
-                scrollChat();
-                saveChatState();
-            })
-            .catch(function(err) {
-                typing.remove();
-                addBubble('¡Gracias, ' + chatUserName + '! Tu mensaje fue recibido. Te contactaremos pronto. 🙌', 'bot');
-                document.getElementById('chatStepDone').style.display = 'flex';
-                scrollChat();
-                saveChatState();
-            });
-        });
-
-        // ── Restaurar estado guardado ──
-        var saved = loadChatState();
-        if (saved) {
-            // Restaurar nombre y email
-            chatUserName = saved.name || '';
-            chatUserEmail = saved.email || '';
-
-            // Restaurar mensajes
-            if (saved.messages && saved.messages.length > 0) {
-                chatBody.innerHTML = '';
-                saved.messages.forEach(function(m) {
-                    var wrapper = document.createElement('div');
-                    wrapper.className = 'chat-message chat-message-' + m.type;
-                    if (m.type === 'bot') {
-                        wrapper.innerHTML = '<div class="chat-avatar">UP</div><div class="chat-bubble">' + m.html + '</div>';
-                    } else {
-                        wrapper.innerHTML = '<div class="chat-bubble">' + m.html + '</div>';
-                    }
-                    chatBody.appendChild(wrapper);
-                });
-            }
-
-            // Restaurar paso
-            document.getElementById('chatStep1').style.display = 'none';
-            document.getElementById('chatStep2').style.display = 'none';
-            document.getElementById('chatStep3').style.display = 'none';
-            document.getElementById('chatStepDone').style.display = 'none';
-
-            if (saved.step === 'done' || saved.completed) {
-                document.getElementById('chatStepDone').style.display = 'flex';
-            } else if (saved.step === 3) {
-                document.getElementById('chatStep3').style.display = 'block';
-            } else if (saved.step === 2) {
-                document.getElementById('chatStep2').style.display = 'block';
-            } else {
-                document.getElementById('chatStep1').style.display = 'block';
-            }
-
-            // Restaurar badge
-            if (saved.badgeHidden) {
-                chatBadge.style.display = 'none';
-            }
-        }
-    });
-    </script>
-
-    <footer class="site-footer">
-        {{-- CTA Banner Superior --}}
-        <div class="footer-cta-banner">
-            <div class="container-custom">
-                <div class="cta-banner-content">
-                    <div class="cta-banner-text">
-                        <span class="cta-banner-label">¿Tienes un proyecto en mente?</span>
-                        <h3 class="cta-banner-title">Hagamos Algo <span class="text-gradient">Increíble</span> Juntos</h3>
-                        <p class="cta-banner-desc">Conversemos sobre cómo podemos ayudarte a alcanzar tus objetivos</p>
-                    </div>
-                    <div class="cta-banner-action">
-                        <a href="{{ route('contact.index') }}" class="btn btn-primary">
-                            Iniciar Proyecto
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M4 10h12m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Contenido Principal del Footer --}}
-        <div class="footer-content">
-            <div class="container-custom">
-                <div class="footer-grid">
-                    {{-- Columna 1: Marca --}}
-                    <div class="footer-brand">
-                        <a href="/" class="footer-logo-link">
-                            <span class="footer-logo-text">creative</span><span class="footer-logo-gradient">up</span>
-                        </a>
-                        <p class="footer-tagline">Transformamos ideas en experiencias digitales que conectan y convierten</p>
-                        
-                        <div class="footer-social-links">
-                            <a href="#" class="social-icon" aria-label="Facebook">
-                                <i class="fa-brands fa-facebook-f"></i>
-                            </a>
-                            <a href="#" class="social-icon" aria-label="Instagram">
-                                <i class="fa-brands fa-instagram"></i>
-                            </a>
-                            <a href="#" class="social-icon" aria-label="LinkedIn">
-                                <i class="fa-brands fa-linkedin-in"></i>
-                            </a>
-                            <a href="#" class="social-icon" aria-label="Twitter">
-                                <i class="fa-brands fa-twitter"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    {{-- Columna 2: Navegación --}}
-                    <div class="footer-column">
-                        <h4 class="footer-title">Navegación</h4>
-                        <ul class="footer-list">
-                            <li><a href="{{ route('home') }}" class="footer-link">Inicio</a></li>
-                            <li><a href="{{ route('services.index') }}" class="footer-link">Servicios</a></li>
-                            <li><a href="{{ route('projects.index') }}" class="footer-link">Proyectos</a></li>
-                            <li><a href="{{ route('blog.index') }}" class="footer-link">Blog</a></li>
-                            <li><a href="{{ route('contact.index') }}" class="footer-link">Contacto</a></li>
-                        </ul>
-                    </div>
-
-                    {{-- Columna 3: Servicios --}}
-                    <div class="footer-column">
-                        <h4 class="footer-title">Servicios</h4>
-                        <ul class="footer-list">
-                            <li><a href="{{ route('services.index') }}" class="footer-link">Desarrollo Web</a></li>
-                            <li><a href="{{ route('services.index') }}" class="footer-link">Diseño UI/UX</a></li>
-                            <li><a href="{{ route('services.index') }}" class="footer-link">Branding</a></li>
-                            <li><a href="{{ route('services.index') }}" class="footer-link">Marketing Digital</a></li>
-                            <li><a href="{{ route('services.index') }}" class="footer-link">SEO</a></li>
-                        </ul>
-                    </div>
-
-                    {{-- Columna 4: Contacto --}}
-                    <div class="footer-column">
-                        <h4 class="footer-title">Contacto</h4>
-                        <ul class="footer-list footer-contact">
-                            <li>
-                                <a href="mailto:hola@creativeup.com" class="footer-contact-link">
-                                    <i class="fa-regular fa-envelope"></i>
-                                    <span>hola@creativeup.com</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="tel:+1234567890" class="footer-contact-link">
-                                    <i class="fa-solid fa-phone"></i>
-                                    <span>+1 (234) 567-890</span>
-                                </a>
-                            </li>
-                            <li>
-                                <span class="footer-contact-link">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                    <span>Ciudad de México, MX</span>
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Barra Inferior --}}
-        <div class="footer-bottom">
-            <div class="container-custom">
-                <div class="footer-bottom-content">
-                    <p class="footer-copyright">
-                        &copy; {{ date('Y') }} CreativeUp. Todos los derechos reservados.
-                    </p>
-                    <div class="footer-legal">
-                        <a href="#" class="footer-legal-link">Política de Privacidad</a>
-                        <span class="footer-separator">·</span>
-                        <a href="#" class="footer-legal-link">Términos de Uso</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Menu Toggle & Logo Scroll Effects
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuTrigger = document.getElementById('menuTrigger');
-            const fullscreenMenu = document.getElementById('fullscreenMenu');
-            const floatingLogo = document.getElementById('floatingLogo');
-            
-            // Toggle Menu
-            if (menuTrigger && fullscreenMenu) {
-                menuTrigger.addEventListener('click', function() {
-                    menuTrigger.classList.toggle('active');
-                    fullscreenMenu.classList.toggle('active');
-                    document.body.style.overflow = fullscreenMenu.classList.contains('active') ? 'hidden' : '';
-                });
-                
-                // Cerrar al hacer click en el backdrop
-                const backdrop = fullscreenMenu.querySelector('.menu-backdrop');
-                if (backdrop) {
-                    backdrop.addEventListener('click', function() {
-                        menuTrigger.classList.remove('active');
-                        fullscreenMenu.classList.remove('active');
-                        document.body.style.overflow = '';
-                    });
-                }
-                
-                // Cerrar al hacer click en un link
-                const navLinks = fullscreenMenu.querySelectorAll('.nav-link');
-                navLinks.forEach(link => {
-                    link.addEventListener('click', function() {
-                        menuTrigger.classList.remove('active');
-                        fullscreenMenu.classList.remove('active');
-                        document.body.style.overflow = '';
-                    });
-                });
-                
-                // Cerrar al hacer click en el botón CTA
-                const ctaButton = fullscreenMenu.querySelector('.cta-button');
-                if (ctaButton) {
-                    ctaButton.addEventListener('click', function() {
-                        menuTrigger.classList.remove('active');
-                        fullscreenMenu.classList.remove('active');
-                        document.body.style.overflow = '';
-                    });
-                }
-                
-                // Cerrar con tecla ESC
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape' && fullscreenMenu.classList.contains('active')) {
-                        menuTrigger.classList.remove('active');
-                        fullscreenMenu.classList.remove('active');
-                        document.body.style.overflow = '';
-                    }
-                });
-            }
-            
-            // Logo Scroll Effect
-            if (floatingLogo) {
-                window.addEventListener('scroll', function() {
-                    const currentScroll = window.pageYOffset;
-                    
-                    if (currentScroll > 100) {
-                        floatingLogo.classList.add('scrolled');
-                    } else {
-                        floatingLogo.classList.remove('scrolled');
-                    }
-                });
-            }
-        });
-    </script>
-
-@stack('scripts')
+    @stack('scripts')
 </body>
 </html>

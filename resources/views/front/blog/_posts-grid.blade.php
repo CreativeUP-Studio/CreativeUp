@@ -49,11 +49,23 @@
             @if($post->user)
             <div class="bidx-featured-author">
                 <div class="bidx-author-avatar">
-                    {{ strtoupper(substr($post->user->name, 0, 1)) }}
+                    @if($post->user->avatar)
+                        <img src="{{ asset('storage/' . $post->user->avatar) }}" alt="{{ $post->user->name }}">
+                    @else
+                        {{ strtoupper(substr($post->user->name, 0, 1)) }}
+                    @endif
                 </div>
                 <div class="bidx-author-info">
-                    <strong>{{ $post->user->name }}</strong>
-                    <span>Autor</span>
+                    <strong>
+                        @php
+                            $nameParts = explode(' ', $post->user->name);
+                            $shortName = $nameParts[0] . (isset($nameParts[1]) ? ' ' . $nameParts[1] : '');
+                        @endphp
+                        {{ $shortName }}
+                        @if($post->user->position)
+                            | {{ $post->user->position }}
+                        @endif
+                    </strong>
                 </div>
             </div>
             @endif
@@ -111,9 +123,22 @@
                 @if($post->user)
                 <div class="bidx-post-author-small">
                     <div class="bidx-post-author-avatar">
-                        {{ strtoupper(substr($post->user->name, 0, 1)) }}
+                        @if($post->user->avatar)
+                            <img src="{{ asset('storage/' . $post->user->avatar) }}" alt="{{ $post->user->name }}">
+                        @else
+                            {{ strtoupper(substr($post->user->name, 0, 1)) }}
+                        @endif
                     </div>
-                    <span class="bidx-post-author-name">{{ $post->user->name }}</span>
+                    <span class="bidx-post-author-name">
+                        @php
+                            $nameParts = explode(' ', $post->user->name);
+                            $shortName = $nameParts[0] . (isset($nameParts[1]) ? ' ' . $nameParts[1] : '');
+                        @endphp
+                        {{ $shortName }}
+                        @if($post->user->position)
+                            | {{ $post->user->position }}
+                        @endif
+                    </span>
                 </div>
                 @endif
                 <a href="{{ route('blog.show', $post->slug) }}" class="bidx-post-link">

@@ -19,13 +19,25 @@
            class="pidx-card-link"
            aria-label="Ver proyecto: {{ $project->title }}">
             {{-- Imagen principal --}}
-            <div class="pidx-card-image">
-                <img src="{{ $mainImage }}"
-                     alt="{{ $project->title }}"
-                     loading="lazy"
-                     decoding="async"
-                     width="600"
-                     height="375">
+            @php
+                $thumbDevice = $project->thumbnail_device ?? 'safari';
+                if (!request()->routeIs('projects.show')) {
+                    $thumbDevice = 'none';
+                }
+                $displayUrl = 'localhost';
+                if ($project->url) {
+                    $parsed = parse_url($project->url);
+                    $displayUrl = ($parsed['host'] ?? '') . ($parsed['path'] ?? '');
+                }
+            @endphp
+
+            <div class="pidx-card-image device-{{ $thumbDevice }} {{ $thumbDevice === 'safari' ? 'browser-mockup' : '' }}">
+                @include('front.projects._device-mockup', [
+                    'device' => $thumbDevice,
+                    'image' => $mainImage,
+                    'title' => $project->title,
+                    'displayUrl' => $displayUrl
+                ])
                 <div class="pidx-card-image-overlay" aria-hidden="true">
                     <span class="pidx-card-view">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>

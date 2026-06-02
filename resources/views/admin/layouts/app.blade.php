@@ -22,16 +22,10 @@
              Brand Header
              ───────────────────────────────────────────────────────────────────────── --}}
         <div class="sidebar-header">
-            <a href="{{ route('admin.dashboard') }}" class="sidebar-brand">
-                <div class="sidebar-brand-icon" onclick="event.preventDefault(); if(document.body.getAttribute('data-sidebar-collapsed') === 'true') toggleSidebarCollapse();">
-                    <i class="fa-solid fa-bolt" aria-hidden="true"></i>
-                </div>
-                <div class="sidebar-brand-text">
-                    <span class="sidebar-brand-name">
-                        <span class="brand-creative">creative</span><span class="brand-up">up</span>
-                    </span>
-                    <span class="sidebar-brand-tagline">Admin Panel</span>
-                </div>
+            <a href="{{ route('admin.dashboard') }}" class="sidebar-brand-premium" onclick="if(document.body.getAttribute('data-sidebar-collapsed') === 'true') { event.preventDefault(); toggleSidebarCollapse(); }">
+                <span class="brand-text">creative</span>
+                <span class="brand-gradient">up</span>
+                <div class="brand-dot"></div>
             </a>
             <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" onclick="toggleSidebarCollapse()" 
                     aria-label="Colapsar sidebar" title="Colapsar menú">
@@ -133,6 +127,17 @@
                 <span class="sidebar-nav-badge sidebar-nav-badge--success">{{ $newLeadsCount }} nuevos</span>
                 @endif
             </a>
+            <a href="{{ route('admin.chat.index') }}"
+               class="sidebar-nav-item {{ request()->routeIs('admin.chat.*') ? 'active' : '' }}">
+                <div class="sidebar-nav-icon">
+                    <i class="fa-solid fa-comments" aria-hidden="true"></i>
+                </div>
+                <span class="sidebar-nav-text">Mensajes Chat</span>
+                @php $newChatCount = \App\Models\ChatMessage::unread()->count(); @endphp
+                @if($newChatCount > 0)
+                <span class="sidebar-nav-badge sidebar-nav-badge--primary">{{ $newChatCount }}</span>
+                @endif
+            </a>
 
             {{-- Configuración Section --}}
             <div class="sidebar-nav-section">
@@ -141,6 +146,14 @@
                     <span>Sistema</span>
                 </span>
             </div>
+            <a href="{{ route('admin.hero.edit') }}"
+               class="sidebar-nav-item {{ request()->routeIs('admin.hero.*') ? 'active' : '' }}">
+                <div class="sidebar-nav-icon">
+                    <i class="fa-solid fa-star" aria-hidden="true"></i>
+                </div>
+                <span class="sidebar-nav-text">Hero del Home</span>
+                <span class="sidebar-nav-badge sidebar-nav-badge--primary" style="font-size: 0.65rem;">Nuevo</span>
+            </a>
             <button class="sidebar-nav-item sidebar-nav-submenu-toggle" 
                     onclick="toggleSubmenu(this)" aria-expanded="false">
                 <div class="sidebar-nav-icon">
@@ -150,6 +163,10 @@
                 <i class="fa-solid fa-chevron-down sidebar-nav-arrow" aria-hidden="true"></i>
             </button>
             <div class="sidebar-submenu">
+                <a href="{{ route('admin.settings.edit') }}" class="sidebar-submenu-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-gears" aria-hidden="true"></i>
+                    <span>Detalles del Sitio</span>
+                </a>
                 <a href="{{ route('home') }}" target="_blank" class="sidebar-submenu-item">
                     <i class="fa-solid fa-globe" aria-hidden="true"></i>
                     <span>Ver Sitio Web</span>
@@ -181,7 +198,11 @@
             {{-- User Profile --}}
             <div class="sidebar-user">
                 <div class="sidebar-user-avatar">
-                    <span>{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</span>
+                    @if(Auth::user()->avatar)
+                        <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}">
+                    @else
+                        <span>{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</span>
+                    @endif
                 </div>
                 <div class="sidebar-user-info">
                     <span class="sidebar-user-name">{{ Auth::user()->name ?? 'Admin' }}</span>
@@ -196,11 +217,11 @@
 
             {{-- User Menu Dropdown --}}
             <div class="sidebar-user-menu" id="sidebarUserMenu">
-                <a href="#" class="sidebar-user-menu-item">
+                <a href="{{ route('admin.profile.edit') }}" class="sidebar-user-menu-item">
                     <i class="fa-solid fa-user-pen" aria-hidden="true"></i>
                     <span>Editar Perfil</span>
                 </a>
-                <a href="#" class="sidebar-user-menu-item">
+                <a href="{{ route('admin.profile.edit') }}" class="sidebar-user-menu-item">
                     <i class="fa-solid fa-key" aria-hidden="true"></i>
                     <span>Cambiar Contraseña</span>
                 </a>
@@ -268,28 +289,57 @@
                         <button class="topbar-action-btn topbar-notifications-btn" onclick="toggleNotifications()" 
                                 aria-label="Notificaciones" aria-expanded="false">
                             <i class="fa-solid fa-bell" aria-hidden="true"></i>
-                            @php $notifCount = \App\Models\Lead::where('status', 'nuevo')->count(); @endphp
-                            @if($notifCount > 0)
-                            <span class="topbar-notification-badge">{{ $notifCount > 9 ? '9+' : $notifCount }}</span>
+                            @php 
+                                $chatUnreadCount = \App\Models\ChatMessage::unread()->count();
+                                $leadsCount = \App\Models\Lead::where('status', 'nuevo')->count();
+                                $totalNotifications = $chatUnreadCount + $leadsCount;
+                            @endphp
+                            @if($totalNotifications > 0)
+                            <span class="topbar-notification-badge">{{ $totalNotifications > 9 ? '9+' : $totalNotifications }}</span>
                             @endif
                         </button>
                         <div class="topbar-dropdown-menu topbar-notifications-menu" id="notificationsMenu">
                             <div class="topbar-dropdown-header">
                                 <span class="topbar-dropdown-title">Notificaciones</span>
-                                <button class="topbar-dropdown-action">Marcar todas leídas</button>
+                                <button class="topbar-dropdown-action" onclick="markAllAsRead()">Marcar todas leídas</button>
                             </div>
-                            <div class="topbar-dropdown-body">
-                                @if($notifCount > 0)
+                            <div class="topbar-dropdown-body" id="notificationsBody">
+                                @php
+                                    $recentChatMessages = \App\Models\ChatMessage::select('conversation_id', 'name', 'email', 'message', 'created_at')
+                                        ->where('sender', 'user')
+                                        ->where('is_read', false)
+                                        ->orderBy('created_at', 'desc')
+                                        ->limit(5)
+                                        ->get();
+                                @endphp
+                                
+                                @if($chatUnreadCount > 0)
+                                    @foreach($recentChatMessages as $chatMsg)
+                                    <a href="{{ route('admin.chat.show', $chatMsg->conversation_id) }}" class="topbar-notification-item topbar-notification-item--unread">
+                                        <div class="topbar-notification-icon topbar-notification-icon--primary">
+                                            <i class="fa-solid fa-comment" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="topbar-notification-content">
+                                            <p class="topbar-notification-text"><strong>{{ $chatMsg->name }}</strong> te envió un mensaje</p>
+                                            <span class="topbar-notification-time">{{ $chatMsg->created_at->diffForHumans() }}</span>
+                                        </div>
+                                    </a>
+                                    @endforeach
+                                @endif
+                                
+                                @if($leadsCount > 0)
                                 <a href="{{ route('admin.leads.index') }}" class="topbar-notification-item topbar-notification-item--unread">
                                     <div class="topbar-notification-icon topbar-notification-icon--success">
                                         <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
                                     </div>
                                     <div class="topbar-notification-content">
-                                        <p class="topbar-notification-text">Tienes <strong>{{ $notifCount }} leads nuevos</strong></p>
+                                        <p class="topbar-notification-text">Tienes <strong>{{ $leadsCount }} leads nuevos</strong></p>
                                         <span class="topbar-notification-time">Revisa el CRM</span>
                                     </div>
                                 </a>
-                                @else
+                                @endif
+                                
+                                @if($totalNotifications === 0)
                                 <div class="topbar-notification-empty">
                                     <i class="fa-solid fa-bell-slash" aria-hidden="true"></i>
                                     <p>No hay notificaciones</p>
@@ -297,7 +347,7 @@
                                 @endif
                             </div>
                             <div class="topbar-dropdown-footer">
-                                <a href="{{ route('admin.leads.index') }}">Ver todos los leads</a>
+                                <a href="{{ route('admin.chat.index') }}">Ver todos los mensajes</a>
                             </div>
                         </div>
                     </div>
@@ -315,7 +365,11 @@
                 <div class="topbar-user-menu">
                     <button class="topbar-user-btn" onclick="toggleUserDropdown()" aria-expanded="false">
                         <div class="topbar-user-avatar">
-                            <span>{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</span>
+                            @if(Auth::user()->avatar)
+                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}">
+                            @else
+                                <span>{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</span>
+                            @endif
                         </div>
                         <div class="topbar-user-info">
                             <span class="topbar-user-name">{{ Auth::user()->name ?? 'Admin' }}</span>
@@ -326,7 +380,11 @@
                     <div class="topbar-dropdown-menu topbar-user-dropdown" id="userDropdown">
                         <div class="topbar-dropdown-header topbar-user-dropdown-header">
                             <div class="topbar-user-avatar topbar-user-avatar--lg">
-                                <span>{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</span>
+                                @if(Auth::user()->avatar)
+                                    <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}">
+                                @else
+                                    <span>{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</span>
+                                @endif
                             </div>
                             <div>
                                 <p class="topbar-user-dropdown-name">{{ Auth::user()->name ?? 'Admin' }}</p>
@@ -334,11 +392,11 @@
                             </div>
                         </div>
                         <div class="topbar-dropdown-body">
-                            <a href="#" class="topbar-dropdown-item">
+                            <a href="{{ route('admin.profile.edit') }}" class="topbar-dropdown-item">
                                 <i class="fa-solid fa-user" aria-hidden="true"></i>
                                 <span>Mi Perfil</span>
                             </a>
-                            <a href="#" class="topbar-dropdown-item">
+                            <a href="{{ route('admin.profile.edit') }}" class="topbar-dropdown-item">
                                 <i class="fa-solid fa-gear" aria-hidden="true"></i>
                                 <span>Configuración</span>
                             </a>
@@ -659,6 +717,180 @@
         }
     });
     </script>
+
+    {{-- SweetAlert2 Library --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Configuración global de SweetAlert2
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        // Función para mostrar alertas de éxito
+        function showSuccess(message, title = '¡Éxito!') {
+            Toast.fire({
+                icon: 'success',
+                title: title,
+                text: message
+            });
+        }
+
+        // Función para mostrar alertas de error
+        function showError(message, title = 'Error') {
+            Toast.fire({
+                icon: 'error',
+                title: title,
+                text: message
+            });
+        }
+
+        // Función para mostrar alertas de información
+        function showInfo(message, title = 'Información') {
+            Toast.fire({
+                icon: 'info',
+                title: title,
+                text: message
+            });
+        }
+
+        // Función para mostrar alertas de advertencia
+        function showWarning(message, title = 'Advertencia') {
+            Toast.fire({
+                icon: 'warning',
+                title: title,
+                text: message
+            });
+        }
+
+        // Función para confirmaciones
+        function confirmAction(title, text, confirmText = 'Sí, continuar', cancelText = 'Cancelar') {
+            return Swal.fire({
+                title: title,
+                text: text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff006e',
+                cancelButtonColor: '#ef4444',
+                confirmButtonText: confirmText,
+                cancelButtonText: cancelText,
+                reverseButtons: true,
+                customClass: {
+                    popup: 'swal-custom-popup',
+                    confirmButton: 'swal-custom-confirm',
+                    cancelButton: 'swal-custom-cancel'
+                }
+            });
+        }
+
+        // Función para confirmación de eliminación
+        function confirmDelete(itemName = 'este elemento') {
+            return Swal.fire({
+                title: '¿Estás seguro?',
+                html: `Estás a punto de eliminar <strong>${itemName}</strong>.<br>Esta acción no se puede deshacer.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: '<i class="fas fa-trash"></i> Sí, eliminar',
+                cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+                reverseButtons: true,
+                customClass: {
+                    popup: 'swal-custom-popup',
+                    confirmButton: 'swal-custom-delete',
+                    cancelButton: 'swal-custom-cancel'
+                },
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown animate__faster'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp animate__faster'
+                }
+            });
+        }
+
+        // Mostrar alertas de sesión automáticamente
+        @if(session('success'))
+            showSuccess('{{ session('success') }}');
+        @endif
+
+        @if(session('error'))
+            showError('{{ session('error') }}');
+        @endif
+
+        @if(session('info'))
+            showInfo('{{ session('info') }}');
+        @endif
+
+        @if(session('warning'))
+            showWarning('{{ session('warning') }}');
+        @endif
+    </script>
+
+    {{-- Sistema de Notificaciones en Tiempo Real --}}
+    <script src="{{ asset('js/admin-notifications.js') }}"></script>
+
+    {{-- Estilos personalizados para SweetAlert2 --}}
+    <style>
+        .swal-custom-popup {
+            border-radius: 16px !important;
+            padding: 2rem !important;
+        }
+
+        .swal-custom-confirm,
+        .swal-custom-delete {
+            border-radius: 10px !important;
+            padding: 0.75rem 2rem !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .swal-custom-confirm:hover,
+        .swal-custom-delete:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .swal-custom-cancel {
+            border-radius: 10px !important;
+            padding: 0.75rem 2rem !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+        }
+
+        .swal2-toast {
+            border-radius: 12px !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .swal2-toast .swal2-title {
+            font-size: 0.95rem !important;
+            font-weight: 600 !important;
+        }
+
+        .swal2-icon {
+            border-width: 3px !important;
+        }
+        
+        /* Icono de notificación primary para chat */
+        .topbar-notification-icon--primary {
+            background: var(--admin-gradient);
+            color: white;
+        }
+    </style>
+
+    {{-- ═══════════════════════════════════════════════════════════════════════════
+         Sistema de Notificaciones en Tiempo Real
+         ═══════════════════════════════════════════════════════════════════════════ --}}
+    <script src="{{ asset('js/admin-notifications.js') }}"></script>
 
     @stack('scripts')
 </body>

@@ -1,22 +1,64 @@
-@import "tailwindcss";
-@import "./home.css";
-@import "./home-responsive-premium.css";
-@import "./admin.css";
-@import "./contact.css";
-@import "./services.css";
-@import "./projects.css";
-@import "./admin-projects.css";
-@import "./blog.css";
-@import "./ajax.css";
-@import "./admin-leads.css";
-@import "./admin-leads-premium.css";
-@import "./admin-leads-cards.css";
+/* ================================
+   CreativeUp - Main Application CSS
+   Estructura organizada y profesional
+   
+   Fecha: 2026-04-05
+   Version: 2.1.0 - Clean Organized Structure
+================================ */
 
+/* ================================
+   FRAMEWORK BASE
+================================ */
+@import "tailwindcss";
+
+/* ================================
+   FRONTEND STYLES
+   Estilos para el sitio web público
+================================ */
+
+/* Home Page */
+@import "./frontend/home.css";
+
+/* Layout (Logo, Menu, Footer) */
+@import "./frontend/layout-responsive.css";
+
+/* Public Pages */
+@import "./frontend/contact.css";
+@import "./frontend/services.css";
+@import "./frontend/projects.css";
+@import "./frontend/blog.css";
+
+/* ================================
+   ADMIN PANEL STYLES
+   Estilos para el panel de administración
+================================ */
+
+/* Admin Base */
+@import "./admin/admin.css";
+
+/* Admin Sections */
+@import "./admin/admin-projects.css";
+@import "./admin/admin-leads.css";
+@import "./admin/admin-leads-premium.css";
+@import "./admin/admin-leads-cards.css";
+
+/* ================================
+   COMPONENTS
+   Componentes reutilizables
+================================ */
+@import "./components/ajax.css";
+
+/* ================================
+   TAILWIND SOURCES
+================================ */
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
+/* ================================
+   THEME CONFIGURATION
+================================ */
 @theme {
     --font-sans:
         "Poppins", "Instrument Sans", ui-sans-serif, system-ui, sans-serif,

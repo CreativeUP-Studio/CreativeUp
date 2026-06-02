@@ -168,35 +168,62 @@ class LeadController extends Controller
     public function bulkAction(Request $request)
     {
         $validated = $request->validate([
-            'action'   => 'required|in:mark_contacted,mark_closed,delete',
+            'bulk_action' => 'required|in:mark_contacted,mark_closed,delete',
             'lead_ids' => 'required|array|min:1',
             'lead_ids.*' => 'exists:leads,id',
         ]);
 
-        $leads = Lead::whereIn('id', $validated['lead_ids']);
-        $count = $leads->count();
+        $leadIds = $validated['lead_ids'];
+        $count = count($leadIds);
 
-        switch ($validated['action']) {
-            case 'mark_contacted':
-                $leads->update(['status' => 'contacted']);
-                $msg = "{$count} leads marcados como contactados.";
-                break;
-            case 'mark_closed':
-                $leads->update(['status' => 'closed']);
-                $msg = "{$count} leads marcados como cerrados.";
-                break;
-            case 'delete':
-                $leads->delete();
-                $msg = "{$count} leads eliminados.";
-                break;
+        try {
+            switch ($validated['bulk_action']) {
+                case 'mark_contacted':
+                    Lead::whereIn('id', $leadIds)->update(['status' => 'contacted']);
+                    $msg = "{$count} lead(s) marcado(s) como contactados.";
+                    break;
+                    
+                case 'mark_closed':
+                    Lead::whereIn('id', $leadIds)->update(['status' => 'closed']);
+                    $msg = "{$count} lead(s) marcado(s) como cerrados.";
+                    break;
+                    
+                case 'delete':
+                    // Eliminar respuestas primero (por si acaso)
+                    LeadReply::whereIn('lead_id', $leadIds)->delete();
+                    // Luego eliminar los leads
+                    Lead::whereIn('id', $leadIds)->delete();
+                    $msg = "{$count} lead(s) eliminado(s) correctamente.";
+                    break;
+            }
+
+            return redirect()->back()->with('success', $msg);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al procesar la acción: ' . $e->getMessage());
         }
-
-        return redirect()->back()->with('success', $msg);
     }
 
     public function destroy(Lead $lead)
     {
-        $lead->delete();
-        return redirect()->route('admin.leads.index')->with('success', 'Lead eliminado correctamente.');
+        try {
+            $leadName = $lead->name;
+            $leadEmail = $lead->email;
+            
+            // Eliminar respuestas asociadas primero
+            $repliesDeleted = $lead->replies()->delete();
+            
+            // Eliminar el lead
+            $lead->delete();
+            
+            \Illuminate\Support\Facades\Log::info("Lead eliminado: ID {$lead->id}, Nombre: {$leadName}, Email: {$leadEmail}, Respuestas eliminadas: {$repliesDeleted}");
+            
+            return redirect()->route('admin.leads.index')
+                ->with('success', "Lead '{$leadName}' eliminado correctamente.");
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Error al eliminar lead ID {$lead->id}: " . $e->getMessage());
+            
+            return redirect()->back()
+                ->with('error', 'Error al eliminar el lead: ' . $e->getMessage());
+        }
     }
 }
