@@ -34,8 +34,9 @@ Route::get('/projects/{slug}', [ProjectController::class, 'show'])->name('projec
 Route::get('/blog', [PostController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [PostController::class, 'show'])->name('blog.show');
 
-Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/contacto', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contacto', [ContactController::class, 'store'])->name('contact.store');
+Route::redirect('/contact', '/contacto');
 Route::post('/subscribe', [ContactController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::post('/chat-message', [ContactController::class, 'chatStore'])->name('chat.store');
 Route::get('/chat-messages/new', [ContactController::class, 'getNewMessages'])->name('chat.getNewMessages');
