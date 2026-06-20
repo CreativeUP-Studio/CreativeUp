@@ -1,5 +1,7 @@
 {{-- Admin Projects Grid Partial - For AJAX Loading --}}
-@forelse($projects as $project)
+@if($projects->count() > 0)
+<div class="svc-grid" id="projectsGrid">
+@foreach($projects as $project)
 <div class="svc-card-item" 
      style="--card-color: var(--admin-primary)"
      data-id="{{ $project->id }}"
@@ -118,10 +120,12 @@
          </div>
      </div>
 </div>
-@empty
-<div class="svc-empty-state" style="grid-column: 1 / -1;">
+@endforeach
+</div>
+@else
+<div class="svc-empty-state" style="grid-column: 1 / -1; width: 100%;">
     <i class="fa-solid fa-folder-open svc-empty-icon"></i>
     <h3>No se encontraron proyectos</h3>
     <p>Intenta ajustar los filtros de búsqueda o crea un nuevo proyecto.</p>
 </div>
-@endforelse
+@endif

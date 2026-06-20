@@ -2719,4 +2719,129 @@
     margin: 10px;
 }
 
+/* ==========================================
+   CAROUSEL ON MOBILE FOR PROJECT STEPS
+   ========================================== */
+@media (max-width: 768px) {
+    .pshow-step-collage {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        scroll-behavior: smooth !important;
+        -webkit-overflow-scrolling: touch !important;
+        gap: 0 !important;
+        aspect-ratio: auto !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding-bottom: 0.5rem !important;
+    }
+    
+    .pshow-step-collage::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .pshow-collage-img {
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        scroll-snap-align: start !important;
+        padding: 0 10px !important;
+        box-sizing: border-box !important;
+        grid-area: auto !important;
+        margin: 0 !important;
+        aspect-ratio: auto !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    /* Reset device mockup styling to show raw image on mobile */
+    .pshow-collage-img .apple-macbook-front,
+    .pshow-collage-img .mac-lid,
+    .pshow-collage-img .mac-screen,
+    .pshow-collage-img .project-mockup-wrapper,
+    .pshow-collage-img .iphone-device,
+    .pshow-collage-img .iphone-bezel,
+    .pshow-collage-img .iphone-screen,
+    .pshow-collage-img .iphone-screen-img,
+    .pshow-collage-img .ipad-device,
+    .pshow-collage-img .ipad-bezel,
+    .pshow-collage-img .ipad-screen,
+    .pshow-collage-img .ipad-screen-img,
+    .pshow-collage-img .browser-mockup,
+    .pshow-collage-img .pshow-mockup {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        aspect-ratio: auto !important;
+        position: static !important;
+        transform: none !important;
+        perspective: none !important;
+        border-radius: 0 !important;
+        overflow: visible !important;
+        display: block !important;
+    }
+
+    /* Hide bezels and hardware components */
+    .pshow-collage-img .mac-keyboard-base,
+    .pshow-collage-img .mac-notch,
+    .pshow-collage-img .mac-browser,
+    .pshow-collage-img .iphone-bezel::before,
+    .pshow-collage-img .iphone-island,
+    .pshow-collage-img .iphone-button,
+    .pshow-collage-img .ipad-bezel::before,
+    .pshow-collage-img .ipad-button,
+    .pshow-collage-img .safari-header-bar {
+        display: none !important;
+    }
+
+    .pshow-collage-img img {
+        width: auto !important;
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: 350px !important;
+        object-fit: contain !important;
+        border-radius: 16px !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        display: block !important;
+        margin: 0 auto !important;
+    }
+
+    /* Carousel Pagination Dots Styles */
+    .pshow-collage-dots {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        width: 100%;
+    }
+    
+    .pshow-collage-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: var(--proj-text-light);
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: all var(--proj-trans-fast);
+        opacity: 0.5;
+    }
+    
+    .pshow-collage-dot.is-active {
+        background-color: var(--proj-primary);
+        transform: scale(1.25);
+        opacity: 1;
+    }
+}
+
 

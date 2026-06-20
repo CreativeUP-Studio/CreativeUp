@@ -93,23 +93,14 @@
      3. PROJECTS GRID WITH AJAX
      ═══════════════════════════════════════════════════ --}}
 <div data-ajax-results>
-    @if($projects->count() > 0)
-    <div class="svc-grid" id="projectsGrid">
-        @include('admin.projects._projects-grid')
-    </div>
+    @include('admin.projects._projects-grid')
+</div>
 
-    {{-- Paginación --}}
+{{-- Paginación --}}
+<div data-ajax-pagination>
     @if($projects->hasPages())
-    <div class="admin-pagination" id="projectsPagination" data-ajax-pagination>
+    <div class="admin-pagination" id="projectsPagination">
         {{ $projects->appends(request()->query())->links() }}
-    </div>
-    @endif
-    
-    @else
-    <div class="svc-empty-state">
-        <i class="fa-solid fa-folder-open svc-empty-icon"></i>
-        <h3>No se encontraron proyectos</h3>
-        <p>Intenta ajustar los filtros de búsqueda o crea un nuevo proyecto.</p>
     </div>
     @endif
 </div>
@@ -152,8 +143,8 @@ function initProjectsModule() {
     };
 
     // B. Conmutadores de Estado AJAX (Switches)
-    // Usamos delegación de eventos en el grid para que funcione después de actualizaciones por AJAX
-    const grid = document.getElementById('projectsGrid');
+    // Usamos delegación de eventos en el contenedor AJAX para que funcione después de actualizaciones
+    const grid = document.querySelector('[data-ajax-results]');
     if (grid && !grid.dataset.listenerBound) {
         grid.dataset.listenerBound = 'true';
         grid.addEventListener('change', function(e) {

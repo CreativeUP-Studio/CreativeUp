@@ -1,5 +1,7 @@
 {{-- Admin Posts Grid Partial - For AJAX Loading --}}
-@forelse($posts as $post)
+@if($posts->count() > 0)
+<div class="svc-grid" id="postsGrid">
+@foreach($posts as $post)
 <div class="svc-card-item" 
      style="--card-color: var(--admin-primary)"
      data-id="{{ $post->id }}"
@@ -114,10 +116,12 @@
          </div>
      </div>
 </div>
-@empty
-<div class="svc-empty-state" style="grid-column: 1 / -1;">
+@endforeach
+</div>
+@else
+<div class="svc-empty-state" style="grid-column: 1 / -1; width: 100%;">
     <i class="fa-solid fa-newspaper svc-empty-icon"></i>
     <h3>No se encontraron artículos</h3>
     <p>Intenta ajustar los filtros de búsqueda o crea un nuevo artículo.</p>
 </div>
-@endforelse
+@endif

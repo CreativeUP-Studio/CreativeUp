@@ -211,23 +211,14 @@
      3. BLOG POSTS GRID WITH AJAX
      ═══════════════════════════════════════════════════ --}}
 <div data-ajax-results>
-    @if($posts->count() > 0)
-    <div class="svc-grid" id="postsGrid">
-        @include('admin.posts._posts-grid')
-    </div>
+    @include('admin.posts._posts-grid')
+</div>
 
-    {{-- Paginación --}}
+{{-- Paginación --}}
+<div data-ajax-pagination>
     @if($posts->hasPages())
-    <div class="admin-pagination" id="postsPagination" data-ajax-pagination>
+    <div class="admin-pagination" id="postsPagination">
         {{ $posts->appends(request()->query())->links() }}
-    </div>
-    @endif
-    
-    @else
-    <div class="svc-empty-state">
-        <i class="fa-solid fa-newspaper svc-empty-icon"></i>
-        <h3>No se encontraron artículos</h3>
-        <p>Intenta ajustar los filtros de búsqueda o crea un nuevo artículo.</p>
     </div>
     @endif
 </div>
@@ -350,7 +341,7 @@ function initPostsModule() {
     };
 
     // B. Conmutadores de Estado AJAX (Switches)
-    const grid = document.getElementById('postsGrid');
+    const grid = document.querySelector('[data-ajax-results]');
     if (grid && !grid.dataset.listenerBound) {
         grid.dataset.listenerBound = 'true';
         grid.addEventListener('change', function(e) {

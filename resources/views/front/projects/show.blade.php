@@ -549,6 +549,70 @@
             }, { once: true });
         }
     });
+
+    // Carousel Pagination Dots on Mobile for Steps
+    function initCollageCarousels() {
+        const isMobile = window.innerWidth <= 768;
+        const collages = document.querySelectorAll('.pshow-step-collage');
+        
+        collages.forEach(collage => {
+            const images = collage.querySelectorAll('.pshow-collage-img');
+            // Remove existing dots if any
+            const existingDots = collage.nextElementSibling;
+            if (existingDots && existingDots.classList.contains('pshow-collage-dots')) {
+                existingDots.remove();
+            }
+            
+            if (isMobile && images.length > 1) {
+                // Create dots container
+                const dotsContainer = document.createElement('div');
+                dotsContainer.className = 'pshow-collage-dots';
+                dotsContainer.setAttribute('role', 'tablist');
+                
+                images.forEach((img, idx) => {
+                    const dot = document.createElement('button');
+                    dot.className = `pshow-collage-dot ${idx === 0 ? 'is-active' : ''}`;
+                    dot.setAttribute('aria-label', `Ir a imagen ${idx + 1}`);
+                    dot.setAttribute('role', 'tab');
+                    dot.setAttribute('aria-selected', idx === 0 ? 'true' : 'false');
+                    
+                    dot.addEventListener('click', () => {
+                        const slideWidth = collage.clientWidth;
+                        collage.scrollTo({
+                            left: idx * slideWidth,
+                            behavior: 'smooth'
+                        });
+                    });
+                    
+                    dotsContainer.appendChild(dot);
+                });
+                
+                // Append dots container below the collage
+                collage.after(dotsContainer);
+                
+                // Listen for scroll events to update active dot
+                let scrollTimeout;
+                collage.addEventListener('scroll', () => {
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        const slideWidth = collage.clientWidth;
+                        const activeIndex = Math.round(collage.scrollLeft / slideWidth);
+                        const dots = dotsContainer.querySelectorAll('.pshow-collage-dot');
+                        dots.forEach((dot, idx) => {
+                            dot.classList.toggle('is-active', idx === activeIndex);
+                            dot.setAttribute('aria-selected', idx === activeIndex ? 'true' : 'false');
+                        });
+                    }, 50);
+                });
+            }
+        });
+    }
+
+    // Run on init
+    initCollageCarousels();
+    
+    // Run on resize
+    window.addEventListener('resize', initCollageCarousels);
 })();
 </script>
 @endpush

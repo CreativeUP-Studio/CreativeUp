@@ -115,129 +115,17 @@
     <h2 id="pidx-projects-heading" class="sr-only">Lista de proyectos</h2>
     
     <div data-ajax-results>
-    @if($projects->count() > 0)
+        @include('front.projects._projects-grid', ['animate' => true])
+    </div>
 
-        <div class="pidx-list" role="list">
-        @foreach($projects as $index => $project)
-            @php
-                $mainImage = $project->thumbnail
-                    ? Storage::url($project->thumbnail)
-                    : ($project->images->first()
-                        ? Storage::url($project->images->first()->image_path)
-                        : asset('images/hero-1.jpg'));
-                $projectNum = str_pad($projects->firstItem() + $index, 2, '0', STR_PAD_LEFT);
-            @endphp
-
-            <article class="pidx-card anim-scroll" data-anim="fade-up" role="listitem">
-                {{-- Número grande decorativo --}}
-                <div class="pidx-card-number" aria-hidden="true">
-                    <span>{{ $projectNum }}</span>
-                </div>
-
-                <a href="{{ route('projects.show', $project->slug) }}" 
-                   class="pidx-card-link"
-                   aria-label="Ver proyecto: {{ $project->title }}">
-                    {{-- Imagen principal --}}
-                    @php
-                        $thumbDevice = $project->thumbnail_device ?? 'safari';
-                        if (!request()->routeIs('projects.show')) {
-                            $thumbDevice = 'none';
-                        }
-                        $displayUrl = 'localhost';
-                        if ($project->url) {
-                            $parsed = parse_url($project->url);
-                            $displayUrl = ($parsed['host'] ?? '') . ($parsed['path'] ?? '');
-                        }
-                    @endphp
-
-                    <div class="pidx-card-image device-{{ $thumbDevice }} {{ $thumbDevice === 'safari' ? 'browser-mockup' : '' }}">
-                        @include('front.projects._device-mockup', [
-                            'device' => $thumbDevice,
-                            'image' => $mainImage,
-                            'title' => $project->title,
-                            'displayUrl' => $displayUrl
-                        ])
-                        <div class="pidx-card-image-overlay" aria-hidden="true">
-                            <span class="pidx-card-view">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                <span>Ver proyecto</span>
-                            </span>
-                        </div>
-                        @if(!empty($project->type))
-                        <span class="pidx-card-tag">{{ $project->type }}</span>
-                        @endif
-                    </div>
-
-                    {{-- Contenido --}}
-                    <div class="pidx-card-content">
-                        {{-- Header con año --}}
-                        <div class="pidx-card-header">
-                            @if(!empty($project->year))
-                            <span class="pidx-card-year">
-                                <time datetime="{{ $project->year }}">{{ $project->year }}</time>
-                            </span>
-                            @endif
-                            @if(!empty($project->client))
-                            <span class="pidx-card-client">
-                                <i class="fa-regular fa-building" aria-hidden="true"></i>
-                                {{ $project->client }}
-                            </span>
-                            @endif
-                        </div>
-
-                        {{-- Título --}}
-                        <h3 class="pidx-card-title">{{ $project->title }}</h3>
-
-                        {{-- Descripción --}}
-                        <p class="pidx-card-desc">{{ Str::limit($project->description, 140) }}</p>
-
-                        {{-- Tecnologías como badges --}}
-                        @if(!empty($project->technologies) && is_array($project->technologies))
-                        <div class="pidx-card-techs" aria-label="Tecnologías utilizadas">
-                            @foreach(array_slice($project->technologies, 0, 4) as $tech)
-                                <span class="pidx-card-tech">{{ $tech }}</span>
-                            @endforeach
-                            @if(count($project->technologies) > 4)
-                                <span class="pidx-card-tech pidx-card-tech--more">+{{ count($project->technologies) - 4 }}</span>
-                            @endif
-                        </div>
-                        @endif
-
-                        {{-- Footer con CTA --}}
-                        <div class="pidx-card-footer">
-                            <span class="pidx-card-cta">
-                                <span>Explorar proyecto</span>
-                                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                            </span>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        @endforeach
-        </div>
-
-        {{-- Paginación --}}
+    {{-- Paginación --}}
+    <div data-ajax-pagination>
         @if($projects->hasPages())
-        <nav class="pidx-pagination" aria-label="Paginación de proyectos" data-ajax-pagination>
+        <nav class="pidx-pagination" aria-label="Paginación de proyectos">
             {{ $projects->appends(request()->query())->links() }}
         </nav>
         @endif
-
-    @else
-        <div class="pidx-empty" role="status">
-            <div class="pidx-empty-icon" aria-hidden="true">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="3" y="3" width="7" height="7" rx="1"/>
-                    <rect x="14" y="3" width="7" height="7" rx="1"/>
-                    <rect x="3" y="14" width="7" height="7" rx="1"/>
-                    <rect x="14" y="14" width="7" height="7" rx="1"/>
-                </svg>
-            </div>
-            <h3>Pr&oacute;ximamente</h3>
-            <p>Estamos preparando nuestros mejores proyectos para compartirlos contigo.</p>
-        </div>
-    @endif
-    </div>{{-- End data-ajax-results --}}
+    </div>
 </section>
 
 {{-- ═══ CTA ═══ --}}

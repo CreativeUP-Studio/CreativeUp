@@ -11,6 +11,138 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
+    <style>
+        /* ═══════════════════════════════════════════════════
+           GLOBAL COLOR SCHEME & BROWSER CURSOR VISIBILITY OVERRIDES
+           ═══════════════════════════════════════════════════ */
+        
+        /* Force color-scheme at the document level */
+        html, body.admin-body {
+            color-scheme: light !important;
+        }
+        body.admin-body[data-theme="dark"] {
+            color-scheme: dark !important;
+        }
+        
+        /* Force color-scheme directly on the inputs to adjust the text selection mouse pointer (I-beam hover cursor) */
+        body:not([data-theme="dark"]) input,
+        body:not([data-theme="dark"]) textarea,
+        body:not([data-theme="dark"]) select,
+        body:not([data-theme="dark"]) .admin-form-input,
+        body:not([data-theme="dark"]) .admin-form-textarea,
+        body:not([data-theme="dark"]) .admin-form-select,
+        body:not([data-theme="dark"]) .pf-input,
+        body:not([data-theme="dark"]) .pf-textarea,
+        body:not([data-theme="dark"]) .pf-select,
+        body:not([data-theme="dark"]) .leads-search-input,
+        body:not([data-theme="dark"]) .leads-filter-select,
+        body:not([data-theme="dark"]) .global-search-input,
+        body:not([data-theme="dark"]) .svc-search-input {
+            color-scheme: light !important;
+        }
+
+        body[data-theme="dark"] input,
+        body[data-theme="dark"] textarea,
+        body[data-theme="dark"] select,
+        body[data-theme="dark"] .admin-form-input,
+        body[data-theme="dark"] .admin-form-textarea,
+        body[data-theme="dark"] .admin-form-select,
+        body[data-theme="dark"] .pf-input,
+        body[data-theme="dark"] .pf-textarea,
+        body[data-theme="dark"] .pf-select,
+        body[data-theme="dark"] .leads-search-input,
+        body[data-theme="dark"] .leads-filter-select,
+        body[data-theme="dark"] .global-search-input,
+        body[data-theme="dark"] .svc-search-input {
+            color-scheme: dark !important;
+        }
+        
+        /* Force a high-contrast custom SVG text cursor to prevent invisible browser I-beam bugs on hover */
+        input:not([type="submit"]):not([type="button"]):not([type="image"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]):not([type="color"]), 
+        textarea,
+        .admin-form-input, .admin-form-textarea, .admin-post-title-input, .admin-post-content-editor, .admin-search-input-modern, .admin-textarea-modern,
+        .pf-input, .pf-textarea, .leads-search-input, .global-search-input, .svc-search-input {
+            cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyNCcgaGVpZ2h0PScyNCcgdmlld0JveD0nMCAwIDI0IDI0Jz48cGF0aCBkPSdNMTIgNHYxNk04IDRoOE04IDIwaDgnIHN0cm9rZT0nd2hpdGUnIHN0cm9rZS13aWR0aD0nMycgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbGluZWpvaW49J3JvdW5kJy8+PHBhdGggZD0nTTEyIDR2MTZNOCA0aDhNOCAyMGg4JyBzdHJva2U9JyMxYTFhMmUnIHN0cm9rZT0nd2hpdGUnIHN0cm9rZS13aWR0aD0nMS41JyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnLz48L3N2Zz4=') 12 12, text !important;
+        }
+
+        /* Ensure the text caret (vertical blinking line) is always the brand's pink color for high contrast and style */
+        input, textarea, select, 
+        .admin-form-input, .admin-form-textarea, .admin-form-select,
+        .admin-post-title-input, .admin-post-content-editor,
+        .admin-search-input-modern, .admin-filter-select-modern, .admin-textarea-modern,
+        .hero-form-control, .pf-input, .pf-textarea, .pf-select,
+        .leads-search-input, .leads-filter-select, .global-search-input,
+        .svc-search-input {
+            caret-color: var(--admin-primary, #ff006e) !important;
+        }
+
+        /* Prevent parent container white text inheritance in light mode */
+        body:not([data-theme="dark"]) input, 
+        body:not([data-theme="dark"]) textarea, 
+        body:not([data-theme="dark"]) select,
+        body:not([data-theme="dark"]) .admin-form-input,
+        body:not([data-theme="dark"]) .admin-form-textarea,
+        body:not([data-theme="dark"]) .admin-form-select,
+        body:not([data-theme="dark"]) .admin-post-title-input,
+        body:not([data-theme="dark"]) .admin-post-content-editor,
+        body:not([data-theme="dark"]) .admin-search-input-modern,
+        body:not([data-theme="dark"]) .admin-filter-select-modern,
+        body:not([data-theme="dark"]) .admin-textarea-modern,
+        body:not([data-theme="dark"]) .hero-form-control,
+        body:not([data-theme="dark"]) .pf-input,
+        body:not([data-theme="dark"]) .pf-textarea,
+        body:not([data-theme="dark"]) .pf-select,
+        body:not([data-theme="dark"]) .leads-search-input,
+        body:not([data-theme="dark"]) .leads-filter-select,
+        body:not([data-theme="dark"]) .global-search-input,
+        body:not([data-theme="dark"]) .svc-search-input {
+            color: #1a1a2e !important;
+        }
+        
+        body:not([data-theme="dark"]) input:hover, 
+        body:not([data-theme="dark"]) textarea:hover, 
+        body:not([data-theme="dark"]) select:hover,
+        body:not([data-theme="dark"]) .admin-form-input:hover,
+        body:not([data-theme="dark"]) .admin-form-textarea:hover,
+        body:not([data-theme="dark"]) .admin-form-select:hover,
+        body:not([data-theme="dark"]) .admin-post-title-input:hover,
+        body:not([data-theme="dark"]) .admin-post-content-editor:hover,
+        body:not([data-theme="dark"]) .admin-search-input-modern:hover,
+        body:not([data-theme="dark"]) .admin-filter-select-modern:hover,
+        body:not([data-theme="dark"]) .admin-textarea-modern:hover,
+        body:not([data-theme="dark"]) .hero-form-control:hover,
+        body:not([data-theme="dark"]) .pf-input:hover,
+        body:not([data-theme="dark"]) .pf-textarea:hover,
+        body:not([data-theme="dark"]) .pf-select:hover,
+        body:not([data-theme="dark"]) .leads-search-input:hover,
+        body:not([data-theme="dark"]) .leads-filter-select:hover,
+        body:not([data-theme="dark"]) .global-search-input:hover,
+        body:not([data-theme="dark"]) .svc-search-input:hover {
+            color: #1a1a2e !important;
+        }
+
+        body:not([data-theme="dark"]) input:focus, 
+        body:not([data-theme="dark"]) textarea:focus, 
+        body:not([data-theme="dark"]) select:focus,
+        body:not([data-theme="dark"]) .admin-form-input:focus,
+        body:not([data-theme="dark"]) .admin-form-textarea:focus,
+        body:not([data-theme="dark"]) .admin-form-select:focus,
+        body:not([data-theme="dark"]) .admin-post-title-input:focus,
+        body:not([data-theme="dark"]) .admin-post-content-editor:focus,
+        body:not([data-theme="dark"]) .admin-search-input-modern:focus,
+        body:not([data-theme="dark"]) .admin-filter-select-modern:focus,
+        body:not([data-theme="dark"]) .admin-textarea-modern:focus,
+        body:not([data-theme="dark"]) .hero-form-control:focus,
+        body:not([data-theme="dark"]) .pf-input:focus,
+        body:not([data-theme="dark"]) .pf-textarea:focus,
+        body:not([data-theme="dark"]) .pf-select:focus,
+        body:not([data-theme="dark"]) .leads-search-input:focus,
+        body:not([data-theme="dark"]) .leads-filter-select:focus,
+        body:not([data-theme="dark"]) .global-search-input:focus,
+        body:not([data-theme="dark"]) .svc-search-input:focus {
+            color: #1a1a2e !important;
+        }
+    </style>
 </head>
 <body class="admin-body" data-sidebar-collapsed="false">
 
