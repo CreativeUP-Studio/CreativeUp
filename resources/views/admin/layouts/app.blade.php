@@ -326,46 +326,6 @@
                 </div>
                 <span class="sidebar-storage-text">3.5 GB de 10 GB</span>
             </div>
-
-            {{-- User Profile --}}
-            <div class="sidebar-user">
-                <div class="sidebar-user-avatar">
-                    @if(Auth::user()->avatar)
-                        <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}">
-                    @else
-                        <span>{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</span>
-                    @endif
-                </div>
-                <div class="sidebar-user-info">
-                    <span class="sidebar-user-name">{{ Auth::user()->name ?? 'Admin' }}</span>
-                    <span class="sidebar-user-role">Administrador</span>
-                </div>
-                <div class="sidebar-user-actions">
-                    <button class="sidebar-user-btn" title="Configuración de cuenta" onclick="openUserMenu()">
-                        <i class="fa-solid fa-ellipsis-vertical" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
-
-            {{-- User Menu Dropdown --}}
-            <div class="sidebar-user-menu" id="sidebarUserMenu">
-                <a href="{{ route('admin.profile.edit') }}" class="sidebar-user-menu-item">
-                    <i class="fa-solid fa-user-pen" aria-hidden="true"></i>
-                    <span>Editar Perfil</span>
-                </a>
-                <a href="{{ route('admin.profile.edit') }}" class="sidebar-user-menu-item">
-                    <i class="fa-solid fa-key" aria-hidden="true"></i>
-                    <span>Cambiar Contraseña</span>
-                </a>
-                <div class="sidebar-user-menu-divider"></div>
-                <form method="POST" action="{{ route('logout') }}" class="sidebar-logout-form">
-                    @csrf
-                    <button type="submit" class="sidebar-user-menu-item sidebar-user-menu-item--danger">
-                        <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
-                        <span>Cerrar Sesión</span>
-                    </button>
-                </form>
-            </div>
         </div>
     </aside>
 
@@ -510,19 +470,6 @@
                         <i class="fa-solid fa-chevron-down topbar-user-arrow" aria-hidden="true"></i>
                     </button>
                     <div class="topbar-dropdown-menu topbar-user-dropdown" id="userDropdown">
-                        <div class="topbar-dropdown-header topbar-user-dropdown-header">
-                            <div class="topbar-user-avatar topbar-user-avatar--lg">
-                                @if(Auth::user()->avatar)
-                                    <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}">
-                                @else
-                                    <span>{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</span>
-                                @endif
-                            </div>
-                            <div>
-                                <p class="topbar-user-dropdown-name">{{ Auth::user()->name ?? 'Admin' }}</p>
-                                <p class="topbar-user-dropdown-email">{{ Auth::user()->email ?? 'admin@example.com' }}</p>
-                            </div>
-                        </div>
                         <div class="topbar-dropdown-body">
                             <a href="{{ route('admin.profile.edit') }}" class="topbar-dropdown-item">
                                 <i class="fa-solid fa-user" aria-hidden="true"></i>
@@ -721,14 +668,6 @@
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // User Menu (Sidebar)
-    // ═══════════════════════════════════════════════════════════════════════════
-    function openUserMenu() {
-        const menu = document.getElementById('sidebarUserMenu');
-        menu.classList.toggle('open');
-    }
-
-    // ═══════════════════════════════════════════════════════════════════════════
     // Notifications Dropdown
     // ═══════════════════════════════════════════════════════════════════════════
     function toggleNotifications() {
@@ -831,10 +770,6 @@
         // Close user dropdown
         if (!e.target.closest('.topbar-user-btn') && !e.target.closest('#userDropdown')) {
             document.getElementById('userDropdown')?.classList.remove('open');
-        }
-        // Close sidebar user menu
-        if (!e.target.closest('.sidebar-user-btn') && !e.target.closest('#sidebarUserMenu')) {
-            document.getElementById('sidebarUserMenu')?.classList.remove('open');
         }
     });
 

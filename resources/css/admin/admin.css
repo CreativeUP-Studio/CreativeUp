@@ -116,7 +116,7 @@ body.admin-body::before {
     border-right: 1px solid var(--admin-border);
     display: flex;
     flex-direction: column;
-    z-index: 100;
+    z-index: 1010;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -531,6 +531,15 @@ body.admin-body::before {
     color: white;
     font-size: 1rem;
     font-weight: 700;
+    overflow: hidden;
+}
+
+.sidebar-user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    display: block;
 }
 
 .sidebar-user-info {
@@ -732,7 +741,7 @@ body[data-sidebar-collapsed="true"] .admin-main {
     align-items: center;
     justify-content: space-between;
     padding: 0 24px;
-    z-index: 50;
+    z-index: 990;
     box-shadow: var(--admin-shadow-sm);
 }
 
@@ -1087,6 +1096,15 @@ body[data-sidebar-collapsed="true"] .admin-main {
     color: white;
     font-size: 0.9375rem;
     font-weight: 700;
+    overflow: hidden;
+}
+
+.topbar-user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    display: block;
 }
 
 .topbar-user-avatar--lg {
@@ -2947,7 +2965,7 @@ body[data-theme="dark"] .sidebar-nav-count {
         inset: 0;
         background: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(4px);
-        z-index: 90;
+        z-index: 1000;
         display: none;
     }
 
