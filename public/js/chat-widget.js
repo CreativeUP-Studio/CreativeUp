@@ -149,6 +149,9 @@
             chatInput.focus();
             const badge = chatTrigger.querySelector('.trigger-badge');
             if (badge) badge.style.display = 'none';
+            
+            // Solicitar permisos para notificaciones nativas en el dispositivo
+            requestNotificationPermission();
         }
     }
     
@@ -384,13 +387,14 @@
                         lastMessageId = message.id;
                         localStorage.setItem('chat_last_message_id', lastMessageId);
                         
-                        // Mostrar badge si el chat está cerrado
-                        if (!isOpen) {
+                        // Mostrar badge y notificación nativa si el chat está cerrado o la pestaña inactiva
+                        if (!isOpen || document.visibilityState === 'hidden') {
                             const badge = chatTrigger.querySelector('.trigger-badge');
-                            if (badge) {
+                            if (badge && !isOpen) {
                                 badge.style.display = 'flex';
                                 badge.textContent = '1';
                             }
+                            showDeviceNotification(message.message);
                         }
                         playSound = true;
                     });
@@ -454,6 +458,44 @@
             playNote(1046.5, now + 0.08, 0.45);
         } catch (e) {
             console.warn('Audio context failed to play sound:', e);
+        }
+    }
+
+    /**
+     * Solicitar permisos para notificaciones nativas en el dispositivo
+     */
+    function requestNotificationPermission() {
+        if (!('Notification' in window)) return;
+        if (Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    }
+
+    /**
+     * Mostrar notificación nativa en la barra de notificaciones del dispositivo (móvil o laptop)
+     */
+    function showDeviceNotification(messageText) {
+        if (!('Notification' in window)) return;
+        
+        if (Notification.permission === 'granted') {
+            try {
+                const notification = new Notification("CreativeUp", {
+                    body: messageText,
+                    icon: '/favicon.ico',
+                    tag: 'chat-notification',
+                    silent: true // Usamos nuestro propio sonido customizado
+                });
+                
+                notification.onclick = function() {
+                    window.focus();
+                    if (!isOpen) {
+                        toggleChat();
+                    }
+                    notification.close();
+                };
+            } catch (e) {
+                console.warn('Failed to show native notification:', e);
+            }
         }
     }
     
