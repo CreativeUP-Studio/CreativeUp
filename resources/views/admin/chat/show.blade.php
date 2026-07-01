@@ -68,7 +68,7 @@
             @endforeach
             
             {{-- Typing Indicator --}}
-            <div class="chat-message-item user">
+            <div class="chat-message-item user" style="display: none;">
                 <div class="message-avatar-circle">
                     {{ strtoupper(substr($conversation->name, 0, 1)) }}
                 </div>
@@ -132,9 +132,12 @@
 (function() {
     'use strict';
     
+    const replyForm = document.getElementById('replyForm');
+    if (!replyForm || replyForm.dataset.initialized === 'true') return;
+    replyForm.dataset.initialized = 'true';
+
     const conversationId = '{{ $conversationId }}';
     const messagesContainer = document.getElementById('messagesContainer');
-    const replyForm = document.getElementById('replyForm');
     const replyMessage = document.getElementById('replyMessage');
     const sendButton = document.getElementById('sendButton');
     const charCount = document.getElementById('charCount');
@@ -186,8 +189,21 @@
 
     // Agregar mensaje al DOM
     function addMessage(message) {
+        // Evitar duplicados comprobando si el ID del mensaje ya existe en el DOM
+        if (document.querySelector(`[data-message-id="${message.id}"]`)) {
+            // Actualizar el lastMessageId por si acaso
+            if (message.id > lastMessageId) {
+                lastMessageId = message.id;
+            }
+            return;
+        }
+
         // Remover typing indicator si existe
         typingIndicator.classList.remove('active');
+        const typingContainer = typingIndicator.closest('.chat-message-item');
+        if (typingContainer) {
+            typingContainer.style.display = 'none';
+        }
         
         const messageDiv = document.createElement('div');
         messageDiv.className = `chat-message-item ${message.sender}`;
@@ -219,7 +235,6 @@
         `;
         
         // Insertar antes del typing indicator
-        const typingContainer = typingIndicator.closest('.chat-message-item');
         messagesContainer.insertBefore(messageDiv, typingContainer);
         
         scrollToBottom();
@@ -238,6 +253,10 @@
         if (!isTyping) {
             isTyping = true;
             typingIndicator.classList.add('active');
+            const typingContainer = typingIndicator.closest('.chat-message-item');
+            if (typingContainer) {
+                typingContainer.style.display = 'flex';
+            }
             scrollToBottom();
         }
     }
@@ -246,10 +265,22 @@
     function hideTyping() {
         isTyping = false;
         typingIndicator.classList.remove('active');
+        const typingContainer = typingIndicator.closest('.chat-message-item');
+        if (typingContainer) {
+            typingContainer.style.display = 'none';
+        }
     }
 
     // Polling para nuevos mensajes
     function checkNewMessages() {
+        // Auto-limpieza del intervalo al cambiar de página mediante Turbo
+        if (!document.getElementById('messagesContainer')) {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
+            return;
+        }
+
         fetch(`/admin/chat/${conversationId}/new-messages?last_message_id=${lastMessageId}`)
             .then(response => response.json())
             .then(data => {

@@ -36,6 +36,7 @@
     function initializeChat() {
         if (conversationId && hasUserInfo) {
             loadConversationHistory();
+            startPolling();
         }
     }
     
@@ -148,14 +149,6 @@
             chatInput.focus();
             const badge = chatTrigger.querySelector('.trigger-badge');
             if (badge) badge.style.display = 'none';
-            
-            // Iniciar polling si hay conversación
-            if (conversationId) {
-                startPolling();
-            }
-        } else {
-            // Detener polling
-            stopPolling();
         }
     }
     
@@ -385,6 +378,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.has_new && data.messages.length > 0) {
+                    let playSound = false;
                     data.messages.forEach(message => {
                         addMessage(message.message, 'bot', true, message.created_at);
                         lastMessageId = message.id;
@@ -398,7 +392,12 @@
                                 badge.textContent = '1';
                             }
                         }
+                        playSound = true;
                     });
+
+                    if (playSound) {
+                        playNotificationSound();
+                    }
                 }
             })
             .catch(error => console.error('Error checking messages:', error));
@@ -419,6 +418,42 @@
         if (pollingInterval) {
             clearInterval(pollingInterval);
             pollingInterval = null;
+        }
+    }
+
+    /**
+     * Reproducir sonido de notificación premium usando Web Audio API
+     */
+    function playNotificationSound() {
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            const ctx = new AudioContext();
+            
+            const playNote = (frequency, startTime, duration) => {
+                const osc = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(frequency, startTime);
+                
+                gainNode.gain.setValueAtTime(0, startTime);
+                gainNode.gain.linearRampToValueAtTime(0.2, startTime + 0.04);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+                
+                osc.connect(gainNode);
+                gainNode.connect(ctx.destination);
+                
+                osc.start(startTime);
+                osc.stop(startTime + duration);
+            };
+            
+            const now = ctx.currentTime;
+            // Tono limpio dual: Sol5 (784Hz) seguido de Do6 (1046.5Hz)
+            playNote(784, now, 0.35);
+            playNote(1046.5, now + 0.08, 0.45);
+        } catch (e) {
+            console.warn('Audio context failed to play sound:', e);
         }
     }
     
