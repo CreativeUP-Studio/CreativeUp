@@ -62,3 +62,4 @@ class AppServiceProvider extends ServiceProvider
         Cache::forget('menu_services');
     }
 }
+
