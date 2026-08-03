@@ -152,10 +152,17 @@ class ContactController extends Controller
             ->first();
 
         if ($existingLead) {
+            // Re-enviar correo de bienvenida al boletín
+            try {
+                Mail::to($existingLead->email)->send(new SubscriptionWelcome($existingLead));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error("Error al enviar correo de bienvenida de newsletter: " . $e->getMessage());
+            }
+
             return response()->json([
-                'success' => false,
+                'success' => true,
                 'already_subscribed' => true,
-                'message' => '¡Este correo ya está suscrito a nuestro boletín! Gracias por tu interés.',
+                'message' => '¡Correo ya registrado! Te hemos enviado nuevamente el mensaje de confirmación a tu bandeja de entrada.',
             ], 200);
         }
 
