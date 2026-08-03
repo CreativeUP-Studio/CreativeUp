@@ -899,13 +899,226 @@
         @if(session('warning'))
             showWarning('{{ session('warning') }}');
         @endif
+
+        // ============================================================
+        // 1. LOADER ANIMADO GLOBAL EN BOTONES DE GUARDAR / SUBMIT
+        // ============================================================
+        document.addEventListener('submit', function(e) {
+            const form = e.target;
+            
+            if (form.classList.contains('no-loader') || form.hasAttribute('data-no-loader')) {
+                return;
+            }
+
+            if (form.getAttribute('data-swal-confirming') === 'true') {
+                return;
+            }
+
+            const submitBtn = form.querySelector('button[type="submit"]:focus') 
+                           || document.activeElement 
+                           || form.querySelector('button[type="submit"]');
+
+            if (submitBtn && (submitBtn.type === 'submit' || submitBtn.tagName === 'BUTTON') && !submitBtn.classList.contains('is-submitting')) {
+                submitBtn.classList.add('is-submitting');
+                submitBtn.style.pointerEvents = 'none';
+
+                const textSpan = submitBtn.querySelector('span:not(.fa-solid):not(.fas):not(.far)');
+                const originalText = textSpan ? textSpan.textContent.trim() : submitBtn.textContent.trim();
+
+                let loadingText = 'Guardando...';
+                if (originalText.toLowerCase().includes('publicar')) {
+                    loadingText = 'Publicando...';
+                } else if (originalText.toLowerCase().includes('eliminar') || originalText.toLowerCase().includes('borrar')) {
+                    loadingText = 'Eliminando...';
+                } else if (originalText.toLowerCase().includes('enviar') || originalText.toLowerCase().includes('responder')) {
+                    loadingText = 'Enviando...';
+                } else if (originalText.toLowerCase().includes('iniciar') || originalText.toLowerCase().includes('acceder')) {
+                    loadingText = 'Accediendo...';
+                }
+
+                if (textSpan) {
+                    const icon = submitBtn.querySelector('i');
+                    if (icon) {
+                        icon.className = 'fa-solid fa-circle-notch fa-spin';
+                    } else {
+                        const newIcon = document.createElement('i');
+                        newIcon.className = 'fa-solid fa-circle-notch fa-spin';
+                        newIcon.style.marginRight = '0.5rem';
+                        submitBtn.insertBefore(newIcon, textSpan);
+                    }
+                    textSpan.textContent = loadingText;
+                } else {
+                    submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin" style="margin-right:0.5rem;"></i><span>${loadingText}</span>`;
+                }
+
+                setTimeout(() => {
+                    submitBtn.classList.remove('is-submitting');
+                    submitBtn.style.pointerEvents = 'auto';
+                }, 15000);
+            }
+        });
+
+        // ============================================================
+        // 2. ALERTA MODAL SWEETALERT2 PARA CONFIRMACIÓN DE ELIMINACIÓN
+        // ============================================================
+        document.addEventListener('click', function(e) {
+            const deleteBtn = e.target.closest('.svc-card-btn--delete, .btn-delete, .admin-btn-danger, [data-confirm-delete], button[onclick*="confirm"], a[onclick*="confirm"]');
+            const deleteForm = e.target.closest('form[action*="destroy"], form[action*="delete"], .admin-delete-form, form[onsubmit*="confirm"]');
+
+            if (deleteBtn || (deleteForm && e.target.closest('button[type="submit"]'))) {
+                const targetForm = deleteForm || (deleteBtn ? deleteBtn.closest('form') : null);
+                const targetLink = deleteBtn ? deleteBtn.closest('a') : null;
+
+                if (targetForm && targetForm.hasAttribute('onsubmit')) {
+                    targetForm.removeAttribute('onsubmit');
+                }
+                if (deleteBtn && deleteBtn.hasAttribute('onclick')) {
+                    const onclickAttr = deleteBtn.getAttribute('onclick');
+                    if (onclickAttr.includes('confirm(')) {
+                        deleteBtn.removeAttribute('onclick');
+                    }
+                }
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                let itemName = 'este elemento';
+                if (targetForm) {
+                    const card = targetForm.closest('.svc-card-item, .svc-card, .admin-card, tr, .card');
+                    if (card) {
+                        const titleEl = card.querySelector('.svc-card-title, h3, h2, td:first-child, .card-title');
+                        if (titleEl) {
+                            itemName = `"${titleEl.textContent.trim()}"`;
+                        }
+                    }
+                }
+
+                Swal.fire({
+                    title: '¿Confirmar eliminación?',
+                    html: `<div style="font-size: 0.95rem; line-height: 1.5; color: #64748b; margin-top: 0.5rem;">
+                             Estás a punto de eliminar <strong style="color: #ef4444;">${itemName}</strong>.<br>
+                             Esta acción es permanente y no se podrá deshacer.
+                           </div>`,
+                    icon: 'warning',
+                    iconColor: '#ef4444',
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fa-solid fa-trash-can"></i> Sí, eliminar',
+                    cancelButtonText: '<i class="fa-solid fa-xmark"></i> Cancelar',
+                    reverseButtons: true,
+                    background: document.body.getAttribute('data-theme') === 'dark' ? '#181825' : '#ffffff',
+                    color: document.body.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#0f172a',
+                    customClass: {
+                        popup: 'swal-custom-delete-popup',
+                        confirmButton: 'swal-custom-delete-btn',
+                        cancelButton: 'swal-custom-cancel-btn'
+                    },
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown animate__faster'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp animate__faster'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        if (targetForm) {
+                            targetForm.setAttribute('data-swal-confirming', 'true');
+                            const btn = deleteBtn || targetForm.querySelector('button[type="submit"]');
+                            if (btn) {
+                                btn.classList.add('is-submitting');
+                                btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin" style="margin-right:0.5rem;"></i><span>Eliminando...</span>`;
+                            }
+                            targetForm.submit();
+                        } else if (targetLink && targetLink.href) {
+                            window.location.href = targetLink.href;
+                        }
+                    }
+                });
+            }
+        }, true);
     </script>
 
     {{-- Sistema de Notificaciones en Tiempo Real --}}
     <script src="{{ asset('js/admin-notifications.js') }}"></script>
 
-    {{-- Estilos personalizados para SweetAlert2 --}}
+    {{-- Estilos personalizados para Loader y SweetAlert2 --}}
     <style>
+        /* Form Submit Loader Animation Style */
+        .btn-submitting,
+        button[type="submit"].is-submitting,
+        .admin-btn.is-submitting {
+            position: relative !important;
+            pointer-events: none !important;
+            opacity: 0.88 !important;
+            cursor: wait !important;
+            box-shadow: 0 0 15px rgba(255, 0, 110, 0.4) !important;
+        }
+
+        /* Ultra-Premium SweetAlert2 Custom Styling */
+        .swal-custom-delete-popup {
+            border-radius: 20px !important;
+            padding: 2rem 1.75rem !important;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            background: #ffffff !important;
+            color: #0f172a !important;
+        }
+
+        body[data-theme="dark"] .swal-custom-delete-popup {
+            background: #181825 !important;
+            color: #f8fafc !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+
+        .swal-custom-delete-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 10px !important;
+            padding: 0.75rem 1.75rem !important;
+            font-weight: 600 !important;
+            font-size: 0.9rem !important;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4) !important;
+            transition: all 0.25s ease !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+        }
+
+        .swal-custom-delete-btn:hover {
+            transform: translateY(-2px) scale(1.02) !important;
+            box-shadow: 0 8px 22px rgba(239, 68, 68, 0.6) !important;
+        }
+
+        .swal-custom-cancel-btn {
+            background: #f1f5f9 !important;
+            color: #475569 !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 10px !important;
+            padding: 0.75rem 1.5rem !important;
+            font-weight: 600 !important;
+            font-size: 0.9rem !important;
+            transition: all 0.2s ease !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+        }
+
+        body[data-theme="dark"] .swal-custom-cancel-btn {
+            background: #27273a !important;
+            color: #cbd5e1 !important;
+            border-color: #3f3f5a !important;
+        }
+
+        .swal-custom-cancel-btn:hover {
+            background: #e2e8f0 !important;
+            color: #1e293b !important;
+        }
+
+        body[data-theme="dark"] .swal-custom-cancel-btn:hover {
+            background: #32324d !important;
+            color: #ffffff !important;
+        }
+
         .swal-custom-popup {
             border-radius: 16px !important;
             padding: 2rem !important;
@@ -947,17 +1160,11 @@
             border-width: 3px !important;
         }
         
-        /* Icono de notificación primary para chat */
         .topbar-notification-icon--primary {
             background: var(--admin-gradient);
             color: white;
         }
     </style>
-
-    {{-- ═══════════════════════════════════════════════════════════════════════════
-         Sistema de Notificaciones en Tiempo Real
-         ═══════════════════════════════════════════════════════════════════════════ --}}
-    <script src="{{ asset('js/admin-notifications.js') }}"></script>
 
     @stack('scripts')
 </body>
