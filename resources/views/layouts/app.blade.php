@@ -452,7 +452,7 @@
             {{-- Columna Izquierda: Navegación con Iconos e Interactividad --}}
             <nav class="main-navigation">
                 <a href="{{ route('home') }}" class="nav-link" 
-                   data-preview-img="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop"
+                   data-preview-img="{{ $siteSettings->menu_img_home_url }}"
                    data-preview-title="CreativeUp Studio"
                    data-preview-desc="Donde las ideas se convierten en experiencias digitales premium y software a medida.">
                     <span class="nav-number">01</span>
@@ -461,7 +461,7 @@
                     <span class="nav-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                 </a>
                 <a href="{{ route('services.index') }}" class="nav-link" 
-                   data-preview-img="https://images.unsplash.com/photo-1542744094-3a31f103e35f?q=80&w=800&auto=format&fit=crop"
+                   data-preview-img="{{ $siteSettings->menu_img_services_url }}"
                    data-preview-title="Nuestras Soluciones"
                    data-preview-desc="Diseño web a medida, desarrollo de software premium, e-commerce y marketing digital.">
                     <span class="nav-number">02</span>
@@ -470,7 +470,7 @@
                     <span class="nav-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                 </a>
                 <a href="{{ route('projects.index') }}" class="nav-link" 
-                   data-preview-img="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=800&auto=format&fit=crop"
+                   data-preview-img="{{ $siteSettings->menu_img_projects_url }}"
                    data-preview-title="Casos de Éxito"
                    data-preview-desc="Explora nuestra galería de proyectos premium desarrollados para impulsar marcas a nivel global.">
                     <span class="nav-number">03</span>
@@ -479,7 +479,7 @@
                     <span class="nav-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                 </a>
                 <a href="{{ route('blog.index') }}" class="nav-link" 
-                   data-preview-img="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=800&auto=format&fit=crop"
+                   data-preview-img="{{ $siteSettings->menu_img_blog_url }}"
                    data-preview-title="Ideas y Tendencias"
                    data-preview-desc="Artículos, tutoriales e insights sobre tecnología, diseño UI/UX y el futuro del desarrollo web.">
                     <span class="nav-number">04</span>
@@ -488,7 +488,7 @@
                     <span class="nav-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                 </a>
                 <a href="{{ route('contact.index') }}" class="nav-link" 
-                   data-preview-img="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop"
+                   data-preview-img="{{ $siteSettings->menu_img_contact_url }}"
                    data-preview-title="Inicia tu Proyecto"
                    data-preview-desc="Hablemos sobre tu visión. Nuestro equipo de expertos está listo para darle vida a tus ideas digitales.">
                     <span class="nav-number">05</span>
@@ -503,7 +503,7 @@
                 {{-- Tarjeta de Previsualización Interactiva (Hidden on Mobile/Tablet) --}}
                 <div class="fs-nav-preview-card">
                     <div class="fs-nav-preview-img-wrap">
-                        <div class="fs-nav-preview-img" id="fsNavPreviewImg" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop');"></div>
+                        <div class="fs-nav-preview-img" id="fsNavPreviewImg" style="background-image: url('{{ $siteSettings->menu_img_home_url }}');"></div>
                     </div>
                     <div class="fs-nav-preview-content">
                         <span class="fs-nav-preview-badge" id="fsNavPreviewBadge">CreativeUp</span>

@@ -236,6 +236,13 @@
                     <i class="fa-solid fa-circle"></i>
                     <span>{{ $service->is_active ? 'Publicado' : 'Borrador' }}</span>
                 </div>
+                <div class="svc-field svc-field--compact" style="margin-top: 0.75rem; margin-bottom: 0.75rem;">
+                    <label for="is_active" style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 0.35rem; display: block;">Estado:</label>
+                    <select id="is_active" name="is_active" class="svc-input" style="width: 100%; padding: 0.5rem; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 600;">
+                        <option value="1" {{ old('is_active', $service->is_active) ? 'selected' : '' }}>✅ Publicado / Activo</option>
+                        <option value="0" {{ !old('is_active', $service->is_active) ? 'selected' : '' }}>📝 Borrador / Inactivo</option>
+                    </select>
+                </div>
                 <div class="svc-status-info">
                     <div class="svc-status-item">
                         <span>Creado:</span>

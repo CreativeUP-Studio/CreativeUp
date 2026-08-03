@@ -269,12 +269,13 @@ function initServicesModule() {
     });
 
     // B. Conmutadores de Estado AJAX (Switches)
-    activeToggles.forEach(toggle => {
-        toggle.addEventListener('change', function() {
-            const serviceId = this.getAttribute('data-id');
-            const isActive = this.checked ? 1 : 0;
+    document.addEventListener('change', function(e) {
+        if (e.target && e.target.classList.contains('svc-active-toggle')) {
+            const toggle = e.target;
+            const serviceId = toggle.getAttribute('data-id');
+            const isActive = toggle.checked ? 1 : 0;
             const label = document.getElementById(`statusLabel-${serviceId}`);
-            const card = document.querySelector(`.svc-card-item[data-id="${serviceId}"]`);
+            const card = toggle.closest('.svc-card-item');
 
             // Actualizar etiqueta e info local inmediatamente
             if (label) label.textContent = isActive ? 'Activo' : 'Borrador';
@@ -299,19 +300,19 @@ function initServicesModule() {
                 if (window.Toast) {
                     window.Toast.fire({
                         icon: 'success',
-                        title: isActive ? 'Servicio publicado' : 'Servicio en borrador'
+                        title: data.is_active ? 'Servicio publicado' : 'Servicio en borrador'
                     });
                 }
             })
             .catch(err => {
                 console.error(err);
                 // Revertir en caso de fallo
-                this.checked = !this.checked;
-                if (label) label.textContent = this.checked ? 'Activo' : 'Borrador';
-                if (card) card.setAttribute('data-status', this.checked ? 'active' : 'inactive');
+                toggle.checked = !toggle.checked;
+                if (label) label.textContent = toggle.checked ? 'Activo' : 'Borrador';
+                if (card) card.setAttribute('data-status', toggle.checked ? 'active' : 'inactive');
                 alert('Ocurrió un error al actualizar el estado del servicio.');
             });
-        });
+        }
     });
 
     // C. Atajo de Teclado (tecla / para buscar)

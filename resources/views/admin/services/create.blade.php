@@ -196,6 +196,17 @@
 
         {{-- Sidebar --}}
         <aside class="svc-sidebar">
+            {{-- Status Card --}}
+            <div class="svc-sidebar-card">
+                <h3><i class="fa-solid fa-circle-dot"></i> Estado del servicio</h3>
+                <div class="svc-field svc-field--compact" style="margin-top: 0.5rem;">
+                    <select id="is_active" name="is_active" class="svc-input" style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 600;">
+                        <option value="1" {{ old('is_active', '1') == '1' ? 'selected' : '' }}>✅ Publicado / Activo</option>
+                        <option value="0" {{ old('is_active') == '0' ? 'selected' : '' }}>📝 Borrador / Inactivo</option>
+                    </select>
+                </div>
+            </div>
+
             {{-- Image Upload --}}
             <div class="svc-sidebar-card">
                 <h3><i class="fa-solid fa-image"></i> Imagen principal</h3>

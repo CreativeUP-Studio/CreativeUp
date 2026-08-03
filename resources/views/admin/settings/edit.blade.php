@@ -99,7 +99,7 @@ body[data-theme="dark"] .settings-switch label {
         </div>
     @endif
 
-    <form id="settingsForm" action="{{ route('admin.settings.update') }}" method="POST">
+    <form id="settingsForm" action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -246,6 +246,125 @@ body[data-theme="dark"] .settings-switch label {
             </div>
         </div>
 
+        {{-- IMÁGENES DEL MENÚ DE NAVEGACIÓN FULLSCREEN --}}
+        <div class="settings-card">
+            <div class="settings-card-header">
+                <h5><i class="fas fa-images"></i> Imágenes de Previsualización del Menú</h5>
+            </div>
+            <div class="settings-card-body">
+                <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem;">
+                    Sube las imágenes que aparecerán en la tarjeta de previsualización interactiva al desplegar el menú de navegación pantalla completa (Fullscreen Navigation). Tamaño máximo 50MB por imagen.
+                </p>
+
+                <div class="settings-grid settings-grid-3">
+                    {{-- 01. INICIO --}}
+                    <div class="settings-form-group">
+                        <label class="settings-form-label">
+                            <i class="fas fa-home" style="color: var(--admin-primary); margin-right: 4px;"></i>
+                            01. Imagen Enlace "Inicio"
+                        </label>
+                        <div style="margin-bottom: 0.75rem; border-radius: 10px; overflow: hidden; height: 110px; background: #f3f4f6; position: relative; border: 1px dashed #cbd5e1;">
+                            <img id="prev_menu_img_home" src="{{ $settings->menu_img_home_url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <input type="file" name="menu_img_home" class="settings-form-control @error('menu_img_home') is-invalid @enderror" accept="image/*" onchange="previewMenuImg(this, 'prev_menu_img_home')">
+                        <small class="settings-form-text">Recomendado: 800x600px. (Max 50MB)</small>
+                        @if($settings->menu_img_home)
+                            <div style="margin-top: 0.5rem;">
+                                <label style="font-size: 0.8rem; color: #ef4444; cursor: pointer;">
+                                    <input type="checkbox" name="remove_menu_img_home" value="1"> Restablecer a imagen por defecto
+                                </label>
+                            </div>
+                        @endif
+                        @error('menu_img_home')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+
+                    {{-- 02. SERVICIOS --}}
+                    <div class="settings-form-group">
+                        <label class="settings-form-label">
+                            <i class="fas fa-layer-group" style="color: var(--admin-primary); margin-right: 4px;"></i>
+                            02. Imagen Enlace "Servicios"
+                        </label>
+                        <div style="margin-bottom: 0.75rem; border-radius: 10px; overflow: hidden; height: 110px; background: #f3f4f6; position: relative; border: 1px dashed #cbd5e1;">
+                            <img id="prev_menu_img_services" src="{{ $settings->menu_img_services_url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <input type="file" name="menu_img_services" class="settings-form-control @error('menu_img_services') is-invalid @enderror" accept="image/*" onchange="previewMenuImg(this, 'prev_menu_img_services')">
+                        <small class="settings-form-text">Recomendado: 800x600px. (Max 50MB)</small>
+                        @if($settings->menu_img_services)
+                            <div style="margin-top: 0.5rem;">
+                                <label style="font-size: 0.8rem; color: #ef4444; cursor: pointer;">
+                                    <input type="checkbox" name="remove_menu_img_services" value="1"> Restablecer a imagen por defecto
+                                </label>
+                            </div>
+                        @endif
+                        @error('menu_img_services')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+
+                    {{-- 03. PORTAFOLIO --}}
+                    <div class="settings-form-group">
+                        <label class="settings-form-label">
+                            <i class="fas fa-briefcase" style="color: var(--admin-primary); margin-right: 4px;"></i>
+                            03. Imagen Enlace "Portafolio"
+                        </label>
+                        <div style="margin-bottom: 0.75rem; border-radius: 10px; overflow: hidden; height: 110px; background: #f3f4f6; position: relative; border: 1px dashed #cbd5e1;">
+                            <img id="prev_menu_img_projects" src="{{ $settings->menu_img_projects_url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <input type="file" name="menu_img_projects" class="settings-form-control @error('menu_img_projects') is-invalid @enderror" accept="image/*" onchange="previewMenuImg(this, 'prev_menu_img_projects')">
+                        <small class="settings-form-text">Recomendado: 800x600px. (Max 50MB)</small>
+                        @if($settings->menu_img_projects)
+                            <div style="margin-top: 0.5rem;">
+                                <label style="font-size: 0.8rem; color: #ef4444; cursor: pointer;">
+                                    <input type="checkbox" name="remove_menu_img_projects" value="1"> Restablecer a imagen por defecto
+                                </label>
+                            </div>
+                        @endif
+                        @error('menu_img_projects')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+
+                    {{-- 04. BLOG --}}
+                    <div class="settings-form-group">
+                        <label class="settings-form-label">
+                            <i class="fas fa-newspaper" style="color: var(--admin-primary); margin-right: 4px;"></i>
+                            04. Imagen Enlace "Blog"
+                        </label>
+                        <div style="margin-bottom: 0.75rem; border-radius: 10px; overflow: hidden; height: 110px; background: #f3f4f6; position: relative; border: 1px dashed #cbd5e1;">
+                            <img id="prev_menu_img_blog" src="{{ $settings->menu_img_blog_url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <input type="file" name="menu_img_blog" class="settings-form-control @error('menu_img_blog') is-invalid @enderror" accept="image/*" onchange="previewMenuImg(this, 'prev_menu_img_blog')">
+                        <small class="settings-form-text">Recomendado: 800x600px. (Max 50MB)</small>
+                        @if($settings->menu_img_blog)
+                            <div style="margin-top: 0.5rem;">
+                                <label style="font-size: 0.8rem; color: #ef4444; cursor: pointer;">
+                                    <input type="checkbox" name="remove_menu_img_blog" value="1"> Restablecer a imagen por defecto
+                                </label>
+                            </div>
+                        @endif
+                        @error('menu_img_blog')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+
+                    {{-- 05. CONTACTO --}}
+                    <div class="settings-form-group">
+                        <label class="settings-form-label">
+                            <i class="fas fa-paper-plane" style="color: var(--admin-primary); margin-right: 4px;"></i>
+                            05. Imagen Enlace "Contacto"
+                        </label>
+                        <div style="margin-bottom: 0.75rem; border-radius: 10px; overflow: hidden; height: 110px; background: #f3f4f6; position: relative; border: 1px dashed #cbd5e1;">
+                            <img id="prev_menu_img_contact" src="{{ $settings->menu_img_contact_url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <input type="file" name="menu_img_contact" class="settings-form-control @error('menu_img_contact') is-invalid @enderror" accept="image/*" onchange="previewMenuImg(this, 'prev_menu_img_contact')">
+                        <small class="settings-form-text">Recomendado: 800x600px. (Max 50MB)</small>
+                        @if($settings->menu_img_contact)
+                            <div style="margin-top: 0.5rem;">
+                                <label style="font-size: 0.8rem; color: #ef4444; cursor: pointer;">
+                                    <input type="checkbox" name="remove_menu_img_contact" value="1"> Restablecer a imagen por defecto
+                                </label>
+                            </div>
+                        @endif
+                        @error('menu_img_contact')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{-- OPCIONES Y FUNCIONALIDADES --}}
         <div class="settings-card">
             <div class="settings-card-header">
@@ -276,4 +395,18 @@ body[data-theme="dark"] .settings-switch label {
         </div>
     </form>
 </div>
+
+@push('scripts')
+<script>
+function previewMenuImg(input, targetId) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById(targetId).src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+@endpush
 @endsection

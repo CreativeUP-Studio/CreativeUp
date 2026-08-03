@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SiteSettingController extends Controller
 {
@@ -47,6 +48,13 @@ class SiteSettingController extends Controller
             // SEO General
             'meta_title' => 'required|string|max:200',
             'meta_description' => 'required|string|max:500',
+
+            // Imágenes del Menú de Navegación (Max 50MB cada una)
+            'menu_img_home' => 'nullable|image|max:51200',
+            'menu_img_services' => 'nullable|image|max:51200',
+            'menu_img_projects' => 'nullable|image|max:51200',
+            'menu_img_blog' => 'nullable|image|max:51200',
+            'menu_img_contact' => 'nullable|image|max:51200',
         ]);
 
         // Procesar checkboxes
@@ -57,6 +65,22 @@ class SiteSettingController extends Controller
         $settings = SiteSetting::first();
         if (!$settings) {
             $settings = new SiteSetting();
+        }
+
+        // Procesar subida de imágenes para el menú
+        $menuFields = ['menu_img_home', 'menu_img_services', 'menu_img_projects', 'menu_img_blog', 'menu_img_contact'];
+        foreach ($menuFields as $imgField) {
+            if ($request->has('remove_' . $imgField) && $request->input('remove_' . $imgField) == '1') {
+                if ($settings->$imgField && Storage::disk('public')->exists($settings->$imgField)) {
+                    Storage::disk('public')->delete($settings->$imgField);
+                }
+                $validated[$imgField] = null;
+            } elseif ($request->hasFile($imgField)) {
+                if ($settings->$imgField && Storage::disk('public')->exists($settings->$imgField)) {
+                    Storage::disk('public')->delete($settings->$imgField);
+                }
+                $validated[$imgField] = $request->file($imgField)->store('settings/menu', 'public');
+            }
         }
 
         $settings->fill($validated);

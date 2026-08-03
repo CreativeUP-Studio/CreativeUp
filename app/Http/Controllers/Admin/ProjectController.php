@@ -118,7 +118,11 @@ class ProjectController extends Controller
         $project = Project::create($validated);
 
         if ($project->status === 'published') {
-            \App\Services\NewsletterNotificationService::notifyNewProject($project);
+            try {
+                \App\Services\NewsletterNotificationService::notifyNewProject($project);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Error notificando nuevo proyecto: ' . $e->getMessage());
+            }
         }
 
         // Guardar imágenes adicionales
@@ -352,7 +356,11 @@ class ProjectController extends Controller
         ]);
 
         if ($newStatus === 'published') {
-            \App\Services\NewsletterNotificationService::notifyNewProject($project);
+            try {
+                \App\Services\NewsletterNotificationService::notifyNewProject($project);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Error notificando nuevo proyecto: ' . $e->getMessage());
+            }
         }
 
         return response()->json([

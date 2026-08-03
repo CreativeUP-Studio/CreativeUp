@@ -1281,40 +1281,42 @@
     perspective: 1200px;
 }
 
-/* Hybrid MacBook - Classic Silver Aluminum Vector Style */
+/* Modern Ultra-Slim MacBook Pro - Sleek Vector Style */
 .apple-macbook-front {
     position: relative;
-    width: 90%;
+    width: 92%;
+    max-width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .apple-macbook-front .mac-lid {
-    background: #08080a;
-    border-radius: 20px 20px 0 0;
-    padding: 2% 2% 2.8%;
+    background: #050507;
+    border-radius: 8px 8px 0 0;
+    padding: 4px 4px 5px; /* Ultra-thin screen bezel */
     width: 100%;
     position: relative;
-    border: 2.5px solid #a1a1a6; /* Silver aluminum border */
+    border: 1px solid #94a3b8; /* Anodized silver edge */
     border-bottom: none;
     box-shadow: 
-        inset 0 0 0 1px #1c1c1e,
-        inset 0 0 0 2px #0a0a0c,
-        0 4px 20px rgba(0,0,0,0.15);
+        inset 0 0 0 1px #18181b,
+        0 6px 20px rgba(0, 0, 0, 0.3);
     z-index: 2;
+    box-sizing: border-box;
 }
 
 .apple-macbook-front .mac-notch {
     position: absolute;
-    top: 2%;
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 14%;
-    height: 18px;
-    background: #08080a;
-    border-radius: 0 0 8px 8px;
+    width: clamp(40px, 8%, 70px);
+    height: clamp(6px, 0.9vw, 10px);
+    background: #050507;
+    border-radius: 0 0 4px 4px;
     z-index: 10;
     display: flex;
     align-items: center;
@@ -1322,8 +1324,8 @@
 }
 
 .apple-macbook-front .mac-camera {
-    width: 5px;
-    height: 5px;
+    width: 3px;
+    height: 3px;
     background: #0f172a;
     border-radius: 50%;
     position: relative;
@@ -1332,21 +1334,21 @@
 .apple-macbook-front .mac-camera::after {
     content: '';
     position: absolute;
-    right: -10px;
-    top: 1px;
-    width: 3px;
-    height: 3px;
-    background: #22c55e; /* Green camera LED */
+    right: -6px;
+    top: 0.5px;
+    width: 2px;
+    height: 2px;
+    background: #22c55e;
     border-radius: 50%;
     box-shadow: 0 0 2px #22c55e;
 }
 
 .apple-macbook-front .mac-screen {
-    background: #1e1e1e;
-    border-radius: 8px 8px 0 0;
+    background: #18181b;
+    border-radius: 5px 5px 0 0;
     overflow: hidden;
     position: relative;
-    border: 1px solid #1c1c1e;
+    border: 1px solid #18181b;
     aspect-ratio: 16/10;
     width: 100%;
     display: flex;
@@ -1355,7 +1357,7 @@
 
 .apple-macbook-front .mac-screen img {
     width: 100%;
-    height: calc(100% - 30px);
+    height: calc(100% - clamp(18px, 2.2vw, 22px));
     object-fit: cover;
     object-position: top center;
     background: #fff;
@@ -1363,79 +1365,86 @@
 }
 
 .apple-macbook-front .mac-browser {
-    height: 30px;
-    background: #1c1c1e;
+    height: clamp(18px, 2.2vw, 22px);
+    background: #18181b;
     display: flex;
     align-items: center;
-    padding: 0 12px;
+    padding: 0 8px;
     border-bottom: 1px solid #0f0f11;
     flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 .apple-macbook-front .mac-browser-dots {
-    width: 8px; height: 8px;
+    width: 5px; 
+    height: 5px;
     background: #ff5f56;
     border-radius: 50%;
-    box-shadow: 14px 0 0 #ffbd2e, 28px 0 0 #27c93f;
+    box-shadow: 9px 0 0 #ffbd2e, 18px 0 0 #27c93f;
+    flex-shrink: 0;
 }
 
 .apple-macbook-front .mac-browser-url {
-    background: #0f0f11;
-    color: #888;
+    background: #09090b;
+    color: #94a3b8;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 10px;
-    padding: 4px 0;
-    border-radius: 5px;
+    font-size: clamp(7px, 0.9vw, 9px);
+    height: clamp(12px, 1.5vw, 15px);
+    border-radius: 3px;
     text-align: center;
     flex-grow: 1;
-    margin: 0 35px;
+    margin: 0 clamp(6px, 2.5vw, 18px);
     border: 1px solid #27272a;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* Classic Silver keyboard base */
+/* Ultra-Slim MacBook Pro Base - 6px Thin */
 .apple-macbook-front .mac-keyboard-base {
     position: relative;
-    width: 114%;
-    height: 24px;
-    background: linear-gradient(to bottom, #f1f5f9 0%, #cbd5e1 25%, #94a3b8 85%, #64748b 100%); /* Silver metallic brushed finish */
-    border-radius: 0 0 16px 16px;
+    width: 107%;
+    margin: 0 auto !important;
+    height: clamp(6px, 1vw, 10px);
+    background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 65%, #94a3b8 100%);
+    border-radius: 0 0 8px 8px;
     z-index: 1;
-    border: 1.5px solid #a1a1a6;
-    border-top: 1px solid #e2e8f0;
+    border: 1px solid #cbd5e1;
+    border-top: 1.5px solid #ffffff;
     box-shadow: 
-        0 15px 35px rgba(0,0,0,0.35), 
-        inset 0 1px 1px #ffffff;
+        0 10px 25px -2px rgba(0, 0, 0, 0.35), 
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
     display: block;
     transform: none !important;
+    box-sizing: border-box;
 }
 
-/* Thumb notch cutout in the center of the base */
+/* Discrete Center Cutout on base */
 .apple-macbook-front .mac-keyboard-base::before {
     content: '';
     position: absolute;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 14%;
-    height: 6px;
+    width: 10%;
+    height: clamp(1.5px, 0.3vw, 2.5px);
     background: #475569;
-    border-radius: 0 0 8px 8px;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);
+    border-radius: 0 0 3px 3px;
 }
 
-/* Rubber feet underneath the base */
+/* Subtle Rubber feet underneath base */
 .apple-macbook-front .mac-keyboard-base .mac-foot {
     position: absolute;
-    bottom: -4px;
-    width: 28px;
-    height: 5px;
+    bottom: -2px;
+    width: clamp(10px, 2vw, 18px);
+    height: 2px;
     background: #1e293b;
-    border-radius: 0 0 6px 6px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    border-radius: 0 0 3px 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .apple-macbook-front .mac-keyboard-base .mac-foot--left {
@@ -1446,7 +1455,7 @@
     right: 8%;
 }
 
-/* Hide old key layout elements to support the new realistic flat layout */
+/* Hide legacy elements */
 .apple-macbook-front .mac-keyboard,
 .apple-macbook-front .mac-trackpad,
 .apple-macbook-front .mac-cutout {
@@ -1612,7 +1621,7 @@
     box-sizing: border-box;
 }
 
-/* MacBook Dynamic Mockup */
+/* MacBook Dynamic Mockup Wrapper */
 .project-mockup-wrapper.mockup-macbook {
     display: flex;
     flex-direction: column;
@@ -1624,38 +1633,39 @@
 
 .project-mockup-wrapper .macbook-device {
     position: relative;
-    width: 90%;
+    width: 92%;
     max-width: 100%;
     display: flex;
     flex-direction: column;
-    transition: transform 0.4s ease;
+    align-items: center;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .project-mockup-wrapper .macbook-device:hover {
-    transform: translateY(-5px) rotateX(2deg);
+    transform: translateY(-4px) rotateX(1.5deg);
 }
 
 .project-mockup-wrapper .mac-lid {
-    background: #08080a;
-    border-radius: 14px 14px 0 0;
-    padding: 2.2% 2.2% 3%;
+    background: #050507;
+    border-radius: 8px 8px 0 0;
+    padding: 4px 4px 5px;
     width: 100%;
     position: relative;
-    border: 2px solid #a1a1a6; /* Silver aluminum border */
+    border: 1px solid #94a3b8;
     border-bottom: none;
     box-shadow: 
-        inset 0 0 0 1px #1c1c1e,
-        inset 0 0 0 2px #0a0a0c,
-        0 8px 24px rgba(0,0,0,0.3);
+        inset 0 0 0 1px #18181b,
+        0 6px 20px rgba(0, 0, 0, 0.3);
     z-index: 2;
+    box-sizing: border-box;
 }
 
 .project-mockup-wrapper .mac-screen-content {
-    background: #1e1e1e;
-    border-radius: 6px 6px 0 0;
+    background: #18181b;
+    border-radius: 5px 5px 0 0;
     overflow: hidden;
     position: relative;
-    border: 1px solid #1c1c1e;
+    border: 1px solid #18181b;
     aspect-ratio: 16/10;
     width: 100%;
     display: flex;
@@ -1663,23 +1673,25 @@
 }
 
 .project-mockup-wrapper .mac-browser-bar {
-    height: 26px;
-    background: #1c1c1e;
+    height: clamp(18px, 2.2vw, 22px);
+    background: #18181b;
     display: flex;
     align-items: center;
-    padding: 0 10px;
+    padding: 0 8px;
     border-bottom: 1px solid #0f0f11;
+    box-sizing: border-box;
 }
 
 .project-mockup-wrapper .mac-dots {
     display: flex;
-    gap: 5px;
+    gap: 4px;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .project-mockup-wrapper .mac-dots span {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     display: inline-block;
 }
@@ -1689,25 +1701,28 @@
 .project-mockup-wrapper .mac-dots span:nth-child(3) { background: #27c93f; }
 
 .project-mockup-wrapper .mac-address-bar {
-    background: #0f0f11;
-    color: #888;
+    background: #09090b;
+    color: #94a3b8;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 9px;
-    padding: 2px 0;
-    border-radius: 4px;
+    font-size: clamp(7px, 0.9vw, 9px);
+    height: clamp(12px, 1.5vw, 15px);
+    border-radius: 3px;
     text-align: center;
     flex-grow: 1;
-    margin: 0 30px;
+    margin: 0 clamp(6px, 2.5vw, 18px);
     border: 1px solid #27272a;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .project-mockup-wrapper .mac-screen-img {
     flex-grow: 1;
-    height: calc(100% - 26px);
+    height: calc(100% - clamp(18px, 2.2vw, 22px));
     position: relative;
     overflow: hidden;
 }
@@ -1722,17 +1737,18 @@
 
 .project-mockup-wrapper .mac-keyboard-base {
     position: relative;
-    width: 112%;
-    margin-left: -6%;
-    height: 16px;
-    background: linear-gradient(to bottom, #f1f5f9 0%, #cbd5e1 25%, #94a3b8 85%, #64748b 100%); /* Silver metallic */
-    border-radius: 0 0 12px 12px;
+    width: 104%;
+    margin-left: -2%;
+    height: clamp(4px, 0.8vw, 7px);
+    background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 30%, #cbd5e1 65%, #94a3b8 100%);
+    border-radius: 0 0 6px 6px;
     box-shadow: 
-        0 12px 24px rgba(0,0,0,0.4), 
-        inset 0 1px 1px #ffffff;
+        0 8px 20px -2px rgba(0, 0, 0, 0.35), 
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
     z-index: 1;
-    border: 1.5px solid #a1a1a6;
-    border-top: 1px solid #e2e8f0;
+    border: 1px solid #cbd5e1;
+    border-top: 1px solid rgba(255, 255, 255, 0.9);
+    box-sizing: border-box;
 }
 
 .project-mockup-wrapper .mac-keyboard-base::before {
@@ -1741,11 +1757,10 @@
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 14%;
-    height: 4px;
+    width: 10%;
+    height: clamp(1.5px, 0.3vw, 2.5px);
     background: #475569;
-    border-radius: 0 0 6px 6px;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.4);
+    border-radius: 0 0 3px 3px;
 }
 
 
@@ -2681,5 +2696,65 @@
     border-radius: 12px;
     margin: 10px;
 }
+
+/* MacBook Responsive Adjustments */
+@media (max-width: 768px) {
+    .apple-macbook-front,
+    .project-mockup-wrapper .macbook-device {
+        width: 96% !important;
+    }
+
+    .apple-macbook-front .mac-lid,
+    .project-mockup-wrapper .mac-lid {
+        border-radius: 8px 8px 0 0 !important;
+        padding: 1.5% 1.5% 2.2% !important;
+    }
+
+    .apple-macbook-front .mac-keyboard-base,
+    .project-mockup-wrapper .mac-keyboard-base {
+        width: 106% !important;
+        height: clamp(5px, 1.2vw, 8px) !important;
+        border-radius: 0 0 8px 8px !important;
+    }
+
+    .apple-macbook-front .mac-browser-url,
+    .project-mockup-wrapper .mac-address-bar {
+        margin: 0 6px !important;
+        font-size: 8px !important;
+        height: 14px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .apple-macbook-front,
+    .project-mockup-wrapper .macbook-device {
+        width: 98% !important;
+    }
+
+    .apple-macbook-front .mac-lid,
+    .project-mockup-wrapper .mac-lid {
+        border-radius: 6px 6px 0 0 !important;
+        border-width: 1px !important;
+    }
+
+    .apple-macbook-front .mac-keyboard-base,
+    .project-mockup-wrapper .mac-keyboard-base {
+        width: 104% !important;
+        height: 5px !important;
+        border-radius: 0 0 6px 6px !important;
+    }
+
+    .apple-macbook-front .mac-browser-dots,
+    .project-mockup-wrapper .mac-dots {
+        gap: 3px !important;
+    }
+
+    .apple-macbook-front .mac-browser-url,
+    .project-mockup-wrapper .mac-address-bar {
+        font-size: 7px !important;
+        margin: 0 4px !important;
+    }
+}
+
 
 

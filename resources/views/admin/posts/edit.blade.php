@@ -33,13 +33,13 @@
                 <i class="fa-solid fa-eye"></i>
                 <span>Vista Previa</span>
             </a>
-            <button type="submit" name="action" value="save_draft" class="admin-btn admin-btn-secondary">
+            <button type="submit" onclick="document.getElementById('status').value='draft'" class="admin-btn admin-btn-secondary">
                 <i class="fa-solid fa-floppy-disk"></i>
                 <span>Guardar Borrador</span>
             </button>
-            <button type="submit" name="action" value="publish" class="admin-btn admin-btn-primary">
+            <button type="submit" onclick="document.getElementById('status').value='published'" class="admin-btn admin-btn-primary">
                 <i class="fa-solid fa-paper-plane"></i>
-                <span>{{ $post->status === 'published' ? 'Actualizar' : 'Publicar' }}</span>
+                <span>{{ $post->status === 'published' ? 'Guardar Publicado' : 'Publicar' }}</span>
             </button>
         </div>
     </div>
@@ -238,12 +238,12 @@
 
                 <div class="admin-form-group">
                     <label class="admin-form-label">Estado</label>
-                    <select name="status_select" id="status" class="admin-form-select">
+                    <select name="status" id="status" class="admin-form-select">
                         <option value="draft" {{ old('status', $post->status) === 'draft' ? 'selected' : '' }}>
-                            Borrador
+                            📝 Borrador
                         </option>
                         <option value="published" {{ old('status', $post->status) === 'published' ? 'selected' : '' }}>
-                            Publicado
+                            ✅ Publicado
                         </option>
                     </select>
                 </div>

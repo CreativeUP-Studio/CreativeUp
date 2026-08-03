@@ -131,6 +131,7 @@ class PostController extends Controller
             'content'          => 'required|string',
             'featured_image'   => 'nullable|image|max:51200',
             'category'         => 'nullable|string|in:branding,diseno,seo,redes,marketing',
+            'status'           => 'nullable|in:draft,published',
             'status_select'    => 'nullable|in:draft,published',
             'published_at'     => 'nullable|date',
             'meta_description' => 'nullable|string|max:500',
@@ -138,13 +139,15 @@ class PostController extends Controller
 
         $validated['slug'] = $validated['slug'] ?: Str::slug($validated['title']);
 
-        // Determinar el status basado en el botón presionado o el select
-        if ($request->has('action')) {
-            $validated['status'] = $request->input('action') === 'publish' ? 'published' : 'draft';
-        } elseif ($request->has('status_select')) {
+        // Determinar el status basado en status, status_select o action
+        if ($request->filled('status')) {
+            $validated['status'] = $request->input('status');
+        } elseif ($request->filled('status_select')) {
             $validated['status'] = $request->input('status_select');
+        } elseif ($request->has('action')) {
+            $validated['status'] = $request->input('action') === 'publish' ? 'published' : 'draft';
         } else {
-            $validated['status'] = $post->status; // Mantener el status actual
+            $validated['status'] = $post->status;
         }
 
         if ($request->hasFile('featured_image')) {
@@ -158,13 +161,16 @@ class PostController extends Controller
             $validated['published_at'] = now();
         }
 
-        // Remover status_select antes de actualizar
         unset($validated['status_select']);
 
         $post->update($validated);
 
         if ($post->status === 'published' && !$wasPublished) {
-            \App\Services\NewsletterNotificationService::notifyNewPost($post);
+            try {
+                \App\Services\NewsletterNotificationService::notifyNewPost($post);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Error notificando nuevo post: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('admin.posts.index')->with('success', 'Post actualizado exitosamente.');
@@ -192,7 +198,11 @@ class PostController extends Controller
         ]);
 
         if ($newStatus === 'published') {
-            \App\Services\NewsletterNotificationService::notifyNewPost($post);
+            try {
+                \App\Services\NewsletterNotificationService::notifyNewPost($post);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Error notificando nuevo post: ' . $e->getMessage());
+            }
         }
 
         return response()->json([

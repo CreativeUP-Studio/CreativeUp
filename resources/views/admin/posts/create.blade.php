@@ -23,11 +23,11 @@
             </div>
         </div>
         <div class="admin-compact-header-actions">
-            <button type="submit" name="status" value="draft" class="admin-btn admin-btn-secondary">
+            <button type="submit" onclick="document.getElementById('status').value='draft'" class="admin-btn admin-btn-secondary">
                 <i class="fa-solid fa-floppy-disk"></i>
                 <span>Guardar Borrador</span>
             </button>
-            <button type="submit" name="status" value="published" class="admin-btn admin-btn-primary">
+            <button type="submit" onclick="document.getElementById('status').value='published'" class="admin-btn admin-btn-primary">
                 <i class="fa-solid fa-paper-plane"></i>
                 <span>Publicar</span>
             </button>
@@ -221,12 +221,12 @@
 
                 <div class="admin-form-group">
                     <label class="admin-form-label">Estado</label>
-                    <select name="status_select" id="status" class="admin-form-select">
-                        <option value="draft" {{ old('status') === 'draft' ? 'selected' : '' }}>
-                            Borrador
+                    <select name="status" id="status" class="admin-form-select">
+                        <option value="draft" {{ old('status', 'draft') === 'draft' ? 'selected' : '' }}>
+                            📝 Borrador
                         </option>
                         <option value="published" {{ old('status') === 'published' ? 'selected' : '' }}>
-                            Publicado
+                            ✅ Publicado
                         </option>
                     </select>
                 </div>

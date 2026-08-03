@@ -131,6 +131,11 @@
                 <i class="fa-solid fa-rocket" aria-hidden="true"></i>
                 <span>Publicar</span>
             </button>
+            @else
+            <button type="submit" class="admin-btn admin-btn-secondary" onclick="document.getElementById('status').value='draft'" style="background: rgba(234, 179, 8, 0.15); color: #b45309; border-color: rgba(234, 179, 8, 0.3);">
+                <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+                <span>Cambiar a Borrador</span>
+            </button>
             @endif
         </div>
     </div>

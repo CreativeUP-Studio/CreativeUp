@@ -78,18 +78,14 @@ class ServiceController extends Controller
 
         // Filter empty benefits
         if (isset($validated['benefits'])) {
-            $validated['benefits'] = array_values(array_filter($validated['benefits'], fn($b) => !empty(trim($b['title'] ?? ''))));
-        }
-
-        // Filter empty process steps
-        if (isset($validated['process_steps'])) {
-            $validated['process_steps'] = array_values(array_filter($validated['process_steps'], fn($s) => !empty(trim($s['title'] ?? ''))));
-        }
-
         $service = Service::create($validated);
 
         if ($service->is_active) {
-            \App\Services\NewsletterNotificationService::notifyNewService($service);
+            try {
+                \App\Services\NewsletterNotificationService::notifyNewService($service);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Error notificando nuevo servicio: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('admin.services.index')->with('success', 'Servicio creado exitosamente.');
@@ -137,7 +133,9 @@ class ServiceController extends Controller
         ]);
 
         $validated['slug'] = $validated['slug'] ?: Str::slug($validated['title']);
-        $validated['is_active'] = $request->input('is_active') == '1';
+        if ($request->has('is_active')) {
+            $validated['is_active'] = ($request->input('is_active') == '1' || $request->input('is_active') === true);
+        }
         $validated['order'] = $validated['order'] ?? 0;
 
         if ($request->hasFile('image')) {
@@ -187,7 +185,11 @@ class ServiceController extends Controller
         $service->update($validated);
 
         if ($service->is_active && !$wasActive) {
-            \App\Services\NewsletterNotificationService::notifyNewService($service);
+            try {
+                \App\Services\NewsletterNotificationService::notifyNewService($service);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Error notificando servicio activado: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('admin.services.index')->with('success', 'Servicio actualizado exitosamente.');
@@ -217,7 +219,11 @@ class ServiceController extends Controller
         ]);
 
         if ($newActive) {
-            \App\Services\NewsletterNotificationService::notifyNewService($service);
+            try {
+                \App\Services\NewsletterNotificationService::notifyNewService($service);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Error notificando servicio activado: ' . $e->getMessage());
+            }
         }
 
         return response()->json([
