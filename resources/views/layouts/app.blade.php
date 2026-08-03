@@ -1002,6 +1002,131 @@
             const btnAccept = document.getElementById('btnAcceptCookies');
             const btnReject = document.getElementById('btnRejectCookies');
 
+            function sendConsentToServer(type) {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                const ua = navigator.userAgent || '';
+
+                // ── Device Type ──────────────────────────
+                let deviceType = 'Desktop';
+                if (/Mobi|Android/i.test(ua)) deviceType = 'Mobile';
+                else if (/Tablet|iPad/i.test(ua)) deviceType = 'Tablet';
+
+                // ── Browser ───────────────────────────────
+                let browser = 'Otros';
+                if (ua.includes('Firefox')) browser = 'Firefox';
+                else if (ua.includes('Edg')) browser = 'Edge';
+                else if (ua.includes('Chrome')) browser = 'Chrome';
+                else if (ua.includes('Safari')) browser = 'Safari';
+
+                // ── Operating System ──────────────────────
+                let os = 'Desconocido';
+                if (ua.includes('Win')) os = 'Windows';
+                else if (ua.includes('Mac')) os = 'macOS';
+                else if (ua.includes('Linux')) os = 'Linux';
+                else if (ua.includes('Android')) os = 'Android';
+                else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+
+                // ── Hardware: CPU Cores (logical) ─────────
+                const cpuCores = (navigator.hardwareConcurrency || 'N/A') + ' núcleos';
+
+                // ── Hardware: Device RAM ──────────────────
+                const deviceMemory = navigator.deviceMemory
+                    ? (navigator.deviceMemory + ' GB RAM')
+                    : 'N/A';
+
+                // ── Network: Connection Type ──────────────
+                const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                const connectionType = connection
+                    ? (connection.effectiveType || connection.type || 'N/A')
+                    : 'N/A';
+
+                // ── Touch Points ──────────────────────────
+                const touchPoints = navigator.maxTouchPoints !== undefined
+                    ? (navigator.maxTouchPoints + ' touch points')
+                    : 'N/A';
+
+                // ── GPU / WebGL Renderer ──────────────────
+                let gpuRenderer = 'N/A';
+                try {
+                    const canvas = document.createElement('canvas');
+                    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                    if (gl) {
+                        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                        if (debugInfo) {
+                            gpuRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || 'N/A';
+                        }
+                    }
+                } catch(e) {}
+
+                // ── Canvas Fingerprint (rendering signature) ──
+                let canvasHash = 'N/A';
+                try {
+                    const c = document.createElement('canvas');
+                    c.width = 200; c.height = 50;
+                    const ctx = c.getContext('2d');
+                    ctx.textBaseline = 'top';
+                    ctx.font = "14px 'Arial'";
+                    ctx.fillStyle = '#f60';
+                    ctx.fillRect(125, 1, 62, 20);
+                    ctx.fillStyle = '#069';
+                    ctx.fillText('CreativeUP🛡️', 2, 15);
+                    ctx.fillStyle = 'rgba(102,204,0,0.7)';
+                    ctx.fillText('CreativeUP🛡️', 4, 17);
+                    canvasHash = c.toDataURL().slice(-32);
+                } catch(e) {}
+
+                // ── Hardware Fingerprint (combina todas las señales) ──
+                const fingerprintRaw = [
+                    ua.substring(0, 50),
+                    navigator.hardwareConcurrency || '',
+                    navigator.deviceMemory || '',
+                    navigator.maxTouchPoints || '',
+                    window.screen.width + 'x' + window.screen.height,
+                    window.screen.colorDepth || '',
+                    navigator.language || '',
+                    gpuRenderer.substring(0, 60),
+                    canvasHash,
+                    Intl.DateTimeFormat().resolvedOptions().timeZone || ''
+                ].join('|');
+
+                // Simple hash for fingerprint display (non-crypto, fast)
+                let fingerprintHash = 0;
+                for (let i = 0; i < fingerprintRaw.length; i++) {
+                    const char = fingerprintRaw.charCodeAt(i);
+                    fingerprintHash = ((fingerprintHash << 5) - fingerprintHash) + char;
+                    fingerprintHash = fingerprintHash & fingerprintHash;
+                }
+                const hardware_fingerprint = Math.abs(fingerprintHash).toString(16).toUpperCase().padStart(8, '0');
+
+                const auditData = {
+                    consent_type:         type,
+                    hardware_fingerprint: hardware_fingerprint,
+                    device_type:          deviceType,
+                    browser:              browser,
+                    os:                   os,
+                    cpu_cores:            cpuCores,
+                    device_memory:        deviceMemory,
+                    connection_type:      connectionType,
+                    touch_points:         touchPoints,
+                    screen_resolution:    window.screen ? (window.screen.width + 'x' + window.screen.height) : null,
+                    language:             navigator.language || navigator.userLanguage || null,
+                    page_url:             window.location.href,
+                    timezone:             Intl.DateTimeFormat().resolvedOptions().timeZone || null
+                };
+
+                fetch('{{ route('legal.cookie-consent') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken || '',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(auditData)
+                }).catch(function(err) {
+                    console.error('Error registrando consentimiento:', err);
+                });
+            }
+
             if (!localStorage.getItem('cookie_consent_choice')) {
                 setTimeout(function() {
                     if (banner) banner.style.display = 'block';
@@ -1012,6 +1137,7 @@
                 btnAccept.addEventListener('click', function() {
                     localStorage.setItem('cookie_consent_choice', 'all');
                     if (banner) banner.style.display = 'none';
+                    sendConsentToServer('all');
                 });
             }
 
@@ -1019,6 +1145,7 @@
                 btnReject.addEventListener('click', function() {
                     localStorage.setItem('cookie_consent_choice', 'essential');
                     if (banner) banner.style.display = 'none';
+                    sendConsentToServer('essential');
                 });
             }
         });

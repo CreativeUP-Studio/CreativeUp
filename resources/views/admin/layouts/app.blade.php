@@ -270,6 +270,17 @@
                 <span class="sidebar-nav-badge sidebar-nav-badge--primary">{{ $newChatCount }}</span>
                 @endif
             </a>
+            <a href="{{ route('admin.cookie-consents.index') }}"
+               class="sidebar-nav-item {{ request()->routeIs('admin.cookie-consents.*') ? 'active' : '' }}">
+                <div class="sidebar-nav-icon">
+                    <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+                </div>
+                <span class="sidebar-nav-text">Auditoría IPs & Cookies</span>
+                @php $consentTodayCount = \App\Models\CookieConsent::whereDate('accepted_at', now())->count(); @endphp
+                @if($consentTodayCount > 0)
+                <span class="sidebar-nav-badge sidebar-nav-badge--success">+{{ $consentTodayCount }} hoy</span>
+                @endif
+            </a>
 
             {{-- Configuración Section --}}
             <div class="sidebar-nav-section">

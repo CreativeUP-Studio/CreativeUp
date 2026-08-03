@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\HeroController;
 use App\Http\Controllers\Admin\ChatMessageController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SiteSettingController;
+use App\Http\Controllers\Admin\CookieConsentController;
 
 // ── Autenticación ──
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -43,10 +44,11 @@ Route::post('/chat-message', [ContactController::class, 'chatStore'])->name('cha
 Route::get('/chat-messages/new', [ContactController::class, 'getNewMessages'])->name('chat.getNewMessages');
 Route::get('/chat-messages/history', [ContactController::class, 'getConversationHistory'])->name('chat.getHistory');
 
-// ── Páginas Legales ──
+// ── Páginas Legales y Consentimientos ──
 Route::get('/politica-de-privacidad', [LegalController::class, 'privacy'])->name('legal.privacy');
 Route::get('/terminos-y-condiciones', [LegalController::class, 'terms'])->name('legal.terms');
 Route::get('/politica-de-cookies', [LegalController::class, 'cookies'])->name('legal.cookies');
+Route::post('/cookie-consent', [LegalController::class, 'storeConsent'])->name('legal.cookie-consent');
 
 // ── Panel Admin ──
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
@@ -92,6 +94,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Profile
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    // Cookie & IP Audit Consents
+    Route::get('cookie-consents', [CookieConsentController::class, 'index'])->name('cookie-consents.index');
+    Route::get('cookie-consents/export', [CookieConsentController::class, 'export'])->name('cookie-consents.export');
+    Route::delete('cookie-consents/{id}', [CookieConsentController::class, 'destroy'])->name('cookie-consents.destroy');
+
     Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::delete('profile/avatar', [ProfileController::class, 'deleteAvatar'])->name('profile.avatar.delete');
 });
