@@ -77,4 +77,18 @@ class LegalController extends Controller
             'data'    => $consent,
         ]);
     }
+
+    /**
+     * Verifica si la IP del visitante tiene un consentimiento vigente en la BD.
+     * El frontend usa esto para saber si debe mostrar el banner aunque localStorage diga "ya acepté".
+     */
+    public function checkConsent(Request $request)
+    {
+        $exists = \App\Models\CookieConsent::where('ip_address', $request->ip())
+                    ->exists();
+
+        return response()->json([
+            'consented' => $exists,
+        ]);
+    }
 }

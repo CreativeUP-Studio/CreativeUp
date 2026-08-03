@@ -1127,11 +1127,46 @@
                 });
             }
 
-            if (!localStorage.getItem('cookie_consent_choice')) {
+            /**
+             * Lógica del Banner de Cookies:
+             * - Si el admin elimina el registro de la BD, el banner vuelve a aparecer
+             *   aunque el localStorage diga "ya acepté". Esto garantiza que el
+             *   consentimiento en la BD sea siempre la fuente de verdad.
+             */
+            function showBannerDelayed() {
                 setTimeout(function() {
                     if (banner) banner.style.display = 'block';
                 }, 1000);
             }
+
+            function initCookieBanner() {
+                const localChoice = localStorage.getItem('cookie_consent_choice');
+
+                if (!localChoice) {
+                    // Sin decisión local → mostrar banner directamente
+                    showBannerDelayed();
+                } else {
+                    // Tiene decisión local → verificar si el registro sigue en la BD
+                    fetch('{{ route('legal.check-consent') }}', {
+                        method: 'GET',
+                        headers: { 'Accept': 'application/json' }
+                    })
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        if (!data.consented) {
+                            // El admin eliminó el registro → limpiar y mostrar banner
+                            localStorage.removeItem('cookie_consent_choice');
+                            showBannerDelayed();
+                        }
+                        // Si data.consented === true → banner no se muestra (ya registrado)
+                    })
+                    .catch(function() {
+                        // Si falla el servidor → no mostrar banner (comportamiento no invasivo)
+                    });
+                }
+            }
+
+            initCookieBanner();
 
             if (btnAccept) {
                 btnAccept.addEventListener('click', function() {

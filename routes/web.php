@@ -49,6 +49,7 @@ Route::get('/politica-de-privacidad', [LegalController::class, 'privacy'])->name
 Route::get('/terminos-y-condiciones', [LegalController::class, 'terms'])->name('legal.terms');
 Route::get('/politica-de-cookies', [LegalController::class, 'cookies'])->name('legal.cookies');
 Route::post('/cookie-consent', [LegalController::class, 'storeConsent'])->name('legal.cookie-consent');
+Route::get('/cookie-consent/check', [LegalController::class, 'checkConsent'])->name('legal.check-consent');
 
 // ── Panel Admin ──
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
