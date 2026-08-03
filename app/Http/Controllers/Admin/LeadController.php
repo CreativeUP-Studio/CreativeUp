@@ -103,6 +103,7 @@ class LeadController extends Controller
             try {
                 Mail::to($lead->email)->send(new LeadReplyMail($lead, $reply));
             } catch (\Exception $e) {
+                $reply->update(['sent_to_email' => false]);
                 return redirect()->back()->with('error', 'Respuesta guardada pero hubo un error al enviar el email: ' . $e->getMessage());
             }
         }
