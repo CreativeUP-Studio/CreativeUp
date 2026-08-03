@@ -102,8 +102,7 @@ class NewsletterNotificationService
      */
     protected static function getSubscriberEmails()
     {
-        return Lead::where('source', 'newsletter')
-            ->whereNotNull('email')
+        return Lead::whereNotNull('email')
             ->where('email', '!=', '')
             ->distinct()
             ->pluck('email');

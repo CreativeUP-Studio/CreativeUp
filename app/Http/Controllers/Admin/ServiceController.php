@@ -78,6 +78,14 @@ class ServiceController extends Controller
 
         // Filter empty benefits
         if (isset($validated['benefits'])) {
+            $validated['benefits'] = array_values(array_filter($validated['benefits'], fn($b) => !empty(trim($b['title'] ?? ''))));
+        }
+
+        // Filter empty process steps
+        if (isset($validated['process_steps'])) {
+            $validated['process_steps'] = array_values(array_filter($validated['process_steps'], fn($s) => !empty(trim($s['title'] ?? ''))));
+        }
+
         $service = Service::create($validated);
 
         if ($service->is_active) {
