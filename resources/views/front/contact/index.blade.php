@@ -63,7 +63,7 @@
                         <span class="ch-method-value">{{ $siteSettings->phone }}</span>
                     </span>
                 </a>
-                @if($siteSettings->whatsapp_url && $siteSettings->whatsapp_url !== '#')
+                @if($siteSettings->whatsapp_url)
                 <a href="{{ $siteSettings->whatsapp_url }}" target="_blank" class="ch-method">
                     <span class="ch-method-icon">
                         <i class="fa-brands fa-whatsapp"></i>
@@ -502,7 +502,7 @@
                             <span class="cf-form-contact-value">{{ $siteSettings->phone }}</span>
                         </div>
                     </a>
-                    @if($siteSettings->whatsapp_url && $siteSettings->whatsapp_url !== '#')
+                    @if($siteSettings->whatsapp_url)
                     <a href="{{ $siteSettings->whatsapp_url }}" target="_blank" rel="noopener" class="cf-form-contact-item">
                         <div class="cf-form-contact-icon cf-form-contact-icon--whatsapp">
                             <i class="fab fa-whatsapp"></i>
@@ -520,27 +520,27 @@
             <div class="cf-form-socials">
                 <span class="cf-form-socials-label">Síguenos en:</span>
                 <div class="cf-form-socials-links">
-                    @if($siteSettings->facebook_url && $siteSettings->facebook_url !== '#')
+                    @if($siteSettings->facebook_url)
                         <a href="{{ $siteSettings->facebook_url }}" target="_blank" rel="noopener" class="cf-form-social" aria-label="Facebook" title="Facebook">
                             <i class="fab fa-facebook-f"></i>
                         </a>
                     @endif
-                    @if($siteSettings->instagram_url && $siteSettings->instagram_url !== '#')
+                    @if($siteSettings->instagram_url)
                         <a href="{{ $siteSettings->instagram_url }}" target="_blank" rel="noopener" class="cf-form-social" aria-label="Instagram" title="Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
                     @endif
-                    @if($siteSettings->linkedin_url && $siteSettings->linkedin_url !== '#')
+                    @if($siteSettings->linkedin_url)
                         <a href="{{ $siteSettings->linkedin_url }}" target="_blank" rel="noopener" class="cf-form-social" aria-label="LinkedIn" title="LinkedIn">
                             <i class="fab fa-linkedin-in"></i>
                         </a>
                     @endif
-                    @if($siteSettings->twitter_url && $siteSettings->twitter_url !== '#')
+                    @if($siteSettings->twitter_url)
                         <a href="{{ $siteSettings->twitter_url }}" target="_blank" rel="noopener" class="cf-form-social" aria-label="Twitter" title="Twitter">
                             <i class="fab fa-x-twitter"></i>
                         </a>
                     @endif
-                    @if($siteSettings->github_url && $siteSettings->github_url !== '#')
+                    @if($siteSettings->github_url)
                         <a href="{{ $siteSettings->github_url }}" target="_blank" rel="noopener" class="cf-form-social" aria-label="GitHub" title="GitHub">
                             <i class="fab fa-github"></i>
                         </a>

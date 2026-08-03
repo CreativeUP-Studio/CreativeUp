@@ -406,27 +406,27 @@
                         </a>
                     </div>
                     <div class="footer-social" style="margin-top: 1rem;">
-                        @if($siteSettings->facebook_url && $siteSettings->facebook_url !== '#')
+                        @if($siteSettings->facebook_url)
                             <a href="{{ $siteSettings->facebook_url }}" target="_blank" class="social-btn social-facebook" aria-label="Facebook">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
                         @endif
-                        @if($siteSettings->instagram_url && $siteSettings->instagram_url !== '#')
+                        @if($siteSettings->instagram_url)
                             <a href="{{ $siteSettings->instagram_url }}" target="_blank" class="social-btn social-instagram" aria-label="Instagram">
                                 <i class="fab fa-instagram"></i>
                             </a>
                         @endif
-                        @if($siteSettings->linkedin_url && $siteSettings->linkedin_url !== '#')
+                        @if($siteSettings->linkedin_url)
                             <a href="{{ $siteSettings->linkedin_url }}" target="_blank" class="social-btn social-linkedin" aria-label="LinkedIn">
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
                         @endif
-                        @if($siteSettings->twitter_url && $siteSettings->twitter_url !== '#')
+                        @if($siteSettings->twitter_url)
                             <a href="{{ $siteSettings->twitter_url }}" target="_blank" class="social-btn social-twitter" aria-label="Twitter">
                                 <i class="fab fa-x-twitter"></i>
                             </a>
                         @endif
-                        @if($siteSettings->github_url && $siteSettings->github_url !== '#')
+                        @if($siteSettings->github_url)
                             <a href="{{ $siteSettings->github_url }}" target="_blank" class="social-btn social-github" aria-label="GitHub">
                                 <i class="fab fa-github"></i>
                             </a>
@@ -552,27 +552,27 @@
                 <div class="fs-nav-social-section">
                     <span class="social-section-title">Síguenos</span>
                     <div class="footer-social">
-                        @if($siteSettings->facebook_url && $siteSettings->facebook_url !== '#')
+                        @if($siteSettings->facebook_url)
                             <a href="{{ $siteSettings->facebook_url }}" target="_blank" class="social-btn social-facebook" aria-label="Facebook">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
                         @endif
-                        @if($siteSettings->instagram_url && $siteSettings->instagram_url !== '#')
+                        @if($siteSettings->instagram_url)
                             <a href="{{ $siteSettings->instagram_url }}" target="_blank" class="social-btn social-instagram" aria-label="Instagram">
                                 <i class="fab fa-instagram"></i>
                             </a>
                         @endif
-                        @if($siteSettings->linkedin_url && $siteSettings->linkedin_url !== '#')
+                        @if($siteSettings->linkedin_url)
                             <a href="{{ $siteSettings->linkedin_url }}" target="_blank" class="social-btn social-linkedin" aria-label="LinkedIn">
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
                         @endif
-                        @if($siteSettings->twitter_url && $siteSettings->twitter_url !== '#')
+                        @if($siteSettings->twitter_url)
                             <a href="{{ $siteSettings->twitter_url }}" target="_blank" class="social-btn social-twitter" aria-label="Twitter">
                                 <i class="fab fa-x-twitter"></i>
                             </a>
                         @endif
-                        @if($siteSettings->github_url && $siteSettings->github_url !== '#')
+                        @if($siteSettings->github_url)
                             <a href="{{ $siteSettings->github_url }}" target="_blank" class="social-btn social-github" aria-label="GitHub">
                                 <i class="fab fa-github"></i>
                             </a>
@@ -637,27 +637,27 @@
                     </div>
 
                     <div class="footer-social">
-                        @if($siteSettings->facebook_url && $siteSettings->facebook_url !== '#')
+                        @if($siteSettings->facebook_url)
                             <a href="{{ $siteSettings->facebook_url }}" target="_blank" class="social-btn social-facebook" aria-label="Facebook">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
                         @endif
-                        @if($siteSettings->instagram_url && $siteSettings->instagram_url !== '#')
+                        @if($siteSettings->instagram_url)
                             <a href="{{ $siteSettings->instagram_url }}" target="_blank" class="social-btn social-instagram" aria-label="Instagram">
                                 <i class="fab fa-instagram"></i>
                             </a>
                         @endif
-                        @if($siteSettings->linkedin_url && $siteSettings->linkedin_url !== '#')
+                        @if($siteSettings->linkedin_url)
                             <a href="{{ $siteSettings->linkedin_url }}" target="_blank" class="social-btn social-linkedin" aria-label="LinkedIn">
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
                         @endif
-                        @if($siteSettings->twitter_url && $siteSettings->twitter_url !== '#')
+                        @if($siteSettings->twitter_url)
                             <a href="{{ $siteSettings->twitter_url }}" target="_blank" class="social-btn social-twitter" aria-label="Twitter">
                                 <i class="fab fa-x-twitter"></i>
                             </a>
                         @endif
-                        @if($siteSettings->github_url && $siteSettings->github_url !== '#')
+                        @if($siteSettings->github_url)
                             <a href="{{ $siteSettings->github_url }}" target="_blank" class="social-btn social-github" aria-label="GitHub">
                                 <i class="fab fa-github"></i>
                             </a>
