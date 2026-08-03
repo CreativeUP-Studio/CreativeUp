@@ -442,6 +442,15 @@
          ============================================ --}}
     <div class="fs-navigation" id="fsNavigation">
         
+        {{-- Logo en el menú desplegable --}}
+        <div class="fs-logo-wrap">
+            <a href="{{ route('home') }}" class="navbar-logo">
+                <span class="logo-text">{{ $siteSettings->logo_text }}</span>
+                <span class="logo-gradient">{{ $siteSettings->logo_gradient_text }}</span>
+                <div class="logo-dot"></div>
+            </a>
+        </div>
+
         {{-- Botón Cerrar --}}
         <button class="fs-close-btn" id="fsCloseBtn" aria-label="Cerrar Menú">
             <span class="close-line"></span>
