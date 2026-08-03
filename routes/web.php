@@ -7,6 +7,7 @@ use App\Http\Controllers\Front\ServiceController;
 use App\Http\Controllers\Front\ProjectController;
 use App\Http\Controllers\Front\PostController;
 use App\Http\Controllers\Front\ContactController;
+use App\Http\Controllers\Front\LegalController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
@@ -41,6 +42,11 @@ Route::post('/subscribe', [ContactController::class, 'subscribe'])->name('newsle
 Route::post('/chat-message', [ContactController::class, 'chatStore'])->name('chat.store');
 Route::get('/chat-messages/new', [ContactController::class, 'getNewMessages'])->name('chat.getNewMessages');
 Route::get('/chat-messages/history', [ContactController::class, 'getConversationHistory'])->name('chat.getHistory');
+
+// ── Páginas Legales ──
+Route::get('/politica-de-privacidad', [LegalController::class, 'privacy'])->name('legal.privacy');
+Route::get('/terminos-y-condiciones', [LegalController::class, 'terms'])->name('legal.terms');
+Route::get('/politica-de-cookies', [LegalController::class, 'cookies'])->name('legal.cookies');
 
 // ── Panel Admin ──
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
