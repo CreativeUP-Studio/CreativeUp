@@ -418,6 +418,7 @@ function initRedesign() {
             once: true,
             offset: 50
         });
+        window.AOS.refreshHard();
     }
 
     // J. CAROUSEL CINEMATOGRÁFICO Y FILTRADO INTERACTIVO
@@ -547,6 +548,30 @@ function initRedesign() {
 // Registrar eventos de inicialización en DOMContentLoaded y en turbo:load
 document.addEventListener('DOMContentLoaded', initRedesign);
 document.addEventListener('turbo:load', initRedesign);
+
+// Refrescar animaciones AOS al renderizar Turbo
+document.addEventListener('turbo:render', function() {
+    if (window.AOS) {
+        window.AOS.refreshHard();
+    }
+});
+
+// Manejador del clic en los logos principales (desplazamiento suave si ya está en Home)
+document.addEventListener('click', function(e) {
+    const logoLink = e.target.closest('.navbar-logo, .mobile-logo');
+    if (logoLink) {
+        const currentPath = window.location.pathname.replace(/\/$/, '');
+        if (currentPath === '' || currentPath === '/index.php') {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.AOS) {
+                setTimeout(function() {
+                    window.AOS.refresh();
+                }, 150);
+            }
+        }
+    }
+});
 
 // =========================================================================
 // 3. UTILIDADES GLOBALES
