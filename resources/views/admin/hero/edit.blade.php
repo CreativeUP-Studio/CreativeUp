@@ -214,7 +214,7 @@
                         <div class="hero-form-group">
                             <label class="hero-form-label">Subir Imagen Personalizada</label>
                             <input type="file" name="mockup_image" class="hero-form-control @error('mockup_image') is-invalid @enderror" accept="image/*">
-                            <small class="hero-form-text">Formatos: JPG, PNG, WEBP. Máximo 5MB.</small>
+                            <small class="hero-form-text">Formatos: JPG, PNG, WEBP. Máximo 50MB.</small>
                             @error('mockup_image')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         @if($hero->mockup_image)

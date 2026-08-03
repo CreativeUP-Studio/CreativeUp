@@ -199,7 +199,7 @@
                         <div class="admin-image-preview-placeholder">
                             <i class="fa-solid fa-cloud-arrow-up"></i>
                             <p>Click para subir imagen</p>
-                            <span>JPG, PNG, GIF (Max 2MB)</span>
+                            <span>JPG, PNG, GIF (Max 50MB)</span>
                         </div>
                     </div>
                     <label for="featured_image" class="admin-btn admin-btn-secondary admin-btn-sm" style="width: 100%; margin-top: 12px;">

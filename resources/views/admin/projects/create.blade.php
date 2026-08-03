@@ -351,7 +351,7 @@
                                 <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
                             </div>
                             <p class="pf-upload-text">Click para subir</p>
-                            <span class="pf-upload-hint">JPG, PNG, WebP (Max 2MB)</span>
+                            <span class="pf-upload-hint">JPG, PNG, WebP (Max 50MB)</span>
                         </div>
                     </div>
                     <div class="pf-group" style="margin-top: 1rem; margin-bottom: 0;">

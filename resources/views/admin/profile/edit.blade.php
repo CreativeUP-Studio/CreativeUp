@@ -76,7 +76,7 @@
                         </div>
                         <div class="admin-avatar-upload-info">
                             <h3 class="admin-avatar-upload-title">Cambiar foto de perfil</h3>
-                            <p class="admin-avatar-upload-text">JPG, PNG o GIF. Tamaño máximo 2MB.</p>
+                            <p class="admin-avatar-upload-text">JPG, PNG o GIF. Tamaño máximo 50MB.</p>
                             <div class="admin-avatar-upload-actions">
                                 <label for="avatar" class="admin-btn admin-btn-primary admin-btn-sm">
                                     <i class="fa-solid fa-upload"></i>

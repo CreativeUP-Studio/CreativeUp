@@ -46,7 +46,7 @@ class HeroController extends Controller
             'secondary_button_url' => 'nullable|string|max:255',
             
             // Imagen
-            'mockup_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'mockup_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:51200',
             'featured_project_id' => 'nullable|exists:projects,id',
             
             // Social Proof

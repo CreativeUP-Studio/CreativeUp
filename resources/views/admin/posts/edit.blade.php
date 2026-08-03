@@ -215,7 +215,7 @@
                             <div class="admin-image-preview-placeholder">
                                 <i class="fa-solid fa-cloud-arrow-up"></i>
                                 <p>Click para subir imagen</p>
-                                <span>JPG, PNG, GIF (Max 2MB)</span>
+                                <span>JPG, PNG, GIF (Max 50MB)</span>
                             </div>
                         @endif
                     </div>

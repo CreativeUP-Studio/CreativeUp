@@ -91,12 +91,12 @@ class ProjectController extends Controller
             'client' => 'nullable|string|max:150',
             'year' => 'nullable|string|max:10',
             'technologies' => 'nullable|string',
-            'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail' => 'nullable|image|max:51200',
             'thumbnail_device' => 'nullable|string|in:macbook,iphone,ipad,safari,none',
             'url' => 'nullable|url|max:255',
             'status' => 'required|in:draft,published',
             'published_at' => 'nullable|date',
-            'images.*' => 'image|max:2048',
+            'images.*' => 'image|max:51200',
         ]);
 
         // Convertir technologies de texto a array
@@ -184,12 +184,12 @@ class ProjectController extends Controller
             'client' => 'nullable|string|max:150',
             'year' => 'nullable|string|max:10',
             'technologies' => 'nullable|string',
-            'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail' => 'nullable|image|max:51200',
             'thumbnail_device' => 'nullable|string|in:macbook,iphone,ipad,safari,none',
             'url' => 'nullable|url|max:255',
             'status' => 'required|in:draft,published',
             'published_at' => 'nullable|date',
-            'images.*' => 'image|max:2048',
+            'images.*' => 'image|max:51200',
             'delete_images' => 'nullable|array',
             'delete_images.*' => 'integer|exists:project_images,id',
         ]);

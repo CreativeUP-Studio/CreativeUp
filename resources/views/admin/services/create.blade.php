@@ -204,7 +204,7 @@
                     <div class="svc-image-placeholder">
                         <i class="fa-solid fa-cloud-arrow-up"></i>
                         <span>Click para subir</span>
-                        <small>JPG, PNG, WebP (Max 2MB)</small>
+                        <small>JPG, PNG, WebP (Max 50MB)</small>
                     </div>
                 </div>
                 @error('image')<span class="svc-error">{{ $message }}</span>@enderror

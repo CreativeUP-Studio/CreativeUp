@@ -35,7 +35,7 @@ class ProfileController extends Controller
             'bio' => ['nullable', 'string', 'max:500'],
             'location' => ['nullable', 'string', 'max:255'],
             'website' => ['nullable', 'url', 'max:255'],
-            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:51200'],
         ]);
 
         // Handle avatar upload
