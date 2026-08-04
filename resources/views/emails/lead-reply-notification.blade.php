@@ -35,7 +35,10 @@
                                 <tr>
                                     <td style="padding:8px 0;">
                                         <span style="color:rgba(255,255,255,0.4); font-size:12px;">Respondido por:</span>
-                                        <span style="color:#fff; font-size:14px; margin-left:8px;">{{ $reply->user->name }}</span>
+                                        @if($reply->user->avatar)
+                                            <img src="{{ url(Storage::url($reply->user->avatar)) }}" alt="{{ $reply->user->name }}" width="28" height="28" style="width:28px; height:28px; border-radius:50%; object-fit:cover; vertical-align:middle; margin-left:8px; border:1px solid rgba(131,56,236,0.4);">
+                                        @endif
+                                        <span style="color:#fff; font-size:14px; margin-left:6px; vertical-align:middle;">{{ $reply->user->name }}</span>
                                     </td>
                                 </tr>
                                 <tr>

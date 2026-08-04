@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\Service;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -13,9 +14,13 @@ class NewServiceNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public User $sender;
+
     public function __construct(
         public Service $service
-    ) {}
+    ) {
+        $this->sender = User::first();
+    }
 
     public function envelope(): Envelope
     {

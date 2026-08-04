@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -13,9 +14,13 @@ class NewProjectNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public User $sender;
+
     public function __construct(
         public Project $project
-    ) {}
+    ) {
+        $this->sender = User::first();
+    }
 
     public function envelope(): Envelope
     {
