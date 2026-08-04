@@ -96,10 +96,10 @@ class SiteSetting extends Model
             'github_url' => '#',
             'logo_text' => 'creative',
             'logo_gradient_text' => 'up',
-            'footer_tagline' => 'Diseñamos y desarrollamos soluciones digitales innovadoras que impulsan el crecimiento empresarial.',
+            'footer_tagline' => 'El amanecer de una imagen profesional',
             'status_text' => 'Disponible',
-            'meta_title' => 'CreativeUp - Agencia Digital Innovadora',
-            'meta_description' => 'Transformamos ideas en experiencias digitales extraordinarias',
+            'meta_title' => 'CreativeUp - El amanecer de una imagen profesional',
+            'meta_description' => 'El amanecer de una imagen profesional',
             'show_chat_widget' => true,
             'show_newsletter' => true,
         ]);

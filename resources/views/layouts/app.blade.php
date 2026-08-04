@@ -7,6 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title', $siteSettings->meta_title)</title>
     
+    {{-- Favicon --}}
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}?v=2">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=2">
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}?v=2">
+    <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}?v=2">
+
     {{-- Meta Tags --}}
     <meta name="description" content="@yield('description', $siteSettings->meta_description)">
     <meta name="keywords" content="diseño web, desarrollo web, marketing digital, branding, UX/UI">
@@ -517,7 +523,7 @@
                     <div class="fs-nav-preview-content">
                         <span class="fs-nav-preview-badge" id="fsNavPreviewBadge">CreativeUp</span>
                         <h4 class="fs-nav-preview-title" id="fsNavPreviewTitle">CreativeUp Studio</h4>
-                        <p class="fs-nav-preview-desc" id="fsNavPreviewDesc">Donde las ideas se convierten en experiencias digitales premium y software a medida.</p>
+                        <p class="fs-nav-preview-desc" id="fsNavPreviewDesc">El amanecer de una imagen profesional</p>
                     </div>
                 </div>
 
@@ -751,7 +757,7 @@
             {{-- Footer Bottom --}}
             <div class="footer-bottom">
                 <div class="footer-copyright">
-                    <p>&copy; {{ date('Y') }} CreativeUp. Todos los derechos reservados. Creatividad y Tecnología para tu negocio.</p>
+                    <p>&copy; {{ date('Y') }} CreativeUp. Todos los derechos reservados. El amanecer de una imagen profesional.</p>
                 </div>
                 <div class="footer-legal">
                     <a href="{{ route('legal.privacy') }}">Privacidad</a>
