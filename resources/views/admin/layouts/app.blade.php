@@ -240,6 +240,17 @@
                 <span class="sidebar-nav-badge sidebar-nav-badge--warning">{{ $postsCount }} draft</span>
                 @endif
             </a>
+            <a href="{{ route('admin.job-offers.index') }}"
+               class="sidebar-nav-item {{ request()->routeIs('admin.job-offers.*') ? 'active' : '' }}">
+                <div class="sidebar-nav-icon">
+                    <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
+                </div>
+                <span class="sidebar-nav-text">Trabajos / Vacantes</span>
+                @php $jobsCount = \App\Models\JobOffer::where('is_active', true)->count(); @endphp
+                @if($jobsCount > 0)
+                <span class="sidebar-nav-count">{{ $jobsCount }}</span>
+                @endif
+            </a>
 
             {{-- CRM Section --}}
             <div class="sidebar-nav-section">

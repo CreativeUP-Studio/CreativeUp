@@ -293,55 +293,33 @@
             </p>
         </div>
 
-        @php
-        $jobs = [
-            [
-                'title' => 'Diseñador UI/UX Senior',
-                'desc'  => 'Buscamos un diseñador con experiencia en Figma, sistemas de diseño y pensamiento centrado en el usuario para liderar proyectos de alto nivel.',
-                'area'  => 'Diseño',
-                'type'  => 'Tiempo completo',
-                'remote'=> 'Remoto',
-            ],
-            [
-                'title' => 'Desarrollador Full Stack',
-                'desc'  => 'Laravel + Vue.js / React. Experiencia mínima de 2 años en proyectos productivos, buenas prácticas y trabajo en equipo.',
-                'area'  => 'Desarrollo',
-                'type'  => 'Tiempo completo',
-                'remote'=> 'Remoto',
-            ],
-            [
-                'title' => 'Especialista en Marketing Digital',
-                'desc'  => 'Estrategia de contenido, SEO, SEM y redes sociales. Experiencia en campañas de performance y analítica digital.',
-                'area'  => 'Marketing',
-                'type'  => 'Medio tiempo',
-                'remote'=> 'Remoto',
-            ],
-            [
-                'title' => 'Gestor de Proyectos (PM)',
-                'desc'  => 'Coordinación de equipos creativos y técnicos, gestión de timelines, Scrum/Kanban y comunicación con clientes.',
-                'area'  => 'Gestión',
-                'type'  => 'Tiempo completo',
-                'remote'=> 'Remoto',
-            ],
-        ];
-        @endphp
-
-        @foreach($jobs as $i => $job)
+        @forelse($jobs as $i => $job)
         <div class="job-card" data-aos="fade-up" data-aos-delay="{{ $i * 80 }}" data-aos-once="true">
             <div class="job-card-left">
                 <div class="job-tags">
-                    <span class="job-tag tag-area">{{ $job['area'] }}</span>
-                    <span class="job-tag tag-type">{{ $job['type'] }}</span>
-                    <span class="job-tag tag-remote"><i class="fa-solid fa-wifi" style="font-size:0.7rem;"></i> {{ $job['remote'] }}</span>
+                    <span class="job-tag tag-area">{{ $job->area }}</span>
+                    <span class="job-tag tag-type">{{ $job->type }}</span>
+                    <span class="job-tag tag-remote"><i class="fa-solid fa-wifi" style="font-size:0.7rem;"></i> {{ $job->location }}</span>
                 </div>
-                <div class="job-title">{{ $job['title'] }}</div>
-                <p class="job-desc">{{ $job['desc'] }}</p>
+                <div class="job-title">{{ $job->title }}</div>
+                <p class="job-desc">{{ $job->description }}</p>
+                @if($job->requirements)
+                <div style="font-size:0.85rem; color:#64748b; margin-top:0.5rem;">
+                    <strong>Requisitos:</strong> {{ $job->requirements }}
+                </div>
+                @endif
             </div>
-            <a href="{{ route('contact.index') }}?asunto=Postulacion+{{ urlencode($job['title']) }}" class="job-apply-btn">
+            <a href="{{ route('contact.index') }}?asunto=Postulacion+{{ urlencode($job->title) }}" class="job-apply-btn">
                 Aplicar <i class="fa-solid fa-arrow-right" style="font-size:0.8rem;"></i>
             </a>
         </div>
-        @endforeach
+        @empty
+        <div class="text-center py-5" style="background:#fff; border-radius:20px; border:1.5px solid #e2e8f0; padding:3rem 1.5rem;">
+            <i class="fa-solid fa-briefcase mb-3" style="font-size: 2.5rem; color: #94a3b8;"></i>
+            <h4 style="font-family: 'Poppins', sans-serif; font-weight:700; color:#0f172a;">No hay vacantes activas en este momento</h4>
+            <p style="color:#64748b; max-width:450px; margin:0.5rem auto 0;">Pero siempre nos interesa conocer gente talentosa. Puedes enviarnos una postulación abierta a continuación.</p>
+        </div>
+        @endforelse
 
         {{-- Open application --}}
         <div class="open-app-block" data-aos="fade-up" data-aos-once="true">

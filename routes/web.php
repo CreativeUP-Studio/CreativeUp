@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\ChatMessageController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\CookieConsentController;
+use App\Http\Controllers\Admin\JobOfferController;
 
 // ── Autenticación ──
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -68,9 +69,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::patch('posts/{post}/toggle-status', [AdminPostController::class, 'toggleStatus'])->name('posts.toggle-status');
     Route::patch('posts/{post}/quick-update', [AdminPostController::class, 'quickUpdate'])->name('posts.quick-update');
     Route::post('posts/upload-media', [AdminPostController::class, 'uploadMedia'])->name('posts.upload-media');
+    Route::patch('job-offers/{jobOffer}/toggle-active', [JobOfferController::class, 'toggleActive'])->name('job-offers.toggle-active');
     Route::resource('services', AdminServiceController::class);
     Route::resource('projects', AdminProjectController::class);
     Route::resource('posts', AdminPostController::class);
+    Route::resource('job-offers', JobOfferController::class);
 
     Route::get('leads', [LeadController::class, 'index'])->name('leads.index');
     Route::get('leads/export', [LeadController::class, 'export'])->name('leads.export');
