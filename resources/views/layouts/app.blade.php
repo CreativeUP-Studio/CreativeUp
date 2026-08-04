@@ -678,22 +678,28 @@
                     <div class="footer-column">
                         <h4 class="column-title">Servicios</h4>
                         <ul class="column-list">
-                            <li><a href="{{ route('services.index') }}">Diseño Web Premium</a></li>
-                            <li><a href="{{ route('services.index') }}">Desarrollo de Software</a></li>
-                            <li><a href="{{ route('services.index') }}">Branding Corporativo</a></li>
-                            <li><a href="{{ route('services.index') }}">Marketing Digital</a></li>
-                            <li><a href="{{ route('services.index') }}">SEO y Optimización</a></li>
+                            @php
+                                $footerServices = \App\Models\Service::where('is_active', true)
+                                    ->orderBy('order')
+                                    ->take(5)
+                                    ->get(['title','slug']);
+                            @endphp
+                            @forelse($footerServices as $svc)
+                                <li><a href="{{ route('services.show', $svc->slug) }}">{{ $svc->title }}</a></li>
+                            @empty
+                                <li><a href="{{ route('services.index') }}">Ver todos los servicios</a></li>
+                            @endforelse
                         </ul>
                     </div>
 
                     <div class="footer-column">
                         <h4 class="column-title">Empresa</h4>
                         <ul class="column-list">
-                            <li><a href="{{ route('home') }}">Sobre Nosotros</a></li>
+                            <li><a href="{{ route('about') }}">Sobre Nosotros</a></li>
                             <li><a href="{{ route('projects.index') }}">Portafolio</a></li>
                             <li><a href="{{ route('blog.index') }}">Blog y Noticias</a></li>
                             <li><a href="{{ route('contact.index') }}">Contacto Directo</a></li>
-                            <li><a href="#">Carreras</a></li>
+                            <li><a href="{{ route('careers') }}">Trabaja con Nosotros</a></li>
                         </ul>
                     </div>
 

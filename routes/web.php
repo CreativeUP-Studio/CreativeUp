@@ -8,6 +8,8 @@ use App\Http\Controllers\Front\ProjectController;
 use App\Http\Controllers\Front\PostController;
 use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\LegalController;
+use App\Http\Controllers\Front\AboutController;
+use App\Http\Controllers\Front\CareersController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
@@ -43,6 +45,10 @@ Route::post('/subscribe', [ContactController::class, 'subscribe'])->name('newsle
 Route::post('/chat-message', [ContactController::class, 'chatStore'])->name('chat.store');
 Route::get('/chat-messages/new', [ContactController::class, 'getNewMessages'])->name('chat.getNewMessages');
 Route::get('/chat-messages/history', [ContactController::class, 'getConversationHistory'])->name('chat.getHistory');
+
+// ── Páginas de Empresa ──
+Route::get('/sobre-nosotros', [AboutController::class, 'index'])->name('about');
+Route::get('/trabaja-con-nosotros', [CareersController::class, 'index'])->name('careers');
 
 // ── Páginas Legales y Consentimientos ──
 Route::get('/politica-de-privacidad', [LegalController::class, 'privacy'])->name('legal.privacy');
