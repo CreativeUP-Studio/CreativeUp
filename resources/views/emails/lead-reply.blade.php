@@ -89,14 +89,8 @@
                                         </div>
                                         <!-- Author -->
                                         <div style="display:flex; align-items:center; padding-top:20px; border-top:1px solid rgba(255,0,110,0.1);">
-                                            <div style="width:44px; height:44px; border-radius:50%; overflow:hidden; margin-right:12px; vertical-align:middle; flex-shrink:0; border:2px solid rgba(131,56,236,0.3);">
-                                                @if($reply->user->avatar)
-                                                    <img src="{{ url(Storage::url($reply->user->avatar)) }}" alt="{{ $reply->user->name }}" width="44" height="44" style="width:44px; height:44px; border-radius:50%; object-fit:cover; display:block;">
-                                                @else
-                                                    <div style="width:44px; height:44px; background:linear-gradient(135deg, #ff006e 0%, #8338ec 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; text-align:center; line-height:44px;">
-                                                        <span style="color:#ffffff; font-size:18px; font-weight:700;">{{ strtoupper(substr($reply->user->name, 0, 1)) }}</span>
-                                                    </div>
-                                                @endif
+                                            <div style="width:44px; height:44px; background:linear-gradient(135deg, #ff006e 0%, #8338ec 100%); border-radius:50%; display:inline-flex; align-items:center; justify-content:center; margin-right:12px; vertical-align:middle;">
+                                                <span style="color:#ffffff; font-size:18px; font-weight:700;">{{ strtoupper(substr($reply->user->name, 0, 1)) }}</span>
                                             </div>
                                             <div style="display:inline-block; vertical-align:middle;">
                                                 <div style="color:#111827; font-size:15px; font-weight:700; margin:0;">{{ $reply->user->name }}</div>

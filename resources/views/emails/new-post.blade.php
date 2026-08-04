@@ -56,34 +56,6 @@
                             </table>
                         </td>
                     </tr>
-                    {{-- Firma del remitente --}}
-                    <tr>
-                        <td style="background-color:#ffffff; padding:0 40px 28px; border-left:1px solid #e5e5ef; border-right:1px solid #e5e5ef;">
-                            <table cellpadding="0" cellspacing="0" style="border-top:1px solid #f0f0f5; padding-top:20px; width:100%;">
-                                <tr>
-                                    <td>
-                                        <table cellpadding="0" cellspacing="0">
-                                            <tr>
-                                                <td style="vertical-align:middle; padding-right:12px;">
-                                                    @if(isset($sender) && $sender->avatar)
-                                                        <img src="{{ url(Storage::url($sender->avatar)) }}" alt="{{ $sender->name }}" width="48" height="48" style="width:48px; height:48px; border-radius:50%; object-fit:cover; display:block; border:2px solid rgba(94,23,235,0.3);">
-                                                    @else
-                                                        <div style="width:48px; height:48px; background:linear-gradient(135deg,#5e17eb,#ff00cc); border-radius:50%; text-align:center; line-height:48px;">
-                                                            <span style="color:#fff; font-size:20px; font-weight:700;">{{ isset($sender) ? strtoupper(substr($sender->name,0,1)) : 'C' }}</span>
-                                                        </div>
-                                                    @endif
-                                                </td>
-                                                <td style="vertical-align:middle;">
-                                                    <div style="color:#1a1a2e; font-size:14px; font-weight:700;">{{ isset($sender) ? $sender->name : 'CreativeUP' }}</div>
-                                                    <div style="color:#9ca3af; font-size:12px; margin-top:2px;">Equipo CreativeUP</div>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
                     {{-- Footer --}}
                     <tr>
                         <td style="background-color:#f0f0f5; padding:20px 40px; text-align:center; border-radius:0 0 16px 16px; border:1px solid #e5e5ef; border-top:none;">
