@@ -1,164 +1,181 @@
 @extends('admin.layouts.app')
 
 @section('title', 'Editar Vacante: ' . $jobOffer->title)
-@section('page-title', 'Editar Vacante')
+@section('page-title', 'Editar: ' . $jobOffer->title)
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/admin/services.css') }}">
-<style>
-    .form-card {
-        background: #ffffff;
-        border: 1px solid var(--admin-border-color, #e2e8f0);
-        border-radius: 20px;
-        padding: 2rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-    }
-</style>
 @endpush
 
 @section('content')
 
-{{-- HEADER --}}
-<div class="svc-header mb-4">
-    <div class="svc-header-left">
-        <a href="{{ route('admin.job-offers.index') }}" class="btn btn-light border me-3" style="border-radius: 10px;" title="Volver al listado">
-            <i class="fa-solid fa-arrow-left"></i>
-        </a>
-        <div class="svc-header-info">
-            <h1>
-                <i class="fa-solid fa-pen-to-square" style="color: var(--primary-color);"></i>
-                Editar Vacante: {{ $jobOffer->title }}
-            </h1>
-        </div>
-    </div>
-</div>
-
-<form action="{{ route('admin.job-offers.update', $jobOffer->id) }}" method="POST">
+<form method="POST" action="{{ route('admin.job-offers.update', $jobOffer->id) }}" id="jobOfferForm">
     @csrf
     @method('PUT')
 
-    <div class="row g-4">
-        {{-- Principal Col --}}
-        <div class="col-lg-8">
-            <div class="form-card">
-                <h4 style="font-weight: 700; font-size: 1.1rem; color: #0f172a; margin-bottom: 1.5rem;">
-                    Información de la Vacante
-                </h4>
-
-                {{-- Title --}}
-                <div class="mb-3">
-                    <label for="title" class="form-label font-weight-bold">Título del Puesto <span class="text-danger">*</span></label>
-                    <input type="text" name="title" id="title" class="form-control @error('title') is-invalid @enderror" value="{{ old('title', $jobOffer->title) }}" placeholder="Ej. Diseñador UI/UX Senior" required>
-                    @error('title')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- Slug --}}
-                <div class="mb-3">
-                    <label for="slug" class="form-label text-muted" style="font-size: 0.85rem;">Slug (URL amigable)</label>
-                    <input type="text" name="slug" id="slug" class="form-control @error('slug') is-invalid @enderror" value="{{ old('slug', $jobOffer->slug) }}" placeholder="Se genera automáticamente si se deja vacío">
-                    @error('slug')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- Description --}}
-                <div class="mb-3">
-                    <label for="description" class="form-label font-weight-bold">Descripción del Puesto <span class="text-danger">*</span></label>
-                    <textarea name="description" id="description" rows="5" class="form-control @error('description') is-invalid @enderror" placeholder="Describe los objetivos del puesto, funciones principales y lo que esperan del candidato..." required>{{ old('description', $jobOffer->description) }}</textarea>
-                    @error('description')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- Requirements --}}
-                <div class="mb-3">
-                    <label for="requirements" class="form-label font-weight-bold">Requisitos & Habilidades (Opcional)</label>
-                    <textarea name="requirements" id="requirements" rows="4" class="form-control @error('requirements') is-invalid @enderror" placeholder="Ej. 2+ años de experiencia en Laravel, Figma avanzado, nivel de inglés intermedio...">{{ old('requirements', $jobOffer->requirements) }}</textarea>
-                    @error('requirements')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+    {{-- Header --}}
+    <div class="svc-header">
+        <div class="svc-header-left">
+            <a href="{{ route('admin.job-offers.index') }}" class="svc-header-back" title="Volver a la lista">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            <div class="svc-header-info">
+                <h1>
+                    <span>{{ $jobOffer->title }}</span>
+                    <span class="svc-header-status {{ $jobOffer->is_active ? 'active' : 'inactive' }}">
+                        {{ $jobOffer->is_active ? 'Activa' : 'Borrador' }}
+                    </span>
+                </h1>
             </div>
         </div>
+        <div class="svc-header-actions">
+            <a href="{{ route('careers') }}#vacantes" target="_blank" class="admin-btn admin-btn-secondary">
+                <i class="fa-solid fa-eye"></i>
+                <span>Ver en Web</span>
+            </a>
+            <button type="submit" class="admin-btn admin-btn-primary">
+                <i class="fa-solid fa-save"></i>
+                <span>Guardar Cambios</span>
+            </button>
+        </div>
+    </div>
 
-        {{-- Sidebar Col --}}
-        <div class="col-lg-4">
-            <div class="form-card mb-4">
-                <h4 style="font-weight: 700; font-size: 1.1rem; color: #0f172a; margin-bottom: 1.5rem;">
-                    Configuración
-                </h4>
+    <div class="svc-layout">
+        {{-- Main Column --}}
+        <div class="svc-main">
 
-                {{-- Area --}}
-                <div class="mb-3">
-                    <label for="area" class="form-label font-weight-bold">Área / Departamento <span class="text-danger">*</span></label>
-                    <select name="area" id="area" class="form-select @error('area') is-invalid @enderror" required>
-                        @php $currentArea = old('area', $jobOffer->area); @endphp
-                        <option value="Diseño" {{ $currentArea === 'Diseño' ? 'selected' : '' }}>Diseño</option>
-                        <option value="Desarrollo" {{ $currentArea === 'Desarrollo' ? 'selected' : '' }}>Desarrollo</option>
-                        <option value="Marketing" {{ $currentArea === 'Marketing' ? 'selected' : '' }}>Marketing</option>
-                        <option value="Gestión" {{ $currentArea === 'Gestión' ? 'selected' : '' }}>Gestión / PM</option>
-                        <option value="Ventas" {{ $currentArea === 'Ventas' ? 'selected' : '' }}>Ventas / Comercial</option>
-                        <option value="Soporte" {{ $currentArea === 'Soporte' ? 'selected' : '' }}>Soporte Técnico</option>
+            {{-- Informacion del Puesto --}}
+            <section class="svc-card">
+                <header class="svc-card-header">
+                    <span class="svc-card-icon svc-card-icon--purple"><i class="fa-solid fa-pen-to-square"></i></span>
+                    <div>
+                        <h2>Información del puesto</h2>
+                        <p>Modifica los detalles de la vacante laboral</p>
+                    </div>
+                </header>
+
+                <div class="svc-field">
+                    <label for="title">Título del puesto <span class="required">*</span></label>
+                    <input type="text" id="title" name="title" value="{{ old('title', $jobOffer->title) }}" placeholder="Ej: Diseñador UI/UX Senior" required maxlength="255">
+                    @error('title')<span class="svc-error">{{ $message }}</span>@enderror
+                </div>
+
+                <div class="svc-field">
+                    <label for="slug">URL amigable</label>
+                    <div class="svc-input-group">
+                        <span class="svc-input-prefix">/trabaja-con-nosotros#</span>
+                        <input type="text" id="slug" name="slug" value="{{ old('slug', $jobOffer->slug) }}" placeholder="disenador-ui-ux-senior">
+                    </div>
+                    <small><i class="fa-solid fa-magic"></i> Se genera automáticamente si lo dejas vacío.</small>
+                    @error('slug')<span class="svc-error">{{ $message }}</span>@enderror
+                </div>
+
+                <div class="svc-field">
+                    <label for="description">Descripción del puesto <span class="required">*</span></label>
+                    <textarea id="description" name="description" rows="6" required placeholder="Describe los objetivos principales del puesto, responsabilidades diarias y la visión del equipo...">{{ old('description', $jobOffer->description) }}</textarea>
+                    @error('description')<span class="svc-error">{{ $message }}</span>@enderror
+                </div>
+
+                <div class="svc-field">
+                    <label for="requirements">Requisitos & Habilidades (Opcional)</label>
+                    <textarea id="requirements" name="requirements" rows="4" placeholder="Ej: 2+ años de experiencia en Figma / Laravel, buenas prácticas, trabajo en equipo y proactividad...">{{ old('requirements', $jobOffer->requirements) }}</textarea>
+                    <small><i class="fa-solid fa-circle-info"></i> Requisitos técnicos, nivel de experiencia o competencias requeridas.</small>
+                    @error('requirements')<span class="svc-error">{{ $message }}</span>@enderror
+                </div>
+            </section>
+        </div>
+
+        {{-- Sidebar --}}
+        <aside class="svc-sidebar">
+            {{-- Status Card --}}
+            <div class="svc-sidebar-card">
+                <h3><i class="fa-solid fa-circle-dot"></i> Estado de publicación</h3>
+                <div class="svc-field svc-field--compact" style="margin-top: 0.5rem;">
+                    <select id="is_active" name="is_active" class="svc-input" style="width: 100%; padding: 0.65rem 0.8rem; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 600; background: white;">
+                        <option value="1" {{ old('is_active', $jobOffer->is_active) ? 'selected' : '' }}>✅ Publicada / Activa</option>
+                        <option value="0" {{ !old('is_active', $jobOffer->is_active) ? 'selected' : '' }}>📝 Borrador / Inactiva</option>
                     </select>
-                    @error('area')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- Type --}}
-                <div class="mb-3">
-                    <label for="type" class="form-label font-weight-bold">Jornada / Tipo <span class="text-danger">*</span></label>
-                    <select name="type" id="type" class="form-select @error('type') is-invalid @enderror" required>
-                        @php $currentType = old('type', $jobOffer->type); @endphp
-                        <option value="Tiempo completo" {{ $currentType === 'Tiempo completo' ? 'selected' : '' }}>Tiempo completo</option>
-                        <option value="Medio tiempo" {{ $currentType === 'Medio tiempo' ? 'selected' : '' }}>Medio tiempo</option>
-                        <option value="Freelance" {{ $currentType === 'Freelance' ? 'selected' : '' }}>Freelance / Proyecto</option>
-                        <option value="Prácticas" {{ $currentType === 'Prácticas' ? 'selected' : '' }}>Prácticas / Internship</option>
-                    </select>
-                    @error('type')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- Location --}}
-                <div class="mb-3">
-                    <label for="location" class="form-label font-weight-bold">Ubicación <span class="text-danger">*</span></label>
-                    <select name="location" id="location" class="form-select @error('location') is-invalid @enderror" required>
-                        @php $currentLoc = old('location', $jobOffer->location); @endphp
-                        <option value="Remoto" {{ $currentLoc === 'Remoto' ? 'selected' : '' }}>Remoto</option>
-                        <option value="Presencial" {{ $currentLoc === 'Presencial' ? 'selected' : '' }}>Presencial</option>
-                        <option value="Híbrido" {{ $currentLoc === 'Híbrido' ? 'selected' : '' }}>Híbrido</option>
-                    </select>
-                    @error('location')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- Order --}}
-                <div class="mb-3">
-                    <label for="order" class="form-label font-weight-bold">Orden de Aparición</label>
-                    <input type="number" name="order" id="order" class="form-control" value="{{ old('order', $jobOffer->order) }}" min="0">
-                </div>
-
-                {{-- Is Active --}}
-                <div class="form-check form-switch mb-4">
-                    <input class="form-check-input" type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', $jobOffer->is_active) ? 'checked' : '' }}>
-                    <label class="form-check-label font-weight-bold" for="is_active">Publicado en la web</label>
-                </div>
-
-                <div class="d-grid gap-2">
-                    <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center" style="padding: 0.8rem;">
-                        <i class="fa-solid fa-rotate me-2"></i> Actualizar Vacante
-                    </button>
-                    <a href="{{ route('admin.job-offers.index') }}" class="btn btn-light border text-secondary w-100" style="border-radius: 10px; padding: 0.65rem;">
-                        Cancelar
-                    </a>
                 </div>
             </div>
-        </div>
+
+            {{-- Clasificacion --}}
+            <div class="svc-sidebar-card">
+                <h3><i class="fa-solid fa-sliders"></i> Clasificación</h3>
+
+                @php $currentArea = old('area', $jobOffer->area); @endphp
+                <div class="svc-field svc-field--compact">
+                    <label for="area">Área / Departamento <span class="required">*</span></label>
+                    <select id="area" name="area" class="svc-input" required style="width: 100%; padding: 0.65rem 0.8rem; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 600; background: white;">
+                        <option value="Diseño" {{ $currentArea === 'Diseño' ? 'selected' : '' }}>🎨 Diseño</option>
+                        <option value="Desarrollo" {{ $currentArea === 'Desarrollo' ? 'selected' : '' }}>💻 Desarrollo</option>
+                        <option value="Marketing" {{ $currentArea === 'Marketing' ? 'selected' : '' }}>📈 Marketing</option>
+                        <option value="Gestión" {{ $currentArea === 'Gestión' ? 'selected' : '' }}>⚡ Gestión / PM</option>
+                        <option value="Ventas" {{ $currentArea === 'Ventas' ? 'selected' : '' }}>💼 Ventas / Comercial</option>
+                        <option value="Soporte" {{ $currentArea === 'Soporte' ? 'selected' : '' }}>🎧 Soporte Técnico</option>
+                    </select>
+                    @error('area')<span class="svc-error">{{ $message }}</span>@enderror
+                </div>
+
+                @php $currentType = old('type', $jobOffer->type); @endphp
+                <div class="svc-field svc-field--compact">
+                    <label for="type">Jornada / Tipo <span class="required">*</span></label>
+                    <select id="type" name="type" class="svc-input" required style="width: 100%; padding: 0.65rem 0.8rem; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 600; background: white;">
+                        <option value="Tiempo completo" {{ $currentType === 'Tiempo completo' ? 'selected' : '' }}>⏱️ Tiempo completo</option>
+                        <option value="Medio tiempo" {{ $currentType === 'Medio tiempo' ? 'selected' : '' }}>⌛ Medio tiempo</option>
+                        <option value="Freelance" {{ $currentType === 'Freelance' ? 'selected' : '' }}>🚀 Freelance / Proyecto</option>
+                        <option value="Prácticas" {{ $currentType === 'Prácticas' ? 'selected' : '' }}>🎓 Prácticas / Internship</option>
+                    </select>
+                    @error('type')<span class="svc-error">{{ $message }}</span>@enderror
+                </div>
+
+                @php $currentLoc = old('location', $jobOffer->location); @endphp
+                <div class="svc-field svc-field--compact">
+                    <label for="location">Ubicación <span class="required">*</span></label>
+                    <select id="location" name="location" class="svc-input" required style="width: 100%; padding: 0.65rem 0.8rem; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 600; background: white;">
+                        <option value="Remoto" {{ $currentLoc === 'Remoto' ? 'selected' : '' }}>🌐 Remoto</option>
+                        <option value="Presencial" {{ $currentLoc === 'Presencial' ? 'selected' : '' }}>🏢 Presencial</option>
+                        <option value="Híbrido" {{ $currentLoc === 'Híbrido' ? 'selected' : '' }}>🔄 Híbrido</option>
+                    </select>
+                    @error('location')<span class="svc-error">{{ $message }}</span>@enderror
+                </div>
+
+                <div class="svc-field svc-field--compact">
+                    <label for="order">Orden de aparición</label>
+                    <input type="number" id="order" name="order" value="{{ old('order', $jobOffer->order) }}" min="0" placeholder="0">
+                    <small>0 = aparece primero</small>
+                </div>
+            </div>
+
+            {{-- Tips Card --}}
+            <div class="svc-sidebar-card svc-tips">
+                <h3><i class="fa-solid fa-lightbulb"></i> Recomendaciones</h3>
+                <ul>
+                    <li><i class="fa-solid fa-check"></i> Mantén actualizada la información de la oferta</li>
+                    <li><i class="fa-solid fa-check"></i> Si la vacante se cubrió, cámbiala a Borrador</li>
+                </ul>
+            </div>
+        </aside>
     </div>
 </form>
 
 @endsection
+
+@push('scripts')
+<script>
+// Slug auto-generation
+document.getElementById('title').addEventListener('input', function() {
+    const slug = document.getElementById('slug');
+    if (!slug.dataset.manual) {
+        slug.value = this.value.toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .trim();
+    }
+});
+
+document.getElementById('slug').addEventListener('input', function() {
+    this.dataset.manual = 'true';
+});
+</script>
+@endpush

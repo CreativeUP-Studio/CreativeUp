@@ -130,34 +130,43 @@
     .job-card {
         background: #fff;
         border: 1.5px solid #e2e8f0;
+        border-top: 4px solid var(--job-color, #8338ec);
         border-radius: 20px;
         padding: 2rem 2.5rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 1.5rem;
-        margin-bottom: 1rem;
-        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        margin-bottom: 1.25rem;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
         flex-wrap: wrap;
     }
     .job-card:hover {
-        transform: translateX(4px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.07);
-        border-color: rgba(131,56,236,0.3);
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px -10px color-mix(in srgb, var(--job-color, #8338ec) 30%, transparent), 0 0 25px -5px color-mix(in srgb, var(--job-color, #8338ec) 20%, transparent);
+        border-color: color-mix(in srgb, var(--job-color, #8338ec) 40%, transparent);
     }
     .job-card-left { flex: 1; }
     .job-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
     .job-tag {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.3rem 0.8rem;
         border-radius: 50px;
         font-size: 0.78rem;
         font-weight: 700;
         letter-spacing: 0.3px;
     }
-    .tag-area { background:rgba(131,56,236,0.08); color:#8338ec; border:1px solid rgba(131,56,236,0.2); }
-    .tag-type { background:rgba(16,185,129,0.08); color:#10b981; border:1px solid rgba(16,185,129,0.2); }
-    .tag-remote { background:rgba(255,0,110,0.08); color:#ff006e; border:1px solid rgba(255,0,110,0.2); }
+    .tag-area {
+        background: color-mix(in srgb, var(--job-color, #8338ec) 10%, transparent);
+        color: var(--job-color, #8338ec);
+        border: 1px solid color-mix(in srgb, var(--job-color, #8338ec) 25%, transparent);
+    }
+    .tag-type { background:rgba(16,185,129,0.1); color:#10b981; border:1px solid rgba(16,185,129,0.25); }
+    .tag-remote { background:rgba(255,0,110,0.1); color:#ff006e; border:1px solid rgba(255,0,110,0.25); }
     .job-title {
         font-family: 'Poppins', sans-serif;
         font-size: 1.15rem;
@@ -294,22 +303,35 @@
         </div>
 
         @forelse($jobs as $i => $job)
-        <div class="job-card" data-aos="fade-up" data-aos-delay="{{ $i * 80 }}" data-aos-once="true">
+        @php
+            $areaConfig = [
+                'Diseño'     => ['icon' => '🎨', 'color' => '#ff006e'],
+                'Desarrollo' => ['icon' => '💻', 'color' => '#8338ec'],
+                'Marketing'  => ['icon' => '📈', 'color' => '#3a0ca3'],
+                'Gestión'    => ['icon' => '⚡', 'color' => '#10b981'],
+                'Ventas'     => ['icon' => '💼', 'color' => '#f59e0b'],
+                'Soporte'    => ['icon' => '🎧', 'color' => '#00b4d8'],
+            ];
+            $config    = $areaConfig[$job->area] ?? ['icon' => '💼', 'color' => '#8338ec'];
+            $iconEmoji = $config['icon'];
+            $jobColor  = $config['color'];
+        @endphp
+        <div class="job-card" style="--job-color: {{ $jobColor }};" data-aos="fade-up" data-aos-delay="{{ $i * 80 }}" data-aos-once="true">
             <div class="job-card-left">
                 <div class="job-tags">
-                    <span class="job-tag tag-area">{{ $job->area }}</span>
-                    <span class="job-tag tag-type">{{ $job->type }}</span>
+                    <span class="job-tag tag-area">{{ $iconEmoji }} {{ $job->area }}</span>
+                    <span class="job-tag tag-type"><i class="fa-regular fa-clock" style="font-size:0.7rem;"></i> {{ $job->type }}</span>
                     <span class="job-tag tag-remote"><i class="fa-solid fa-wifi" style="font-size:0.7rem;"></i> {{ $job->location }}</span>
                 </div>
                 <div class="job-title">{{ $job->title }}</div>
                 <p class="job-desc">{{ $job->description }}</p>
                 @if($job->requirements)
-                <div style="font-size:0.85rem; color:#64748b; margin-top:0.5rem;">
-                    <strong>Requisitos:</strong> {{ $job->requirements }}
+                <div style="font-size:0.85rem; color:#64748b; margin-top:0.6rem; padding: 0.6rem 0.9rem; background: rgba(0,0,0,0.02); border-left: 3px solid {{ $jobColor }}; border-radius: 0 8px 8px 0;">
+                    <strong style="color: #0f172a;">Requisitos:</strong> {{ $job->requirements }}
                 </div>
                 @endif
             </div>
-            <a href="{{ route('contact.index') }}?asunto=Postulacion+{{ urlencode($job->title) }}" class="job-apply-btn">
+            <a href="{{ route('contact.index') }}?asunto=Postulacion+{{ urlencode($job->title) }}" class="job-apply-btn" style="background: linear-gradient(135deg, {{ $jobColor }}, #8338ec);">
                 Aplicar <i class="fa-solid fa-arrow-right" style="font-size:0.8rem;"></i>
             </a>
         </div>
