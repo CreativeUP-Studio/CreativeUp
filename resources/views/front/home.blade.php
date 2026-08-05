@@ -5,7 +5,66 @@
 @section('keywords', 'diseño web, desarrollo web, agencia digital, branding corporativo, software a medida, UX/UI, CreativeUP')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/frontend/home.css') }}">
+<link rel="stylesheet" href="{{ asset('css/frontend/home.css') }}?v={{ file_exists(public_path('css/frontend/home.css')) ? filemtime(public_path('css/frontend/home.css')) : time() }}">
+<style>
+/* Fallback de Animación Marquee Garantizada para Producción IONOS */
+.cu-clients-marquee-wrapper {
+    width: 100%;
+    margin-top: 3.5rem;
+    overflow: hidden;
+    position: relative;
+    padding: 1.5rem 0;
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+.cu-clients-marquee-track {
+    display: flex !important;
+    display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    align-items: center !important;
+    gap: 4rem !important;
+    width: max-content !important;
+    animation: clientsMarqueeLoop 30s linear infinite !important;
+    -webkit-animation: clientsMarqueeLoop 30s linear infinite !important;
+    will-change: transform;
+}
+.cu-clients-marquee-wrapper:hover .cu-clients-marquee-track {
+    animation-play-state: paused !important;
+    -webkit-animation-play-state: paused !important;
+}
+@-webkit-keyframes clientsMarqueeLoop {
+    0% { transform: translateX(0); -webkit-transform: translateX(0); }
+    100% { transform: translateX(-50%); -webkit-transform: translateX(-50%); }
+}
+@keyframes clientsMarqueeLoop {
+    0% { transform: translateX(0); -webkit-transform: translateX(0); }
+    100% { transform: translateX(-50%); -webkit-transform: translateX(-50%); }
+}
+.cu-client-logo-pure {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    height: 85px !important;
+    padding: 0 1.25rem !important;
+}
+.cu-client-logo-pure img {
+    max-height: 72px !important;
+    max-width: 220px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    filter: grayscale(100%) opacity(0.65);
+    -webkit-filter: grayscale(100%) opacity(0.65);
+    transition: all 0.35s ease;
+    -webkit-transition: all 0.35s ease;
+}
+.cu-client-logo-pure:hover img {
+    filter: grayscale(0%) opacity(1) !important;
+    -webkit-filter: grayscale(0%) opacity(1) !important;
+    transform: scale(1.12) !important;
+    -webkit-transform: scale(1.12) !important;
+}
+</style>
 @endpush
 
 @section('content')

@@ -2294,6 +2294,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
     width: 600px;
     height: 600px;
     background: radial-gradient(circle, rgba(255, 0, 110, 0.04) 0%, rgba(131, 56, 236, 0.02) 50%, transparent 70%);
@@ -2312,35 +2313,62 @@ body {
 }
 
 .cu-clients-marquee-track {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     gap: 4rem;
     width: max-content;
+    -webkit-animation: clientsMarqueeLoop 30s linear infinite;
     animation: clientsMarqueeLoop 30s linear infinite;
     will-change: transform;
 }
 
 .cu-clients-marquee-wrapper:hover .cu-clients-marquee-track {
+    -webkit-animation-play-state: paused;
     animation-play-state: paused;
+}
+
+@-webkit-keyframes clientsMarqueeLoop {
+    0% {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+    100% {
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+    }
 }
 
 @keyframes clientsMarqueeLoop {
     0% {
+        -webkit-transform: translateX(0);
         transform: translateX(0);
     }
     100% {
+        -webkit-transform: translateX(-50%);
         transform: translateX(-50%);
     }
 }
 
 .cu-client-logo-pure {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -ms-flex-negative: 0;
     flex-shrink: 0;
     height: 85px;
     padding: 0 1.25rem;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cu-client-logo-pure img {
@@ -2349,10 +2377,14 @@ body {
     width: auto;
     object-fit: contain;
     filter: grayscale(100%) opacity(0.65);
+    -webkit-filter: grayscale(100%) opacity(0.65);
     transition: all 0.35s ease;
+    -webkit-transition: all 0.35s ease;
 }
 
 .cu-client-logo-pure:hover img {
     filter: grayscale(0%) opacity(1);
+    -webkit-filter: grayscale(0%) opacity(1);
     transform: scale(1.12);
+    -webkit-transform: scale(1.12);
 }
