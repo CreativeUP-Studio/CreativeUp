@@ -4,34 +4,35 @@
 @section('description', 'Únete al equipo de CreativeUP: el amanecer de una imagen profesional. Descubre vacantes abiertas para diseñadores, desarrolladores y especialistas en marketing digital.')
 
 @push('seo')
+@if(isset($jobOffers) && count($jobOffers) > 0)
 <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
+    "@@context": "https://schema.org",
+    "@@type": "ItemList",
     "name": "Oportunidades Laborales en CreativeUP",
     "description": "Vacantes de empleo y carreras profesionales en CreativeUP Studio",
     "numberOfItems": {{ count($jobOffers) }},
     "itemListElement": [
         @foreach($jobOffers as $index => $job)
         {
-            "@type": "ListItem",
+            "@@type": "ListItem",
             "position": {{ $index + 1 }},
             "item": {
-                "@type": "JobPosting",
+                "@@type": "JobPosting",
                 "title": "{{ e($job->title) }}",
                 "description": "{{ e(Str::limit(strip_tags($job->description), 200)) }}",
                 "datePosted": "{{ $job->created_at ? $job->created_at->toIso8601String() : now()->toIso8601String() }}",
                 "employmentType": "{{ e($job->type) }}",
                 "hiringOrganization": {
-                    "@type": "Organization",
+                    "@@type": "Organization",
                     "name": "CreativeUP",
                     "sameAs": "{{ url('/') }}",
                     "logo": "{{ asset('images/logo-icon.png') }}"
                 },
                 "jobLocation": {
-                    "@type": "Place",
+                    "@@type": "Place",
                     "address": {
-                        "@type": "PostalAddress",
+                        "@@type": "PostalAddress",
                         "addressLocality": "{{ e($job->location) }}",
                         "addressCountry": "PE"
                     }
@@ -42,6 +43,7 @@
     ]
 }
 </script>
+@endif
 @endpush
 
 @push('styles')
@@ -234,6 +236,8 @@
         text-decoration: none;
         white-space: nowrap;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: none;
+        cursor: pointer;
     }
     .job-apply-btn:hover {
         transform: translateY(-2px);
@@ -275,6 +279,117 @@
         margin-right: auto;
     }
 
+    /* ── Modal de Postulación ─────────────── */
+    .cu-modal-backdrop {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    }
+    .cu-modal-content {
+        background: #ffffff;
+        border-radius: 24px;
+        max-width: 540px;
+        width: 100%;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalScaleUp {
+        from { opacity: 0; transform: scale(0.95) translateY(10px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .cu-modal-header {
+        padding: 1.5rem 1.75rem;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .cu-modal-header h3 {
+        margin: 0;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #0f172a;
+        font-family: 'Poppins', sans-serif;
+    }
+    .cu-modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #64748b;
+        cursor: pointer;
+        line-height: 1;
+        transition: color 0.2s;
+    }
+    .cu-modal-close:hover { color: #ef4444; }
+    .cu-modal-body {
+        padding: 1.75rem;
+    }
+    .cu-form-group {
+        margin-bottom: 1.25rem;
+    }
+    .cu-form-group label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 0.4rem;
+    }
+    .cu-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        transition: border-color 0.2s;
+        outline: none;
+        background: #ffffff;
+    }
+    .cu-input:focus {
+        border-color: #ff006e;
+        box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.1);
+    }
+    .cu-modal-footer {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+    .cu-btn-cancel {
+        padding: 0.7rem 1.25rem;
+        background: #f1f5f9;
+        color: #64748b;
+        border: none;
+        border-radius: 50px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 0.88rem;
+    }
+    .cu-btn-submit {
+        padding: 0.7rem 1.5rem;
+        background: linear-gradient(135deg, #ff006e, #8338ec);
+        color: #ffffff;
+        border: none;
+        border-radius: 50px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 0.88rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 15px rgba(255, 0, 110, 0.25);
+    }
+
     /* Responsive */
     @media (max-width: 640px) {
         .job-card { flex-direction: column; align-items: flex-start; }
@@ -302,6 +417,16 @@
         </a>
     </div>
 </section>
+
+{{-- Flash Feedback Messages --}}
+@if(session('success'))
+<div class="container" style="margin-top: 2rem;">
+    <div style="background: #d1fae5; border: 1.5px solid #6ee7b7; color: #065f46; padding: 1.25rem 1.5rem; border-radius: 16px; font-weight: 600; display: flex; align-items: center; gap: 0.75rem; box-shadow: 0 10px 25px -5px rgba(16,185,129,0.15);">
+        <i class="fa-solid fa-circle-check" style="font-size: 1.5rem; color: #10b981;"></i>
+        <span>{{ session('success') }}</span>
+    </div>
+</div>
+@endif
 
 {{-- ── BENEFICIOS ────────────────────────────────────── --}}
 <section class="careers-section">
@@ -372,9 +497,9 @@
                 </div>
                 @endif
             </div>
-            <a href="{{ route('contact.index') }}?asunto=Postulacion+{{ urlencode($job->title) }}" class="job-apply-btn" style="background: linear-gradient(135deg, {{ $jobColor }}, #8338ec);">
+            <button type="button" onclick="openApplyModal('{{ e($job->title) }}')" class="job-apply-btn" style="background: linear-gradient(135deg, {{ $jobColor }}, #8338ec);">
                 Aplicar <i class="fa-solid fa-arrow-right" style="font-size:0.8rem;"></i>
-            </a>
+            </button>
         </div>
         @empty
         <div class="text-center py-5" style="background:#fff; border-radius:20px; border:1.5px solid #e2e8f0; padding:3rem 1.5rem;">
@@ -388,11 +513,77 @@
         <div class="open-app-block" data-aos="fade-up" data-aos-once="true">
             <h3>¿No ves tu perfil aquí?</h3>
             <p>Siempre estamos buscando talento excepcional. Envíanos tu CV y portafolio y te tendremos en cuenta para futuras posiciones.</p>
-            <a href="{{ route('contact.index') }}" class="job-apply-btn" style="font-size:1rem; padding:0.85rem 2rem;">
+            <button type="button" onclick="openApplyModal('Postulación Abierta')" class="job-apply-btn" style="font-size:1rem; padding:0.85rem 2rem;">
                 <i class="fa-solid fa-paper-plane"></i> Enviar postulación abierta
-            </a>
+            </button>
         </div>
     </div>
 </section>
+
+{{-- MODAL DE POSTULACIÓN INTERACTIVO --}}
+<div id="applyModal" class="cu-modal-backdrop" style="display: none;">
+    <div class="cu-modal-content">
+        <div class="cu-modal-header">
+            <h3><i class="fa-solid fa-paper-plane" style="color: #ff006e;"></i> Postulación: <span id="modalJobTitleDisplay">Vacante</span></h3>
+            <button type="button" class="cu-modal-close" onclick="closeApplyModal()">&times;</button>
+        </div>
+        <form action="{{ route('careers.apply') }}" method="POST" class="cu-modal-body">
+            @csrf
+            <input type="hidden" name="position" id="modalPositionInput" value="">
+
+            <div class="cu-form-group">
+                <label for="app_name">Tu Nombre Completo *</label>
+                <input type="text" id="app_name" name="name" required placeholder="Ej. Carlos Mendoza" class="cu-input">
+            </div>
+
+            <div class="cu-form-group">
+                <label for="app_email">Correo Electrónico *</label>
+                <input type="email" id="app_email" name="email" required placeholder="ejemplo@correo.com" class="cu-input">
+            </div>
+
+            <div class="cu-form-group">
+                <label for="app_phone">Teléfono / WhatsApp *</label>
+                <input type="tel" id="app_phone" name="phone" required placeholder="+51 987 654 321" class="cu-input">
+            </div>
+
+            <div class="cu-form-group">
+                <label for="app_portfolio">Enlace a CV / LinkedIn / Portafolio *</label>
+                <input type="text" id="app_portfolio" name="portfolio" required placeholder="https://linkedin.com/in/tu-perfil o drive.google.com/cv.pdf" class="cu-input">
+            </div>
+
+            <div class="cu-form-group">
+                <label for="app_message">Mensaje o Breve Presentación</label>
+                <textarea id="app_message" name="message" rows="3" placeholder="Cuéntanos sobre tu experiencia y por qué te gustaría unirte a CreativeUP..." class="cu-input"></textarea>
+            </div>
+
+            <div class="cu-modal-footer">
+                <button type="button" class="cu-btn-cancel" onclick="closeApplyModal()">Cancelar</button>
+                <button type="submit" class="cu-btn-submit">
+                    <i class="fa-solid fa-paper-plane"></i> Enviar Postulación
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+function openApplyModal(title) {
+    document.getElementById('modalJobTitleDisplay').innerText = title;
+    document.getElementById('modalPositionInput').value = title;
+    document.getElementById('applyModal').style.display = 'flex';
+}
+function closeApplyModal() {
+    document.getElementById('applyModal').style.display = 'none';
+}
+// Close modal on click outside
+window.addEventListener('click', function(e) {
+    const modal = document.getElementById('applyModal');
+    if (e.target === modal) {
+        closeApplyModal();
+    }
+});
+</script>
+@endpush
 
 @endsection

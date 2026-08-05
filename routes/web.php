@@ -55,6 +55,7 @@ Route::get('/chat-messages/history', [ContactController::class, 'getConversation
 // ── Páginas de Empresa ──
 Route::get('/sobre-nosotros', [AboutController::class, 'index'])->name('about');
 Route::get('/trabaja-con-nosotros', [CareersController::class, 'index'])->name('careers');
+Route::post('/trabaja-con-nosotros', [CareersController::class, 'apply'])->name('careers.apply');
 
 // ── Páginas Legales y Consentimientos ──
 Route::get('/politica-de-privacidad', [LegalController::class, 'privacy'])->name('legal.privacy');
