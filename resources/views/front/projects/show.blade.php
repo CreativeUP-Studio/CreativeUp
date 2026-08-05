@@ -1,22 +1,36 @@
 @extends('layouts.app')
 
-@section('title', $project->title . ' | Proyectos CreativeUp')
-@section('meta_description', Str::limit($project->description, 160))
-@section('body-class', 'page-project-show')
-
-@push('head')
-<meta property="og:title" content="{{ $project->title }} | CreativeUp">
-<meta property="og:description" content="{{ Str::limit($project->description, 200) }}">
-<meta property="og:type" content="article">
-<meta property="og:url" content="{{ url()->current() }}">
-@if($project->thumbnail)
-<meta property="og:image" content="{{ Storage::url($project->thumbnail) }}">
-@endif
-<meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="{{ route('projects.show', $project->slug) }}">
+@section('title', $project->title . ' | Casos de Éxito CreativeUP')
+@section('description', Str::limit(strip_tags($project->description), 160))
 @if(!empty($project->technologies) && is_array($project->technologies))
-<meta name="keywords" content="{{ implode(', ', $project->technologies) }}">
+@section('keywords', implode(', ', $project->technologies) . ', casos de éxito, desarrollo web, portafolio digital')
 @endif
+@if($project->image)
+@section('og_image', asset('storage/' . $project->image))
+@elseif($project->thumbnail)
+@section('og_image', asset('storage/' . $project->thumbnail))
+@endif
+
+@push('seo')
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": "{{ e($project->title) }}",
+    "description": "{{ e(Str::limit(strip_tags($project->description), 200)) }}",
+    "url": "{{ route('projects.show', $project->slug) }}",
+    @if($project->image)
+    "image": "{{ asset('storage/' . $project->image) }}",
+    @elseif($project->thumbnail)
+    "image": "{{ asset('storage/' . $project->thumbnail) }}",
+    @endif
+    "creator": {
+        "@type": "Organization",
+        "name": "CreativeUP",
+        "url": "{{ url('/') }}"
+    }
+}
+</script>
 @endpush
 
 @section('content')

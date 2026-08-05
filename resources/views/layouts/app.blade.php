@@ -13,15 +13,70 @@
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}?v=2">
     <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}?v=2">
 
+    {{-- Canonical & Indexing --}}
+    <link rel="canonical" href="{{ url()->current() }}">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="CreativeUP">
+
     {{-- Meta Tags --}}
     <meta name="description" content="@yield('description', $siteSettings->meta_description)">
-    <meta name="keywords" content="diseño web, desarrollo web, marketing digital, branding, UX/UI">
+    <meta name="keywords" content="@yield('keywords', 'diseño web, desarrollo web, agencia digital, branding, marketing digital, software a medida, UX/UI')">
     
-    {{-- Open Graph --}}
+    {{-- Open Graph / Facebook / WhatsApp --}}
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:site_name" content="CreativeUP - El amanecer de una imagen profesional">
     <meta property="og:title" content="@yield('title', $siteSettings->meta_title)">
     <meta property="og:description" content="@yield('description', $siteSettings->meta_description)">
-    <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="@yield('og_image', asset('images/logo-icon.png'))">
+    
+    {{-- Twitter Cards --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', $siteSettings->meta_title)">
+    <meta name="twitter:description" content="@yield('description', $siteSettings->meta_description)">
+    <meta name="twitter:image" content="@yield('og_image', asset('images/logo-icon.png'))">
+
+    @stack('meta')
+    @stack('seo')
+
+    {{-- Global Organization & WebSite JSON-LD Schema --}}
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "{{ url('/') }}#organization",
+                "name": "CreativeUP",
+                "url": "{{ url('/') }}",
+                "logo": "{{ asset('images/logo-icon.png') }}",
+                "slogan": "El amanecer de una imagen profesional",
+                "sameAs": [
+                    "{{ $siteSettings->facebook_url }}",
+                    "{{ $siteSettings->instagram_url }}",
+                    "{{ $siteSettings->linkedin_url }}",
+                    "{{ $siteSettings->twitter_url }}"
+                ],
+                "contactPoint": {
+                    "@type": "ContactPoint",
+                    "telephone": "{{ $siteSettings->phone }}",
+                    "contactType": "customer service",
+                    "email": "{{ $siteSettings->email }}"
+                }
+            },
+            {
+                "@type": "WebSite",
+                "@id": "{{ url('/') }}#website",
+                "url": "{{ url('/') }}",
+                "name": "CreativeUP",
+                "description": "El amanecer de una imagen profesional",
+                "publisher": { "@id": "{{ url('/') }}#organization" },
+                "inLanguage": "es"
+            }
+        ]
+    }
+    </script>
     
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">

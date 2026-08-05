@@ -256,6 +256,17 @@
                 <span class="sidebar-nav-count">{{ $jobsCount }}</span>
                 @endif
             </a>
+            <a href="{{ route('admin.clients.index') }}"
+               class="sidebar-nav-item {{ request()->routeIs('admin.clients.*') ? 'active' : '' }}">
+                <div class="sidebar-nav-icon">
+                    <i class="fa-solid fa-building-user" aria-hidden="true"></i>
+                </div>
+                <span class="sidebar-nav-text">Clientes</span>
+                @php $clientsCount = \App\Models\Client::where('is_active', true)->count(); @endphp
+                @if($clientsCount > 0)
+                <span class="sidebar-nav-count">{{ $clientsCount }}</span>
+                @endif
+            </a>
 
             {{-- CRM Section --}}
             <div class="sidebar-nav-section">

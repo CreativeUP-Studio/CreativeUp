@@ -7,6 +7,7 @@ use App\Models\Service;
 use App\Models\Project;
 use App\Models\Post;
 use App\Models\HeroSetting;
+use App\Models\Client;
 use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
@@ -28,8 +29,9 @@ class HomeController extends Controller
             ];
         });
 
-        // Posts SIEMPRE frescos — reflejan lo publicado desde admin
-        $data['posts'] = $this->getPosts();
+        // Posts y Clientes SIEMPRE frescos — reflejan lo publicado desde admin
+        $data['posts']   = $this->getPosts();
+        $data['clients'] = Client::active()->ordered()->get();
 
         return view('front.home', $data);
     }

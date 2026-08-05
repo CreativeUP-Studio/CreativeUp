@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Sobre Nosotros | CreativeUP Studio')
-@section('meta_description', 'Conoce quiénes somos en CreativeUP Studio — un equipo de creativos, desarrolladores y estrategas apasionados por construir experiencias digitales excepcionales.')
+@section('title', 'Sobre Nosotros | CreativeUP - El amanecer de una imagen profesional')
+@section('description', 'Conoce a CreativeUP: el amanecer de una imagen profesional. Somos un equipo apasionado de creativos y desarrolladores dedicados a transformar negocios con tecnología y diseño premium.')
 
 @push('styles')
 <style>

@@ -10,6 +10,10 @@ use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\LegalController;
 use App\Http\Controllers\Front\AboutController;
 use App\Http\Controllers\Front\CareersController;
+use App\Http\Controllers\Front\SitemapController;
+
+// ── SEO & Robots ──
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
@@ -21,6 +25,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\CookieConsentController;
 use App\Http\Controllers\Admin\JobOfferController;
+use App\Http\Controllers\Admin\ClientController as AdminClientController;
 
 // ── Autenticación ──
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -70,10 +75,13 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::patch('posts/{post}/quick-update', [AdminPostController::class, 'quickUpdate'])->name('posts.quick-update');
     Route::post('posts/upload-media', [AdminPostController::class, 'uploadMedia'])->name('posts.upload-media');
     Route::patch('job-offers/{jobOffer}/toggle-active', [JobOfferController::class, 'toggleActive'])->name('job-offers.toggle-active');
+    Route::patch('clients/{client}/toggle-active', [AdminClientController::class, 'toggleActive'])->name('clients.toggle-active');
+    Route::patch('clients/{client}/toggle-featured', [AdminClientController::class, 'toggleFeatured'])->name('clients.toggle-featured');
     Route::resource('services', AdminServiceController::class);
     Route::resource('projects', AdminProjectController::class);
     Route::resource('posts', AdminPostController::class);
     Route::resource('job-offers', JobOfferController::class);
+    Route::resource('clients', AdminClientController::class);
 
     Route::get('leads', [LeadController::class, 'index'])->name('leads.index');
     Route::get('leads/export', [LeadController::class, 'export'])->name('leads.export');

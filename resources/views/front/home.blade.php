@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'CreativeUp - Redefiniendo la Experiencia Digital')
+@section('title', 'CreativeUP - El amanecer de una imagen profesional')
+@section('description', 'CreativeUP: El amanecer de una imagen profesional. Agencia digital especializada en diseño web de alto impacto, desarrollo de software a medida, branding e innovación tecnológica.')
+@section('keywords', 'diseño web, desarrollo web, agencia digital, branding corporativo, software a medida, UX/UI, CreativeUP')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/frontend/home.css') }}">
@@ -512,6 +514,43 @@
         </div>
     </div>
 </section>
+
+{{-- ============================================
+     CLIENTES & ALIANZAS SECTION (LOGOS ONLY)
+     ============================================ --}}
+@if(isset($clients) && $clients->count() > 0)
+<section class="cu-clients-section" id="clientes">
+    <div class="container">
+        <div class="cu-section-header text-center" data-aos="fade-up">
+            <div class="cu-badge" style="margin: 0 auto 1rem auto; display: inline-flex;">
+                <span class="cu-badge-dot"></span>
+                <span class="cu-badge-text">Nuestros Aliados & Clientes</span>
+                <span class="cu-badge-sparkle">🤝</span>
+            </div>
+            <h2 class="cu-section-title">
+                Empresas que confían en <span class="cu-text-gradient">Nuestro Trabajo</span>
+            </h2>
+            <p class="cu-section-desc">Impulsamos el crecimiento y transformación digital de líderes en diversas industrias.</p>
+        </div>
+
+        <div class="cu-clients-grid">
+            @foreach($clients as $client)
+                @if($client->logo_url)
+                    @if($client->website_url)
+                        <a href="{{ $client->website_url }}" target="_blank" rel="noopener noreferrer" class="cu-client-logo-card" data-aos="fade-up" data-aos-delay="{{ 80 * ($loop->index % 6) }}" title="{{ $client->name }}">
+                            <img src="{{ $client->logo_url }}" alt="{{ $client->name }}" loading="lazy">
+                        </a>
+                    @else
+                        <div class="cu-client-logo-card" data-aos="fade-up" data-aos-delay="{{ 80 * ($loop->index % 6) }}" title="{{ $client->name }}">
+                            <img src="{{ $client->logo_url }}" alt="{{ $client->name }}" loading="lazy">
+                        </div>
+                    @endif
+                @endif
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
 
 {{-- ============================================
      INSIGHTS SECTION - Editorial Magazine Layout

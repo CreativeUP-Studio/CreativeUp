@@ -2,55 +2,45 @@
 
 @section('title', $post->title . ' | Blog CreativeUP')
 @section('description', Str::limit(strip_tags($post->content), 160))
+@section('og_type', 'article')
+@if($post->featured_image)
+@section('og_image', asset('storage/' . $post->featured_image))
+@endif
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/frontend/blog.css') }}?v={{ time() }}">
 @endpush
 
-@push('meta')
-{{-- Open Graph --}}
-<meta property="og:title" content="{{ $post->title }}">
-<meta property="og:description" content="{{ Str::limit(strip_tags($post->content), 160) }}">
-<meta property="og:type" content="article">
-<meta property="og:url" content="{{ route('blog.show', $post->slug) }}">
-@if($post->featured_image)
-<meta property="og:image" content="{{ asset('storage/' . $post->featured_image) }}">
-@endif
+@push('seo')
 <meta property="article:published_time" content="{{ $post->published_at?->toIso8601String() }}">
 <meta property="article:author" content="{{ $post->user?->name ?? 'CreativeUP' }}">
 
-{{-- Twitter --}}
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ $post->title }}">
-<meta name="twitter:description" content="{{ Str::limit(strip_tags($post->content), 160) }}">
-@if($post->featured_image)
-<meta name="twitter:image" content="{{ asset('storage/' . $post->featured_image) }}">
-@endif
-
-{{-- Schema.org Article --}}
 <script type="application/ld+json">
 {
-    "@@context": "https://schema.org",
-    "@@type": "BlogPosting",
-    "headline": "{{ $post->title }}",
-    "description": "{{ Str::limit(strip_tags($post->content), 160) }}",
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "{{ e($post->title) }}",
+    "description": "{{ e(Str::limit(strip_tags($post->content), 160)) }}",
     @if($post->featured_image)
     "image": "{{ asset('storage/' . $post->featured_image) }}",
     @endif
     "datePublished": "{{ $post->published_at?->toIso8601String() }}",
     "dateModified": "{{ $post->updated_at->toIso8601String() }}",
     "author": {
-        "@@type": "Person",
-        "name": "{{ $post->user?->name ?? 'CreativeUP' }}"
+        "@type": "Person",
+        "name": "{{ e($post->user?->name ?? 'CreativeUP Team') }}"
     },
     "publisher": {
-        "@@type": "Organization",
+        "@type": "Organization",
         "name": "CreativeUP",
-        "url": "{{ url('/') }}"
+        "logo": {
+            "@type": "ImageObject",
+            "url": "{{ asset('images/logo-icon.png') }}"
+        }
     },
     "mainEntityOfPage": {
-        "@@type": "WebPage",
-        "@@id": "{{ route('blog.show', $post->slug) }}"
+        "@type": "WebPage",
+        "@id": "{{ route('blog.show', $post->slug) }}"
     }
 }
 </script>

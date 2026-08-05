@@ -1,7 +1,48 @@
 @extends('layouts.app')
 
-@section('title', 'Trabaja con Nosotros | CreativeUP Studio')
-@section('meta_description', 'Únete al equipo de CreativeUP Studio. Buscamos talentos creativos, desarrolladores apasionados y estrategas digitales que quieran construir el futuro digital.')
+@section('title', 'Trabaja con Nosotros | Oportunidades Laborales CreativeUP')
+@section('description', 'Únete al equipo de CreativeUP: el amanecer de una imagen profesional. Descubre vacantes abiertas para diseñadores, desarrolladores y especialistas en marketing digital.')
+
+@push('seo')
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Oportunidades Laborales en CreativeUP",
+    "description": "Vacantes de empleo y carreras profesionales en CreativeUP Studio",
+    "numberOfItems": {{ count($jobOffers) }},
+    "itemListElement": [
+        @foreach($jobOffers as $index => $job)
+        {
+            "@type": "ListItem",
+            "position": {{ $index + 1 }},
+            "item": {
+                "@type": "JobPosting",
+                "title": "{{ e($job->title) }}",
+                "description": "{{ e(Str::limit(strip_tags($job->description), 200)) }}",
+                "datePosted": "{{ $job->created_at ? $job->created_at->toIso8601String() : now()->toIso8601String() }}",
+                "employmentType": "{{ e($job->type) }}",
+                "hiringOrganization": {
+                    "@type": "Organization",
+                    "name": "CreativeUP",
+                    "sameAs": "{{ url('/') }}",
+                    "logo": "{{ asset('images/logo-icon.png') }}"
+                },
+                "jobLocation": {
+                    "@type": "Place",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "addressLocality": "{{ e($job->location) }}",
+                        "addressCountry": "PE"
+                    }
+                }
+            }
+        }@if(!$loop->last),@endif
+        @endforeach
+    ]
+}
+</script>
+@endpush
 
 @push('styles')
 <style>

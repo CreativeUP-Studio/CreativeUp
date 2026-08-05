@@ -1,15 +1,30 @@
 @extends('layouts.app')
 
-@section('title', $service->meta_title ?? $service->title)
-
-@push('head')
-<meta name="description" content="{{ $service->meta_description ?? Str::limit($service->description, 160) }}">
-<meta property="og:title" content="{{ $service->meta_title ?? $service->title }} | CreativeUP">
-<meta property="og:description" content="{{ $service->meta_description ?? Str::limit($service->description, 160) }}">
-<meta property="og:type" content="website">
+@section('title', ($service->meta_title ?? $service->title) . ' | Servicios CreativeUP')
+@section('description', $service->meta_description ?? Str::limit(strip_tags($service->short_description ?? $service->description), 160))
 @if($service->image)
-<meta property="og:image" content="{{ Storage::url($service->image) }}">
+@section('og_image', asset('storage/' . $service->image))
 @endif
+
+@push('seo')
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "{{ e($service->title) }}",
+    "serviceType": "{{ e($service->title) }}",
+    "description": "{{ e($service->meta_description ?? Str::limit(strip_tags($service->short_description ?? $service->description), 200)) }}",
+    "url": "{{ route('services.show', $service->slug) }}",
+    @if($service->image)
+    "image": "{{ asset('storage/' . $service->image) }}",
+    @endif
+    "provider": {
+        "@type": "Organization",
+        "name": "CreativeUP",
+        "url": "{{ url('/') }}"
+    }
+}
+</script>
 @endpush
 
 @section('content')

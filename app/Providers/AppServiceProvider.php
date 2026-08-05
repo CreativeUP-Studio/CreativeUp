@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\Service;
 use App\Models\Project;
 use App\Models\Post;
+use App\Models\Client;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -51,6 +52,11 @@ class AppServiceProvider extends ServiceProvider
         Post::created(fn() => $this->clearHomeCache());
         Post::updated(fn() => $this->clearHomeCache());
         Post::deleted(fn() => $this->clearHomeCache());
+
+        // Limpiar caché cuando se modifican clientes
+        Client::created(fn() => $this->clearHomeCache());
+        Client::updated(fn() => $this->clearHomeCache());
+        Client::deleted(fn() => $this->clearHomeCache());
     }
 
     /**
