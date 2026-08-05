@@ -527,7 +527,7 @@
             <h3><i class="fa-solid fa-paper-plane" style="color: #ff006e;"></i> Postulación: <span id="modalJobTitleDisplay">Vacante</span></h3>
             <button type="button" class="cu-modal-close" onclick="closeApplyModal()">&times;</button>
         </div>
-        <form action="{{ route('careers.apply') }}" method="POST" class="cu-modal-body">
+        <form action="{{ Route::has('careers.apply') ? route('careers.apply') : url('/trabaja-con-nosotros') }}" method="POST" class="cu-modal-body">
             @csrf
             <input type="hidden" name="position" id="modalPositionInput" value="">
 
