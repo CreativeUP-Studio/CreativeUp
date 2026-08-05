@@ -552,23 +552,26 @@
     <div class="container">
         <div class="cu-stats-wrapper" data-aos="zoom-in" data-aos-duration="1000">
             <div class="cu-stat-box">
-                <div class="cu-stat-number" data-count="250">0</div>
-                <div class="cu-stat-label">Proyectos Lanzados</div>
+                <div class="cu-stat-number" data-count="{{ preg_replace('/[^0-9]/', '', $siteSettings->stat_projects_count ?? '250') }}">{{ $siteSettings->stat_projects_count ?? '250' }}</div>
+                <div class="cu-stat-label">{{ $siteSettings->stat_projects_label ?? 'Proyectos Lanzados' }}</div>
             </div>
             <div class="cu-stat-divider"></div>
             <div class="cu-stat-box">
-                <div class="cu-stat-number" data-count="99">0</div><span class="cu-stat-suffix">%</span>
-                <div class="cu-stat-label">Clientes Satisfechos</div>
+                <div class="cu-stat-number" data-count="{{ preg_replace('/[^0-9]/', '', $siteSettings->stat_clients_count ?? '99') }}">{{ $siteSettings->stat_clients_count ?? '99' }}</div>
+                @if($siteSettings->stat_clients_suffix)<span class="cu-stat-suffix">{{ $siteSettings->stat_clients_suffix }}</span>@endif
+                <div class="cu-stat-label">{{ $siteSettings->stat_clients_label ?? 'Clientes Satisfechos' }}</div>
             </div>
             <div class="cu-stat-divider"></div>
             <div class="cu-stat-box">
-                <div class="cu-stat-number" data-count="15">0</div><span class="cu-stat-suffix">+</span>
-                <div class="cu-stat-label">Premios de Diseño</div>
+                <div class="cu-stat-number" data-count="{{ preg_replace('/[^0-9]/', '', $siteSettings->stat_awards_count ?? '15') }}">{{ $siteSettings->stat_awards_count ?? '15' }}</div>
+                @if($siteSettings->stat_awards_suffix)<span class="cu-stat-suffix">{{ $siteSettings->stat_awards_suffix }}</span>@endif
+                <div class="cu-stat-label">{{ $siteSettings->stat_awards_label ?? 'Premios de Diseño' }}</div>
             </div>
             <div class="cu-stat-divider"></div>
             <div class="cu-stat-box">
-                <div class="cu-stat-number" data-count="10">0</div><span class="cu-stat-suffix">Años</span>
-                <div class="cu-stat-label">De Experiencia</div>
+                <div class="cu-stat-number" data-count="{{ preg_replace('/[^0-9]/', '', $siteSettings->stat_years_count ?? '10') }}">{{ $siteSettings->stat_years_count ?? '10' }}</div>
+                @if($siteSettings->stat_years_suffix)<span class="cu-stat-suffix">{{ $siteSettings->stat_years_suffix }}</span>@endif
+                <div class="cu-stat-label">{{ $siteSettings->stat_years_label ?? 'De Experiencia' }}</div>
             </div>
         </div>
     </div>

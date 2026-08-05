@@ -456,16 +456,16 @@
 <div class="container">
     <div class="about-stats">
         <div class="stat-item" data-aos="fade-up" data-aos-delay="0" data-aos-once="true">
-            <div class="stat-number">+{{ $projectsCount ?? 50 }}</div>
-            <div class="stat-label">Proyectos Entregados</div>
+            <div class="stat-number">+{{ $siteSettings->stat_projects_count ?? '250' }}</div>
+            <div class="stat-label">{{ $siteSettings->stat_projects_label ?? 'Proyectos Entregados' }}</div>
         </div>
         <div class="stat-item" data-aos="fade-up" data-aos-delay="100" data-aos-once="true">
-            <div class="stat-number">+30</div>
-            <div class="stat-label">Clientes Satisfechos</div>
+            <div class="stat-number">{{ $siteSettings->stat_clients_count ?? '99' }}{{ $siteSettings->stat_clients_suffix ?? '%' }}</div>
+            <div class="stat-label">{{ $siteSettings->stat_clients_label ?? 'Clientes Satisfechos' }}</div>
         </div>
         <div class="stat-item" data-aos="fade-up" data-aos-delay="200" data-aos-once="true">
-            <div class="stat-number">5+</div>
-            <div class="stat-label">Años de Experiencia</div>
+            <div class="stat-number">{{ $siteSettings->stat_years_count ?? '10' }}{{ $siteSettings->stat_years_suffix ?? '+' }}</div>
+            <div class="stat-label">{{ $siteSettings->stat_years_label ?? 'Años de Experiencia' }}</div>
         </div>
         <div class="stat-item" data-aos="fade-up" data-aos-delay="300" data-aos-once="true">
             <div class="stat-number">{{ $services->count() }}+</div>

@@ -365,6 +365,90 @@ body[data-theme="dark"] .settings-switch label {
             </div>
         </div>
 
+        {{-- ESTADÍSTICAS Y CONTADORES --}}
+        <div class="settings-card">
+            <div class="settings-card-header">
+                <h5><i class="fas fa-chart-line"></i> Estadísticas & Contadores del Sitio</h5>
+            </div>
+            <div class="settings-card-body">
+                <div class="settings-grid settings-grid-2">
+
+                    {{-- Contador 1: Proyectos --}}
+                    <div style="background: #f8fafc; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <h6 style="margin-top: 0; margin-bottom: 1rem; font-weight: 700; color: #1e293b;">Contador 1 (ej: Proyectos)</h6>
+                        <div class="settings-grid settings-grid-2">
+                            <div class="settings-form-group" style="margin-bottom: 0;">
+                                <label class="settings-form-label">Valor / Número</label>
+                                <input type="text" name="stat_projects_count" class="settings-form-control" value="{{ old('stat_projects_count', $settings->stat_projects_count ?? '250') }}" placeholder="250">
+                            </div>
+                            <div class="settings-form-group" style="margin-bottom: 0;">
+                                <label class="settings-form-label">Etiqueta</label>
+                                <input type="text" name="stat_projects_label" class="settings-form-control" value="{{ old('stat_projects_label', $settings->stat_projects_label ?? 'Proyectos Lanzados') }}" placeholder="Proyectos Lanzados">
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Contador 2: Clientes Satisfechos --}}
+                    <div style="background: #f8fafc; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <h6 style="margin-top: 0; margin-bottom: 1rem; font-weight: 700; color: #1e293b;">Contador 2 (ej: Clientes Satisfechos)</h6>
+                        <div class="settings-grid settings-grid-3">
+                            <div class="settings-form-group" style="margin-bottom: 0;">
+                                <label class="settings-form-label">Número</label>
+                                <input type="text" name="stat_clients_count" class="settings-form-control" value="{{ old('stat_clients_count', $settings->stat_clients_count ?? '99') }}" placeholder="99">
+                            </div>
+                            <div class="settings-form-group" style="margin-bottom: 0;">
+                                <label class="settings-form-label">Sufijo</label>
+                                <input type="text" name="stat_clients_suffix" class="settings-form-control" value="{{ old('stat_clients_suffix', $settings->stat_clients_suffix ?? '%') }}" placeholder="%">
+                            </div>
+                            <div class="settings-form-group" style="margin-bottom: 0;">
+                                <label class="settings-form-label">Etiqueta</label>
+                                <input type="text" name="stat_clients_label" class="settings-form-control" value="{{ old('stat_clients_label', $settings->stat_clients_label ?? 'Clientes Satisfechos') }}" placeholder="Clientes Satisfechos">
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Contador 3: Premios --}}
+                    <div style="background: #f8fafc; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <h6 style="margin-top: 0; margin-bottom: 1rem; font-weight: 700; color: #1e293b;">Contador 3 (ej: Premios / Reconocimientos)</h6>
+                        <div class="settings-grid settings-grid-3">
+                            <div class="settings-form-group" style="margin-bottom: 0;">
+                                <label class="settings-form-label">Número</label>
+                                <input type="text" name="stat_awards_count" class="settings-form-control" value="{{ old('stat_awards_count', $settings->stat_awards_count ?? '15') }}" placeholder="15">
+                            </div>
+                            <div class="settings-form-group" style="margin-bottom: 0;">
+                                <label class="settings-form-label">Sufijo</label>
+                                <input type="text" name="stat_awards_suffix" class="settings-form-control" value="{{ old('stat_awards_suffix', $settings->stat_awards_suffix ?? '+') }}" placeholder="+">
+                            </div>
+                            <div class="settings-form-group" style="margin-bottom: 0;">
+                                <label class="settings-form-label">Etiqueta</label>
+                                <input type="text" name="stat_awards_label" class="settings-form-control" value="{{ old('stat_awards_label', $settings->stat_awards_label ?? 'Premios de Diseño') }}" placeholder="Premios de Diseño">
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Contador 4: Experiencia --}}
+                    <div style="background: #f8fafc; padding: 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <h6 style="margin-top: 0; margin-bottom: 1rem; font-weight: 700; color: #1e293b;">Contador 4 (ej: Experiencia)</h6>
+                        <div class="settings-grid settings-grid-3">
+                            <div class="settings-form-group" style="margin-bottom: 0;">
+                                <label class="settings-form-label">Número</label>
+                                <input type="text" name="stat_years_count" class="settings-form-control" value="{{ old('stat_years_count', $settings->stat_years_count ?? '10') }}" placeholder="10">
+                            </div>
+                            <div class="settings-form-group" style="margin-bottom: 0;">
+                                <label class="settings-form-label">Sufijo</label>
+                                <input type="text" name="stat_years_suffix" class="settings-form-control" value="{{ old('stat_years_suffix', $settings->stat_years_suffix ?? 'Años') }}" placeholder="Años">
+                            </div>
+                            <div class="settings-form-group" style="margin-bottom: 0;">
+                                <label class="settings-form-label">Etiqueta</label>
+                                <input type="text" name="stat_years_label" class="settings-form-control" value="{{ old('stat_years_label', $settings->stat_years_label ?? 'De Experiencia') }}" placeholder="De Experiencia">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
         {{-- OPCIONES Y FUNCIONALIDADES --}}
         <div class="settings-card">
             <div class="settings-card-header">

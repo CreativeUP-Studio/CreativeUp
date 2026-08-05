@@ -55,6 +55,19 @@ class SiteSettingController extends Controller
             'menu_img_projects' => 'nullable|image|max:51200',
             'menu_img_blog' => 'nullable|image|max:51200',
             'menu_img_contact' => 'nullable|image|max:51200',
+
+            // Estadísticas / Contadores
+            'stat_projects_count' => 'nullable|string|max:50',
+            'stat_projects_label' => 'nullable|string|max:100',
+            'stat_clients_count' => 'nullable|string|max:50',
+            'stat_clients_suffix' => 'nullable|string|max:20',
+            'stat_clients_label' => 'nullable|string|max:100',
+            'stat_awards_count' => 'nullable|string|max:50',
+            'stat_awards_suffix' => 'nullable|string|max:20',
+            'stat_awards_label' => 'nullable|string|max:100',
+            'stat_years_count' => 'nullable|string|max:50',
+            'stat_years_suffix' => 'nullable|string|max:20',
+            'stat_years_label' => 'nullable|string|max:100',
         ]);
 
         // Procesar checkboxes

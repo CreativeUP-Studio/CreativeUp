@@ -34,6 +34,18 @@ class SiteSetting extends Model
         'menu_img_projects',
         'menu_img_blog',
         'menu_img_contact',
+        // Estadísticas / Contadores del Home & Sitio
+        'stat_projects_count',
+        'stat_projects_label',
+        'stat_clients_count',
+        'stat_clients_suffix',
+        'stat_clients_label',
+        'stat_awards_count',
+        'stat_awards_suffix',
+        'stat_awards_label',
+        'stat_years_count',
+        'stat_years_suffix',
+        'stat_years_label',
     ];
 
     protected $casts = [

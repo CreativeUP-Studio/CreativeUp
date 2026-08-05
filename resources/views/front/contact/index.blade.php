@@ -89,8 +89,8 @@
                 </div>
                 <div class="ch-stat-divider"></div>
                 <div class="ch-stat">
-                    <span class="ch-stat-value">98%</span>
-                    <span class="ch-stat-label">Clientes satisfechos</span>
+                    <span class="ch-stat-value">{{ $siteSettings->stat_clients_count ?? '99' }}{{ $siteSettings->stat_clients_suffix ?? '%' }}</span>
+                    <span class="ch-stat-label">{{ $siteSettings->stat_clients_label ?? 'Clientes satisfechos' }}</span>
                 </div>
             </div>
         </div>
