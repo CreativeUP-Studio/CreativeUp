@@ -13,14 +13,10 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('logo')->nullable();
-            $table->string('website_url')->nullable();
-            $table->string('industry')->nullable();
-            $table->text('testimonial')->nullable();
+            $table->string('name')->nullable();
+            $table->string('logo');
             $table->integer('order')->default(0);
             $table->boolean('is_active')->default(true);
-            $table->boolean('is_featured')->default(false);
             $table->timestamps();
         });
     }

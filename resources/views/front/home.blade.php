@@ -516,7 +516,7 @@
 </section>
 
 {{-- ============================================
-     CLIENTES & ALIANZAS SECTION (LOGOS ONLY)
+     CLIENTES & ALIANZAS SECTION (CARRUSEL INFINITO DE LOGOS)
      ============================================ --}}
 @if(isset($clients) && $clients->count() > 0)
 <section class="cu-clients-section" id="clientes">
@@ -532,19 +532,26 @@
             </h2>
             <p class="cu-section-desc">Impulsamos el crecimiento y transformación digital de líderes en diversas industrias.</p>
         </div>
+    </div>
 
-        <div class="cu-clients-grid">
+    {{-- Contenedor del Carrusel Infinito (SOLO LOGOS FLOTANTES - SIN TARJETAS) --}}
+    <div class="cu-clients-marquee-wrapper" data-aos="fade-up" data-aos-delay="100">
+        <div class="cu-clients-marquee-track">
+            {{-- Grupo 1 --}}
             @foreach($clients as $client)
                 @if($client->logo_url)
-                    @if($client->website_url)
-                        <a href="{{ $client->website_url }}" target="_blank" rel="noopener noreferrer" class="cu-client-logo-card" data-aos="fade-up" data-aos-delay="{{ 80 * ($loop->index % 6) }}" title="{{ $client->name }}">
-                            <img src="{{ $client->logo_url }}" alt="{{ $client->name }}" loading="lazy">
-                        </a>
-                    @else
-                        <div class="cu-client-logo-card" data-aos="fade-up" data-aos-delay="{{ 80 * ($loop->index % 6) }}" title="{{ $client->name }}">
-                            <img src="{{ $client->logo_url }}" alt="{{ $client->name }}" loading="lazy">
-                        </div>
-                    @endif
+                    <div class="cu-client-logo-pure" title="{{ $client->name }}">
+                        <img src="{{ $client->logo_url }}" alt="{{ $client->name }}" loading="lazy">
+                    </div>
+                @endif
+            @endforeach
+
+            {{-- Grupo 2 (Duplicado para lograr un loop infinito continuo y fluido) --}}
+            @foreach($clients as $client)
+                @if($client->logo_url)
+                    <div class="cu-client-logo-pure" title="{{ $client->name }}" aria-hidden="true">
+                        <img src="{{ $client->logo_url }}" alt="{{ $client->name }}" loading="lazy">
+                    </div>
                 @endif
             @endforeach
         </div>
